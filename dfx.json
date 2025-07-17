@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "HopeBridge_backend": {
+      "main": "src/HopeBridge_backend/main.mo",
+      "type": "motoko"
+    },
+    "HopeBridge_frontend": {
+      "dependencies": [
+        "HopeBridge_backend"
+      ],
+      "source": [
+        "src/HopeBridge_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "HopeBridge_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

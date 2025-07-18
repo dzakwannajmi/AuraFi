@@ -1,31 +1,30 @@
-import { useState } from 'react';
-import { HopeBridge_backend } from 'declarations/HopeBridge_backend';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Home from "./pages/Home";
+import { AuthProvider } from "./context/AuthContext";
+import { HopeBridge_backend } from "declarations/HopeBridge_backend";
+import { useEffect, useState } from "react";
 
-function App() {
-  const [greeting, setGreeting] = useState('');
+export default function App() {
+  const [greetText, setGreetText] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    HopeBridge_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
+  useEffect(() => {
+    async function fetchGreeting() {
+      const result = await HopeBridge_backend.greet("Najmi");
+      setGreetText(result);
+    }
+    fetchGreeting();
+  }, []);
 
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout greetText={greetText} />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
-
-export default App;

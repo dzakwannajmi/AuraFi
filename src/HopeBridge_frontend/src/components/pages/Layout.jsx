@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import useAuth from "../../hooks/useAuth"; // Path ini sudah benar berdasarkan struktur Anda
+import useAuth from "../../hooks/useAuth"; // Path ini sudah benar
 
-import OnboardingModal from "../modals/OnboardingModal";
+// Perbaikan Jalur Impor
+import OnboardingModal from "../modals/OnboardingModal"; // Dari pages/ ke components/modals/
+import Header from "../Header"; // Dari pages/ ke components/
+import Footer from "../Footer"; // Dari pages/ ke components/
 
-import Header from "../Header";
-import Footer from "../Footer";
-
-import HomePage from "./Home";
-import DashboardPage from "./DashboardPage";
-import TransactionsPage from "./TransactionsPage";
-import AiCarePage from "./AiCarePage";
-import DataInputPage from "./DataInputPage";
-import AboutPage from "./AboutPage";
+// Import komponen halaman yang dibutuhkan di sini untuk Outlet Context
+// Pastikan PATH ini BENAR sesuai struktur Anda
+import HomePage from "./Home"; // Home.jsx di folder yang sama dengan Layout.jsx
+import DashboardPage from "../pages/DashboardPage"; // Dari pages/ ke components/pages/
+import TransactionsPage from "../pages/TransactionsPage"; // Dari pages/ ke components/pages/
+import AiCarePage from "../pages/AiCarePage"; // Dari pages/ ke components/pages/
+import DataInputPage from "../pages/DataInputPage"; // Dari pages/ ke components/pages/
+import AboutPage from "../pages/AboutPage"; // Dari pages/ ke components/pages/
 
 function Layout({
   // Terima semua props dari App.jsx
@@ -102,17 +104,15 @@ function Layout({
   getAiFinancialAdvice,
   handleFinancialGoalsSubmit,
   activeDataInputTab,
-  setActiveDataInputTab, // activeDataInputTab juga harus diteruskan
+  setActiveDataInputTab,
 }) {
-  const { authReady } = useAuth(); // Ini dari useAuth Anda
+  const { authReady } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(true); // State untuk mengontrol modal onboarding
-  const location = useLocation(); // Hook untuk mendapatkan lokasi saat ini
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const location = useLocation();
 
-  // Menggunakan currentPagePath untuk menyoroti link aktif
   const currentPagePath = location.pathname;
 
-  // Menampilkan loading jika autentikasi belum siap
   if (!authReady) {
     return (
       <p className="text-center mt-10 font-poppins text-gray-400">
@@ -123,20 +123,18 @@ function Layout({
 
   return (
     <div className="min-h-screen bg-black-primary text-white-default font-poppins flex flex-col">
-      {/* Global Styles (Diasumsikan index.css menangani ini) */}
       <style>{`
         body { font-family: 'Poppins', sans-serif; }
         .gradient-text { background: linear-gradient(90deg, var(--tw-gradient-from, #3AD9A3), var(--tw-gradient-to, #0F7C5F)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
       `}</style>
 
-      {/* Header Komponen */}
+      {/* Header Komponen - Pastikan Header menerima prop yang dibutuhkan */}
       <Header
         greetText={greetText}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
 
-      {/* Main Content Area: Sidebar + Page Content */}
       <div className="flex flex-1">
         {/* Sidebar Navigation */}
         <nav
@@ -305,7 +303,7 @@ function Layout({
         </main>
       </div>
 
-      {/* Footer Komponen */}
+      {/* Footer Komponen - Pastikan Footer tidak menerima prop `greetText` jika tidak perlu */}
       <Footer />
 
       {/* Onboarding Modal */}
@@ -316,7 +314,7 @@ function Layout({
   );
 }
 
-// Helper component for Sidebar Links (updated to use react-router-dom's Link)
+// Helper component for Sidebar Links
 import { Link, useResolvedPath, useMatch } from "react-router-dom";
 
 function SidebarLink({ to, iconClass, label, setIsSidebarOpen }) {

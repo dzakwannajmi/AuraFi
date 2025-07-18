@@ -2,13 +2,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="bg-gray-800 text-white text-center p-4">
       <p>&copy; 2023 HopeBridge. All rights reserved.</p>
-      <p>
-        Follow us on:
-        <a href="https://facebook.com">Facebook</a> |
-        <a href="https://twitter.com">Twitter</a>
-      </p>
     </footer>
   );
 };

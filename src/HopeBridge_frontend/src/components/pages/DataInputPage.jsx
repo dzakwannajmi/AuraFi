@@ -12,71 +12,82 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useOutletContext } from "react-router-dom";
 
-function DataInputPage({
-  activeDataInputTab,
-  setActiveDataInputTab,
-  handleFinancialGoalsSubmit,
-  gajiBulanan,
-  setGajiBulanan,
-  pendapatanPasif,
-  setPendapatanPasif,
-  belanjaKebutuhan,
-  setBelanjaKebutuhan,
-  transportasi,
-  setTransportasi,
-  sedekahDonasi,
-  setSedekahDonasi,
-  pendidikanExpense,
-  setPendidikanExpense,
-  pajakExpense,
-  setPajakExpense,
-  premiAsuransi,
-  setPremiAsuransi,
-  tabungInvestasiBulanan,
-  setTabungInvestasiBulanan,
-  totalTabunganSaatIni,
-  setTotalTabunganSaatIni,
-  crowdFunding,
-  setCrowdFunding,
-  logamMulia,
-  setLogamMulia,
-  saham,
-  setSaham,
-  unitLink,
-  setUnitLink,
-  reksadana,
-  setReksadana,
-  obligasiP2P,
-  setObligasiP2P,
-  deposito,
-  setDeposito,
-  ebaRitel,
-  setEbaRitel,
-  punyaAset,
-  setPunyaAset,
-  vehicles,
-  setVehicles,
-  rumahValue,
-  setRumahValue,
-  tanahValue,
-  setTanahValue,
-  bangunanValue,
-  setBangunanValue,
-  punyaUtang,
-  setPunyaUtang,
-  debts,
-  setDebts,
-  emergencyFund,
-  setEmergencyFund,
-  budget,
-  setBudget,
-  // New props for chart data
-  incomeChartData,
-  expenseChartData,
-  investmentChartData,
-  assetDebtChartData,
-}) {
+function DataInputPage() {
+  const context = useOutletContext();
+  const {
+    activeDataInputTab,
+    setActiveDataInputTab,
+    handleFinancialGoalsSubmit,
+    gajiBulanan,
+    setGajiBulanan,
+    pendapatanPasif,
+    setPendapatanPasif,
+    belanjaKebutuhan,
+    setBelanjaKebutuhan,
+    transportasi,
+    setTransportasi,
+    sedekahDonasi,
+    setSedekahDonasi,
+    pendidikanExpense,
+    setPendidikanExpense,
+    pajakExpense,
+    setPajakExpense,
+    premiAsuransi,
+    setPremiAsuransi,
+    tabungInvestasiBulanan,
+    setTabungInvestasiBulanan,
+    totalTabunganSaatIni,
+    setTotalTabunganSaatIni,
+    crowdFunding,
+    setCrowdFunding,
+    logamMulia,
+    setLogamMulia,
+    saham,
+    setSaham,
+    unitLink,
+    setUnitLink,
+    reksadana,
+    setReksadana,
+    obligasiP2P,
+    setObligasiP2P,
+    deposito,
+    setDeposito,
+    ebaRitel,
+    setEbaRitel,
+    punyaAset,
+    setPunyaAset,
+    vehicles,
+    setVehicles,
+    rumahValue,
+    setRumahValue,
+    tanahValue,
+    setTanahValue,
+    bangunanValue,
+    setBangunanValue,
+    punyaUtang,
+    setPunyaUtang,
+    debts,
+    setDebts,
+    emergencyFund,
+    setEmergencyFund,
+    budget,
+    setBudget,
+    incomeChartData,
+    expenseChartData,
+    investmentChartData,
+    assetDebtChartData,
+    // NEW: Ambil state crypto dari context
+    bitcoinCurrentValue,
+    setBitcoinCurrentValue,
+    ethereumCurrentValue,
+    setEthereumCurrentValue,
+    cryptoScenarioPercentage,
+    setCryptoScenarioPercentage,
+    netWorth, // Untuk menghitung dampak pada net worth
+  } = context;
+
   const COLORS = [
     "#3AD9A3",
     "#0F7C5F",
@@ -116,6 +127,28 @@ function DataInputPage({
       </text>
     );
   };
+
+  // NEW: Logika Analisis Crypto
+  const calculateCryptoScenario = () => {
+    const changeFactor = 1 + cryptoScenarioPercentage / 100;
+    const newBitcoinValue = bitcoinCurrentValue * changeFactor;
+    const newEthereumValue = ethereumCurrentValue * changeFactor;
+
+    // Hitung dampak pada Net Worth
+    const oldCryptoTotal = bitcoinCurrentValue + ethereumCurrentValue;
+    const newCryptoTotal = newBitcoinValue + newEthereumValue;
+    const netWorthImpact = newCryptoTotal - oldCryptoTotal;
+    const projectedNetWorth = netWorth + netWorthImpact;
+
+    return {
+      newBitcoinValue,
+      newEthereumValue,
+      potentialGainLoss: netWorthImpact,
+      projectedNetWorth,
+    };
+  };
+
+  const cryptoScenarioResult = calculateCryptoScenario();
 
   return (
     <section
@@ -167,6 +200,17 @@ function DataInputPage({
           } transition-all duration-300`}
         >
           Aset & Utang
+        </button>
+        {/* NEW: Tab Analisis Crypto */}
+        <button
+          onClick={() => setActiveDataInputTab("analisisCrypto")}
+          className={`px-6 py-3 text-lg font-medium ${
+            activeDataInputTab === "analisisCrypto"
+              ? "gradient-text border-b-2 border-green-primary"
+              : "text-gray-400 hover:text-green-primary"
+          } transition-all duration-300`}
+        >
+          Analisis Crypto
         </button>
       </div>
 
@@ -268,7 +312,7 @@ function DataInputPage({
                     border: "1px solid gray-tooltip-border",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "gray-tooltip-item" }}
+                  itemStyle={{ color: "white-default" }}
                   labelStyle={{ color: "gray-tooltip-label" }}
                   formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
                 />
@@ -377,7 +421,7 @@ function DataInputPage({
                     border: "1px solid gray-tooltip-border",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "gray-tooltip-item" }}
+                  itemStyle={{ color: "white-default" }}
                   labelStyle={{ color: "gray-tooltip-label" }}
                   formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
                 />
@@ -561,7 +605,7 @@ function DataInputPage({
                     border: "1px solid gray-tooltip-border",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "gray-tooltip-item" }}
+                  itemStyle={{ color: "white-default" }}
                   labelStyle={{ color: "gray-tooltip-label" }}
                   formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
                 />
@@ -764,7 +808,7 @@ function DataInputPage({
                     border: "1px solid gray-tooltip-border",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "gray-tooltip-item" }}
+                  itemStyle={{ color: "white-default" }}
                   labelStyle={{ color: "gray-tooltip-label" }}
                   formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
                 />
@@ -781,7 +825,128 @@ function DataInputPage({
           </div>
         </div>
       )}
+      {/* NEW: Analisis Crypto Tab Content */}
+      {activeDataInputTab === "analisisCrypto" && (
+        <div className="space-y-8">
+          <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
+            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
+              Analisis Potensi Perubahan Investasi Crypto Anda
+            </h3>
+            <div className="mb-5">
+              <label
+                htmlFor="bitcoinCurrentValue"
+                className="block mb-2 font-medium text-gray-text-tertiary"
+              >
+                Nilai Bitcoin Anda Saat Ini (Rp)
+              </label>
+              <input
+                type="number"
+                id="bitcoinCurrentValue"
+                placeholder="e.g., 10000000"
+                value={bitcoinCurrentValue}
+                onChange={(e) => setBitcoinCurrentValue(Number(e.target.value))}
+                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              />
+            </div>
+            <div className="mb-5">
+              <label
+                htmlFor="ethereumCurrentValue"
+                className="block mb-2 font-medium text-gray-text-tertiary"
+              >
+                Nilai Ethereum Anda Saat Ini (Rp)
+              </label>
+              <input
+                type="number"
+                id="ethereumCurrentValue"
+                placeholder="e.g., 5000000"
+                value={ethereumCurrentValue}
+                onChange={(e) =>
+                  setEthereumCurrentValue(Number(e.target.value))
+                }
+                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              />
+            </div>
+            <div className="mb-5">
+              <label
+                htmlFor="cryptoScenarioPercentage"
+                className="block mb-2 font-medium text-gray-text-tertiary"
+              >
+                Skenario Perubahan Harga (%)
+              </label>
+              <input
+                type="number"
+                id="cryptoScenarioPercentage"
+                placeholder="e.g., 10 untuk 10% naik, -5 untuk 5% turun"
+                value={cryptoScenarioPercentage}
+                onChange={(e) =>
+                  setCryptoScenarioPercentage(Number(e.target.value))
+                }
+                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Masukkan angka positif untuk kenaikan, negatif untuk penurunan.
+              </p>
+            </div>
+            <button
+              type="submit"
+              className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
+            >
+              Simulasikan Perubahan
+            </button>
+          </form>
+
+          {/* Hasil Simulasi */}
+          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
+            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+              Hasil Simulasi
+            </h3>
+            <div className="space-y-3">
+              <p className="text-lg text-gray-300">
+                Potensi Perubahan Nilai Investasi Crypto:{" "}
+                <span
+                  className={`font-bold ${
+                    cryptoScenarioResult.potentialGainLoss >= 0
+                      ? "text-green-primary"
+                      : "text-red-primary"
+                  }`}
+                >
+                  Rp{" "}
+                  {cryptoScenarioResult.potentialGainLoss.toLocaleString(
+                    "id-ID"
+                  )}
+                </span>
+              </p>
+              <p className="text-lg text-gray-300">
+                Nilai Bitcoin Baru:{" "}
+                <span className="font-bold text-white-default">
+                  Rp{" "}
+                  {cryptoScenarioResult.newBitcoinValue.toLocaleString("id-ID")}
+                </span>
+              </p>
+              <p className="text-lg text-gray-300">
+                Nilai Ethereum Baru:{" "}
+                <span className="font-bold text-white-default">
+                  Rp{" "}
+                  {cryptoScenarioResult.newEthereumValue.toLocaleString(
+                    "id-ID"
+                  )}
+                </span>
+              </p>
+              <p className="text-lg text-gray-300">
+                Kekayaan Bersih Proyeksi:{" "}
+                <span className="font-bold gradient-text">
+                  Rp{" "}
+                  {cryptoScenarioResult.projectedNetWorth.toLocaleString(
+                    "id-ID"
+                  )}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
+
 export default DataInputPage;

@@ -34,7 +34,7 @@ function DashboardPage() {
   const safeTotalExpenses = totalExpenses !== undefined ? totalExpenses : 0;
   const safeTotalIncome = totalIncome !== undefined ? totalIncome : 0;
   const safeNetBalance = netBalance !== undefined ? netBalance : 0;
-  const safeNetWorth = netWorth !== undefined ? netWorth ? netWorth : 0 : 0; // double check for null/false values
+  const safeNetWorth = netWorth !== undefined ? netWorth : 0; // Perbaikan: Cukup satu null check
   const safeBudget = budget !== undefined ? budget : 0;
   const safeSavings = savings !== undefined ? savings : 0;
   const safeRetirementSavings = retirementSavings !== undefined ? retirementSavings : 0;
@@ -42,11 +42,14 @@ function DashboardPage() {
 
 
   // Simple financial note based on current status
-  const financialNote = financialStatus && financialStatus.level >= 4
-    ? "Selamat! Kesehatan finansial Anda sangat baik. Terus pertahankan kebiasaan baik ini dan pertimbangkan untuk diversifikasi investasi."
-    : financialStatus && financialStatus.level >= 2
-    ? "Kesehatan finansial Anda stabil, namun ada ruang untuk perbaikan. Fokus pada pengurangan utang atau peningkatan dana darurat."
-    : "Perlu perhatian lebih pada kesehatan finansial Anda. Mari kita mulai dengan membuat anggaran dan melacak pengeluaran Anda.";
+  const financialNote = financialStatus && financialStatus.level !== undefined // Tambahkan null/undefined check untuk level
+    ? (financialStatus.level >= 4
+      ? "Selamat! Kesehatan finansial Anda sangat baik. Terus pertahankan kebiasaan baik ini dan pertimbangkan untuk diversifikasi investasi."
+      : financialStatus.level >= 2
+      ? "Kesehatan finansial Anda stabil, namun ada ruang untuk perbaikan. Fokus pada pengurangan utang atau peningkatan dana darurat."
+      : "Perlu perhatian lebih pada kesehatan finansial Anda. Mari kita mulai dengan membuat anggaran dan melacak pengeluaran Anda.")
+    : "Memuat status keuangan..."; // Pesan default jika financialStatus belum siap
+
 
   // Tambahkan juga pemeriksaan untuk data grafik sebelum merender chart
   const isChartDataReady = monthlyData && monthlyData.length > 0 && categoryExpenseData && categoryExpenseData.length > 0;
@@ -125,7 +128,7 @@ function DashboardPage() {
                 <YAxis stroke="gray-medium" />
                 <Tooltip
                   contentStyle={{ backgroundColor: 'gray-tooltip-bg', border: '1px solid gray-tooltip-border', borderRadius: '8px' }}
-                  itemStyle={{ color: 'gray-tooltip-item' }}
+                  itemStyle={{ color: 'white-default' }} // Menggunakan nama warna dari tailwind.config.js
                   labelStyle={{ color: 'gray-tooltip-label' }}
                   formatter={(value) => `Rp ${value.toLocaleString('id-ID')}`}
                 />
@@ -149,7 +152,7 @@ function DashboardPage() {
                 <YAxis stroke="gray-medium" />
                 <Tooltip
                   contentStyle={{ backgroundColor: 'gray-tooltip-bg', border: '1px solid gray-tooltip-border', borderRadius: '8px' }}
-                  itemStyle={{ color: '#fff' }}
+                  itemStyle={{ color: 'white-default' }} // Menggunakan nama warna dari tailwind.config.js
                   labelStyle={{ color: 'gray-tooltip-label' }}
                   formatter={(value) => `Rp ${value.toLocaleString('id-ID')}`}
                 />

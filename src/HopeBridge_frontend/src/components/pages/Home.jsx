@@ -1,6 +1,8 @@
 import React from "react";
+import { useOutletContext } from "react-router-dom";
+function HomePage() {
+  const { user, login } = useOutletContext();
 
-function HomePage({ setActivePage }) {
   return (
     <section
       id="home"
@@ -14,16 +16,17 @@ function HomePage({ setActivePage }) {
         dan meningkatkan kesehatan finansial Anda. Mulai perjalanan Anda menuju
         stabilitas keuangan sekarang.
       </p>
-      <button className="px-8 py-4 text-xl rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md">
-        Login with Internet Identity
-      </button>
-      <button
-        onClick={() => setActivePage("dashboard")}
-        className="mt-6 px-6 py-3 rounded-lg font-semibold text-gray-300 border border-gray-700 hover:bg-gray-800 transition-colors"
-      >
-        Lanjutkan sebagai Tamu
-      </button>
+      {/* Tombol Login with Internet Identity hanya tampil jika user BELUM login */}
+      {!user && ( // <-- Tambahkan kondisi ini
+        <button
+          onClick={login} // Panggil fungsi login dari Outlet context
+          className="px-8 py-4 text-xl rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
+        >
+          Login with Internet Identity
+        </button>
+      )}
     </section>
   );
 }
+
 export default HomePage;

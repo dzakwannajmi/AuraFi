@@ -17,7 +17,7 @@ import DataInputPage from "../pages/DataInputPage"; // Dari pages/ ke components
 import AboutPage from "../pages/AboutPage"; // Dari pages/ ke components/pages/
 
 function Layout({
-  // Terima semua props dari App.jsx
+  // Terima semua props dari App.jsx (kecuali user, login, logout, karena akan diambil di sini)
   greetText,
   budget,
   setBudget,
@@ -73,6 +73,12 @@ function Layout({
   setDeposito,
   ebaRitel,
   setEbaRitel,
+  bitcoinCurrentValue,
+  setBitcoinCurrentValue,
+  ethereumCurrentValue,
+  setEthereumCurrentValue,
+  cryptoScenarioPercentage,
+  setCryptoScenarioPercentage,
   punyaAset,
   setPunyaAset,
   rumahValue,
@@ -106,7 +112,9 @@ function Layout({
   activeDataInputTab,
   setActiveDataInputTab,
 }) {
-  const { authReady } = useAuth();
+  // Panggil useAuth() di sini, di dalam komponen yang dibungkus AuthProvider
+  const { authReady, user, login, logout } = useAuth(); // <--- Panggil useAuth() di sini
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
   const location = useLocation();
@@ -133,6 +141,9 @@ function Layout({
         greetText={greetText}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        user={user} // Teruskan user ke Header
+        login={login} // Teruskan login ke Header
+        logout={logout} // Teruskan logout ke Header
       />
 
       <div className="flex flex-1">
@@ -210,8 +221,12 @@ function Layout({
           {/* Outlet akan merender komponen anak yang sesuai dengan rute */}
           <Outlet
             context={{
-              // Meneruskan semua props ke Outlet
-              // Pastikan semua props yang diperlukan oleh halaman anak ada di sini
+              // Meneruskan SEMUA props yang diterima Layout, PLUS user, login, logout dari useAuth()
+              // Ini adalah cara paling aman untuk memastikan semua data tersedia
+              greetText,
+              user,
+              login,
+              logout, // <--- PASTIKAN INI ADA DI SINI
               budget,
               setBudget,
               savings,
@@ -266,6 +281,12 @@ function Layout({
               setDeposito,
               ebaRitel,
               setEbaRitel,
+              bitcoinCurrentValue,
+              setBitcoinCurrentValue,
+              ethereumCurrentValue,
+              setEthereumCurrentValue,
+              cryptoScenarioPercentage,
+              setCryptoScenarioPercentage,
               punyaAset,
               setPunyaAset,
               rumahValue,
@@ -303,7 +324,7 @@ function Layout({
         </main>
       </div>
 
-      {/* Footer Komponen - Pastikan Footer tidak menerima prop `greetText` jika tidak perlu */}
+      {/* Footer Komponen */}
       <Footer />
 
       {/* Onboarding Modal */}

@@ -47,6 +47,21 @@ export default {
         // Warna lainnya
         "purple-recharts": "#8884d8", // Warna default recharts (jika tidak di-override)
       },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0, transform: "scale(0.95)" },
+          "100%": { opacity: 1, transform: "scale(1)" },
+        },
+        bounceOnce: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "20%, 50%, 80%": { transform: "translateY(-8px)" },
+          "40%, 60%": { transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-in": "fadeIn 0.3s ease-out forwards",
+        "bounce-once": "bounceOnce 1.5s ease-in-out",
+      },
     },
   },
   plugins: [],

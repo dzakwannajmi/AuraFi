@@ -1,119 +1,132 @@
 import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import useAuth from "../../hooks/useAuth"; // Path ini sudah benar
+import useAuth from "../../hooks/useAuth";
+import useFinancialHealthData from "../../hooks/useFinancialHealthData";
 
 // Perbaikan Jalur Impor
-import OnboardingModal from "../modals/OnboardingModal"; // Dari pages/ ke components/modals/
-import Header from "../Header"; // Dari pages/ ke components/
-import Footer from "../Footer"; // Dari pages/ ke components/
+import OnboardingModal from "../modals/OnboardingModal";
+import Header from "../Header";
+import Footer from "../Footer";
 
-// Import komponen halaman yang dibutuhkan di sini untuk Outlet Context
-// Pastikan PATH ini BENAR sesuai struktur Anda
-import HomePage from "./Home"; // Home.jsx di folder yang sama dengan Layout.jsx
-import DashboardPage from "../pages/DashboardPage"; // Dari pages/ ke components/pages/
-import TransactionsPage from "../pages/TransactionsPage"; // Dari pages/ ke components/pages/
-import AiCarePage from "../pages/AiCarePage"; // Dari pages/ ke components/pages/
-import DataInputPage from "../pages/DataInputPage"; // Dari pages/ ke components/pages/
-import AboutPage from "../pages/AboutPage"; // Dari pages/ ke components/pages/
+// Hapus import komponen halaman di sini, karena mereka akan dirender oleh Outlet
 
-function Layout({
-  // Terima semua props dari App.jsx (kecuali user, login, logout, karena akan diambil di sini)
-  greetText,
-  budget,
-  setBudget,
-  savings,
-  setSavings,
-  retirementSavings,
-  setRetirementSavings,
-  vehicles,
-  setVehicles,
-  otherAssets,
-  setOtherAssets,
-  debts,
-  setDebts,
-  emergencyFund,
-  setEmergencyFund,
-  gajiBulanan,
-  setGajiBulanan,
-  pendapatanPasif,
-  setPendapatanPasif,
-  bisnisUsaha,
-  setBisnisUsaha,
-  hasilInvestasi,
-  setHasilInvestasi,
-  belanjaKebutuhan,
-  setBelanjaKebutuhan,
-  transportasi,
-  setTransportasi,
-  sedekahDonasi,
-  setSedekahDonasi,
-  pendidikanExpense,
-  setPendidikanExpense,
-  pajakExpense,
-  setPajakExpense,
-  premiAsuransi,
-  setPremiAsuransi,
-  tabungInvestasiBulanan,
-  setTabungInvestasiBulanan,
-  totalTabunganSaatIni,
-  setTotalTabunganSaatIni,
-  crowdFunding,
-  setCrowdFunding,
-  logamMulia,
-  setLogamMulia,
-  saham,
-  setSaham,
-  unitLink,
-  setUnitLink,
-  reksadana,
-  setReksadana,
-  obligasiP2P,
-  setObligasiP2P,
-  deposito,
-  setDeposito,
-  ebaRitel,
-  setEbaRitel,
-  bitcoinCurrentValue,
-  setBitcoinCurrentValue,
-  ethereumCurrentValue,
-  setEthereumCurrentValue,
-  cryptoScenarioPercentage,
-  setCryptoScenarioPercentage,
-  punyaAset,
-  setPunyaAset,
-  rumahValue,
-  setRumahValue,
-  tanahValue,
-  setTanahValue,
-  bangunanValue,
-  setBangunanValue,
-  punyaUtang,
-  setPunyaUtang,
-  calculatedTotalIncome,
-  calculatedTotalExpenses,
-  netBalance,
-  netWorth,
-  financialStatus,
-  transactions,
-  monthlyData,
-  categoryExpenseData,
-  incomeChartData,
-  expenseChartData,
-  investmentChartData,
-  assetDebtChartData,
-  aiCareInput,
-  setAiCareInput,
-  aiCareResponse,
-  setAiCareResponse,
-  aiCareLoading,
-  setAiCareLoading,
-  getAiFinancialAdvice,
-  handleFinancialGoalsSubmit,
-  activeDataInputTab,
-  setActiveDataInputTab,
-}) {
-  // Panggil useAuth() di sini, di dalam komponen yang dibungkus AuthProvider
-  const { authReady, user, login, logout } = useAuth(); // <--- Panggil useAuth() di sini
+function Layout(
+  {
+  }
+) {
+  const { authReady, user, login, logout } = useAuth();
+
+  const {
+    greetText,
+    setGreetText,
+    budget,
+    setBudget,
+    savings,
+    setSavings,
+    retirementSavings,
+    setRetirementSavings,
+    vehicles,
+    setVehicles,
+    otherAssets,
+    setOtherAssets,
+    debts,
+    setDebts,
+    emergencyFund,
+    setEmergencyFund,
+    gajiBulanan,
+    setGajiBulanan,
+    pendapatanPasif,
+    setPendapatanPasif,
+    bisnisUsaha,
+    setBisnisUsaha,
+    hasilInvestasi,
+    setHasilInvestasi,
+    belanjaKebutuhan,
+    setBelanjaKebutuhan,
+    transportasi,
+    setTransportasi,
+    sedekahDonasi,
+    setSedekahDonasi,
+    pendidikanExpense,
+    setPendidikanExpense,
+    pajakExpense,
+    setPajakExpense,
+    premiAsuransi,
+    setPremiAsuransi,
+    tabungInvestasiBulanan,
+    setTabungInvestasiBulanan,
+    totalTabunganSaatIni,
+    setTotalTabunganSaatIni,
+    crowdFunding,
+    setCrowdFunding,
+    logamMulia,
+    setLogamMulia,
+    saham,
+    setSaham,
+    unitLink,
+    setUnitLink,
+    reksadana,
+    setReksadana,
+    obligasiP2P,
+    setObligasiP2P,
+    deposito,
+    setDeposito,
+    ebaRitel,
+    setEbaRitel,
+    bitcoinCurrentValue,
+    setBitcoinCurrentValue,
+    ethereumCurrentValue,
+    setEthereumCurrentValue,
+    cryptoScenarioPercentage,
+    setCryptoScenarioPercentage,
+    punyaAset,
+    setPunyaAset,
+    rumahValue,
+    setRumahValue,
+    tanahValue,
+    setTanahValue,
+    bangunanValue,
+    setBangunanValue,
+    punyaUtang,
+    setPunyaUtang,
+    calculatedTotalIncome,
+    calculatedTotalExpenses,
+    netBalance,
+    netWorth,
+    financialStatus,
+    transactions,
+    monthlyData,
+    categoryExpenseData,
+    incomeChartData,
+    expenseChartData,
+    investmentChartData,
+    assetDebtChartData,
+    aiCareInput,
+    setAiCareInput,
+    aiCareResponse,
+    setAiCareResponse,
+    aiCareLoading,
+    setAiCareLoading,
+    getAiFinancialAdvice,
+    handleFinancialGoalsSubmit,
+    activeDataInputTab,
+    setActiveDataInputTab,
+    toggleBisnisUsaha,
+    toggleHasilInvestasi,
+    toggleTransportasi,
+    toggleSedekahDonasi,
+    togglePendidikanExpense,
+    togglePajakExpense,
+    togglePremiAsuransi,
+    toggleReksadana,
+    toggleObligasiP2P,
+    toggleDeposito,
+    toggleEbaRitel,
+    toggleKendaraan,
+    toggleRumah,
+    toggleTanah,
+    toggleBangunan,
+  } = useFinancialHealthData();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -136,14 +149,14 @@ function Layout({
         .gradient-text { background: linear-gradient(90deg, var(--tw-gradient-from, #3AD9A3), var(--tw-gradient-to, #0F7C5F)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
       `}</style>
 
-      {/* Header Komponen - Pastikan Header menerima prop yang dibutuhkan */}
+      {/* Header Komponen */}
       <Header
-        greetText={greetText}
+        greetText={greetText} // greetText kini dari useFinancialHealthData
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        user={user} // Teruskan user ke Header
-        login={login} // Teruskan login ke Header
-        logout={logout} // Teruskan logout ke Header
+        user={user}
+        login={login}
+        logout={logout}
       />
 
       <div className="flex flex-1">
@@ -221,12 +234,11 @@ function Layout({
           {/* Outlet akan merender komponen anak yang sesuai dengan rute */}
           <Outlet
             context={{
-              // Meneruskan SEMUA props yang diterima Layout, PLUS user, login, logout dari useAuth()
-              // Ini adalah cara paling aman untuk memastikan semua data tersedia
-              greetText,
+              // Meneruskan SEMUA data dari useAuth dan useFinancialHealthData
+              greetText, // greetText kini dari useFinancialHealthData
               user,
               login,
-              logout, // <--- PASTIKAN INI ADA DI SINI
+              logout, // Dari useAuth()
               budget,
               setBudget,
               savings,
@@ -319,6 +331,21 @@ function Layout({
               handleFinancialGoalsSubmit,
               activeDataInputTab,
               setActiveDataInputTab,
+              toggleBisnisUsaha,
+              toggleHasilInvestasi,
+              toggleTransportasi,
+              toggleSedekahDonasi,
+              togglePendidikanExpense,
+              togglePajakExpense,
+              togglePremiAsuransi,
+              toggleReksadana,
+              toggleObligasiP2P,
+              toggleDeposito,
+              toggleEbaRitel,
+              toggleKendaraan,
+              toggleRumah,
+              toggleTanah,
+              toggleBangunan,
             }}
           />
         </main>

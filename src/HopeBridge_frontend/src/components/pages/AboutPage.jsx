@@ -1,6 +1,10 @@
 import React from "react";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext jika perlu greetText
 
 function AboutPage() {
+  // Jika Anda ingin menampilkan greetText di AboutPage, ambil dari context:
+  // const { greetText } = useOutletContext();
+
   return (
     <section id="about" className="p-10 max-w-4xl mx-auto my-10 text-center">
       <h2 className="text-3xl font-semibold mb-8 gradient-text">
@@ -33,6 +37,8 @@ function AboutPage() {
           yang lebih cerdas dan mencapai stabilitas keuangan untuk masa depan
           yang lebih cerah.
         </p>
+        {/* Jika Anda ingin menampilkan greetText di sini: */}
+        {/* <p className="text-sm text-gray-500 mt-4">Pesan dari backend: {greetText}</p> */}
       </div>
     </section>
   );

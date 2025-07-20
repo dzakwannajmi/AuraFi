@@ -1,14 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 
-function TransactionsPage({ transactions }) {
+function TransactionsPage() {
+  const [transactions, setTransactions] = useState([
+    {
+      id: 1,
+      type: "expense",
+      amount: 200000,
+      category: "Obat-obatan",
+      description: "Paracetamol dan antibiotik",
+      date: "2025-07-18",
+    },
+    {
+      id: 2,
+      type: "income",
+      amount: 500000,
+      category: "Klaim Asuransi",
+      description: "Reimburse rawat jalan",
+      date: "2025-07-17",
+    },
+  ]);
+
+  const [formData, setFormData] = useState({
+    type: "expense",
+    amount: "",
+    category: "",
+    description: "",
+    date: "",
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.amount ||
+      !formData.category ||
+      !formData.description ||
+      !formData.date
+    ) {
+      alert("Harap isi semua field");
+      return;
+    }
+
+    const newTransaction = {
+      ...formData,
+      id: Date.now(), // ID unik sederhana
+      amount: parseInt(formData.amount, 10),
+    };
+
+    setTransactions((prev) => [newTransaction, ...prev]);
+    setFormData({
+      type: "expense",
+      amount: "",
+      category: "",
+      description: "",
+      date: "",
+    });
+  };
+
   return (
     <>
-      {/* Transaction Form */}
+      {/* Form */}
       <section className="p-10 max-w-2xl mx-auto mb-10 bg-gray-card-bg rounded-xl shadow-md border border-gray-border md:p-5 md:mx-5">
         <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
           Tambah Transaksi Baru
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label
               htmlFor="type"
@@ -18,7 +79,9 @@ function TransactionsPage({ transactions }) {
             </label>
             <select
               id="type"
-              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              value={formData.type}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default"
             >
               <option value="expense">Pengeluaran Medis</option>
               <option value="income">Klaim Asuransi</option>
@@ -34,8 +97,10 @@ function TransactionsPage({ transactions }) {
             <input
               type="number"
               id="amount"
+              value={formData.amount}
+              onChange={handleChange}
               placeholder="e.g., 500000"
-              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default"
             />
           </div>
           <div className="mb-5">
@@ -48,8 +113,10 @@ function TransactionsPage({ transactions }) {
             <input
               type="text"
               id="category"
-              placeholder="e.g., Obat-obatan, Dokter Gigi, Rawat Inap"
-              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              value={formData.category}
+              onChange={handleChange}
+              placeholder="e.g., Obat-obatan"
+              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default"
             />
           </div>
           <div className="mb-5">
@@ -61,8 +128,10 @@ function TransactionsPage({ transactions }) {
             </label>
             <textarea
               id="description"
+              value={formData.description}
+              onChange={handleChange}
               placeholder="Deskripsi singkat transaksi"
-              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30 min-h-[80px] resize-y"
+              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default min-h-[80px] resize-y"
             ></textarea>
           </div>
           <div className="mb-5">
@@ -75,19 +144,21 @@ function TransactionsPage({ transactions }) {
             <input
               type="date"
               id="date"
-              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+              value={formData.date}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default"
             />
           </div>
           <button
             type="submit"
-            className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
+            className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90"
           >
             Tambah Transaksi
           </button>
         </form>
       </section>
 
-      {/* Transaction List */}
+      {/* List */}
       <section className="p-10 max-w-4xl mx-auto md:p-5">
         <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
           Daftar Transaksi Kesehatan
@@ -96,21 +167,16 @@ function TransactionsPage({ transactions }) {
           <table className="w-full border-collapse min-w-[600px]">
             <thead>
               <tr>
-                <th className="p-4 text-left border-b border-gray-border bg-gray-table-header font-semibold text-gray-100">
-                  Tanggal
-                </th>
-                <th className="p-4 text-left border-b border-gray-border bg-gray-table-header font-semibold text-gray-100">
-                  Jenis
-                </th>
-                <th className="p-4 text-left border-b border-gray-border bg-gray-table-header font-semibold text-gray-100">
-                  Kategori
-                </th>
-                <th className="p-4 text-left border-b border-gray-border bg-gray-table-header font-semibold text-gray-100">
-                  Deskripsi
-                </th>
-                <th className="p-4 text-left border-b border-gray-border bg-gray-table-header font-semibold text-gray-100">
-                  Jumlah
-                </th>
+                {["Tanggal", "Jenis", "Kategori", "Deskripsi", "Jumlah"].map(
+                  (text) => (
+                    <th
+                      key={text}
+                      className="p-4 text-left border-b border-gray-border bg-gray-table-header font-semibold text-gray-100"
+                    >
+                      {text}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody>
@@ -143,6 +209,13 @@ function TransactionsPage({ transactions }) {
                   </td>
                 </tr>
               ))}
+              {transactions.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="p-4 text-center text-gray-400">
+                    Belum ada transaksi.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -150,4 +223,5 @@ function TransactionsPage({ transactions }) {
     </>
   );
 }
+
 export default TransactionsPage;

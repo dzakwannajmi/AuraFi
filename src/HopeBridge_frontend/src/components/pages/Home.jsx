@@ -1,5 +1,6 @@
 import React from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom"; 
+
 function HomePage() {
   const { user, login } = useOutletContext();
 

@@ -1,28 +1,32 @@
 import React from "react";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
-function AiCarePage({
-  gajiBulanan,
-  pendapatanPasif,
-  totalExpenses,
-  totalIncome,
-  netBalance,
-  netWorth,
-  budget,
-  savings,
-  retirementSavings,
-  emergencyFund,
-  debts,
-  punyaAset,
-  vehicles,
-  rumahValue,
-  tanahValue,
-  bangunanValue,
-  aiCareInput,
-  setAiCareInput,
-  aiCareResponse,
-  aiCareLoading,
-  getAiFinancialAdvice,
-}) {
+function AiCarePage() {
+  // Ambil semua state dan fungsi yang dibutuhkan dari Outlet context
+  const {
+    gajiBulanan,
+    pendapatanPasif,
+    calculatedTotalExpenses, // Menggunakan calculatedTotalExpenses dari context
+    calculatedTotalIncome, // Menggunakan calculatedTotalIncome dari context
+    netBalance,
+    netWorth,
+    budget,
+    savings,
+    retirementSavings,
+    emergencyFund,
+    debts,
+    punyaAset,
+    vehicles,
+    rumahValue,
+    tanahValue,
+    bangunanValue,
+    aiCareInput,
+    setAiCareInput,
+    aiCareResponse,
+    aiCareLoading,
+    getAiFinancialAdvice,
+  } = useOutletContext();
+
   return (
     <section id="ai-care" className="p-10 max-w-4xl mx-auto my-10">
       <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">

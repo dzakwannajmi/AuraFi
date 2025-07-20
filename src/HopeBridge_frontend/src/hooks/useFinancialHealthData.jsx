@@ -1,3 +1,4 @@
+// HopeBridge_frontend/src/hooks/useFinancialHealthData.jsx
 import { useState, useEffect } from "react";
 import { HopeBridge_backend } from "declarations/HopeBridge_backend";
 
@@ -13,48 +14,14 @@ const useFinancialHealthData = () => {
 
   const [gajiBulanan, setGajiBulanan] = useState(5000000);
   const [pendapatanPasif, setPendapatanPasif] = useState(1000000);
-
-  // Initialize bisnisUsaha and hasilInvestasi as empty arrays.
-  // This ensures no input fields are shown initially for these dynamic categories.
-  const [bisnisUsaha, setBisnisUsaha] = useState([]);
-  const [hasilInvestasi, setHasilInvestasi] = useState([]);
-
-  // Removed activeBisnisUsaha and activeHasilInvestasi as their visibility is now
-  // controlled by the length of the respective arrays.
-
-  // Function to add a new input field for bisnisUsaha
-  const addBisnisUsaha = () => {
-    setBisnisUsaha((prev) => [...prev, 0]); // Add a new 0 value to the array
-  };
-
-  // Function to update the value of a specific bisnisUsaha input by index
-  const updateBisnisUsaha = (index, value) => {
-    setBisnisUsaha((prev) => {
-      const newArr = [...prev];
-      newArr[index] = value;
-      return newArr;
-    });
-  };
-
-  // Function to add a new input field for hasilInvestasi
-  const addHasilInvestasi = () => {
-    setHasilInvestasi((prev) => [...prev, 0]); // Add a new 0 value to the array
-  };
-
-  // Function to update the value of a specific hasilInvestasi input by index
-  const updateHasilInvestasi = (index, value) => {
-    setHasilInvestasi((prev) => {
-      const newArr = [...prev];
-      newArr[index] = value;
-      return newArr;
-    });
-  };
+  const [bisnisUsaha, setBisnisUsaha] = useState(0);
+  const [hasilInvestasi, setHasilInvestasi] = useState(0);
 
   const [belanjaKebutuhan, setBelanjaKebutuhan] = useState(2500000);
   const [transportasi, setTransportasi] = useState(0);
   const [sedekahDonasi, setSedekahDonasi] = useState(0);
   const [pendidikanExpense, setPendidikanExpense] = useState(0);
-  const [pajakExpense, setPajakExpense] = useState(0);
+  const [pajakExpense, setPajakExpense] = useState(0); // <--- Pastikan ini sudah benar
   const [premiAsuransi, setPremiAsuransi] = useState(0);
 
   const [tabungInvestasiBulanan, setTabungInvestasiBulanan] = useState(1000000);
@@ -119,15 +86,13 @@ const useFinancialHealthData = () => {
   const handleTransactionSubmit = (e) => {
     e.preventDefault();
 
-    // Replaced alert with console.error for better practice in React apps
     if (
       !formData.amount ||
       !formData.category ||
       !formData.description ||
       !formData.date
     ) {
-      console.error("Harap isi semua field transaksi!");
-      // You might want to show a custom modal or error message on the UI instead of alert
+      alert("Harap isi semua field transaksi!");
       return;
     }
 
@@ -145,12 +110,13 @@ const useFinancialHealthData = () => {
       description: "",
       date: "",
     });
-    console.log("Transaksi berhasil ditambahkan!"); // Replaced alert
+    alert("Transaksi berhasil ditambahkan!");
   };
 
-  // States untuk mengontrol visibilitas input tambahan (for pre-defined optional fields)
-  // showBisnisUsaha and showHasilInvestasi removed as they are no longer needed
-  // for dynamic inputs (controlled by array length).
+  // States untuk mengontrol visibilitas input tambahan
+  const [showBisnisUsaha, setShowBisnisUsaha] = useState(false);
+  const [showHasilInvestasi, setShowHasilInvestasi] = useState(false);
+
   const [showTransportasi, setShowTransportasi] = useState(false);
   const [showSedekahDonasi, setShowSedekahDonasi] = useState(false);
   const [showPendidikanExpense, setShowPendidikanExpense] = useState(false);
@@ -167,7 +133,9 @@ const useFinancialHealthData = () => {
   const [showTanah, setShowTanah] = useState(false);
   const [showBangunan, setShowBangunan] = useState(false);
 
-  // Fungsi Toggle untuk visibilitas (for pre-defined optional fields)
+  // Fungsi Toggle untuk visibilitas
+  const toggleBisnisUsaha = () => setShowBisnisUsaha((prev) => !prev);
+  const toggleHasilInvestasi = () => setShowHasilInvestasi((prev) => !prev);
   const toggleTransportasi = () => setShowTransportasi((prev) => !prev);
   const toggleSedekahDonasi = () => setShowSedekahDonasi((prev) => !prev);
   const togglePendidikanExpense = () =>
@@ -183,15 +151,9 @@ const useFinancialHealthData = () => {
   const toggleTanah = () => setShowTanah((prev) => !prev);
   const toggleBangunan = () => setShowBangunan((prev) => !prev);
 
-  // Kalkulasi dinamis - Summing array values for total income
-  const totalBisnisUsaha = bisnisUsaha.reduce((sum, value) => sum + value, 0);
-  const totalHasilInvestasi = hasilInvestasi.reduce(
-    (sum, value) => sum + value,
-    0
-  );
-
+  // Kalkulasi dinamis
   const calculatedTotalIncome =
-    gajiBulanan + pendapatanPasif + totalBisnisUsaha + totalHasilInvestasi;
+    gajiBulanan + pendapatanPasif + bisnisUsaha + hasilInvestasi;
   const calculatedTotalExpenses =
     belanjaKebutuhan +
     transportasi +
@@ -247,14 +209,9 @@ const useFinancialHealthData = () => {
   const incomeChartData = [
     { name: "Gaji Bulanan", value: gajiBulanan },
     { name: "Pendapatan Pasif", value: pendapatanPasif },
-    // Only add these to chart data if their total value is greater than 0
-    ...(totalBisnisUsaha > 0
-      ? [{ name: "Bisnis Usaha", value: totalBisnisUsaha }]
-      : []),
-    ...(totalHasilInvestasi > 0
-      ? [{ name: "Hasil Investasi", value: totalHasilInvestasi }]
-      : []),
-  ].filter((item) => item.value > 0); // Ensure no zero values are plotted
+    { name: "Bisnis Usaha", value: bisnisUsaha },
+    { name: "Hasil Investasi", value: hasilInvestasi },
+  ].filter((item) => item.value > 0);
 
   const expenseChartData = [
     { name: "Belanja Kebutuhan", value: belanjaKebutuhan },
@@ -367,92 +324,7 @@ const useFinancialHealthData = () => {
 
   const handleFinancialGoalsSubmit = (e) => {
     e.preventDefault();
-
-    console.log("handleFinancialGoalsSubmit triggered");
-    // Using console.log instead of alert for better user experience in a React app
-    console.log("Form submitted: handleFinancialGoalsSubmit triggered");
-
-    // Simple validation example: check if gajiBulanan is a positive number
-    if (gajiBulanan < 0) {
-      console.error("Gaji Bulanan harus bernilai positif.");
-      // You might want to show a custom modal or error message on the UI instead of alert
-      return;
-    }
-
-    console.log("Submitting financial data:");
-    console.log({
-      gajiBulanan,
-      pendapatanPasif,
-      bisnisUsaha,
-      hasilInvestasi,
-      belanjaKebutuhan,
-      transportasi,
-      sedekahDonasi,
-      pendidikanExpense,
-      pajakExpense,
-      premiAsuransi,
-      tabungInvestasiBulanan,
-      totalTabunganSaatIni,
-      crowdFunding,
-      logamMulia,
-      saham,
-      unitLink,
-      reksadana,
-      obligasiP2P,
-      deposito,
-      ebaRitel,
-      punyaAset,
-      vehicles,
-      rumahValue,
-      tanahValue,
-      bangunanValue,
-      punyaUtang,
-      debts,
-      emergencyFund,
-      budget,
-      bitcoinCurrentValue,
-      ethereumCurrentValue,
-      cryptoScenarioPercentage,
-    });
-
-    // Optionally save to localStorage as example persistence
-    const financialData = {
-      gajiBulanan,
-      pendapatanPasif,
-      bisnisUsaha,
-      hasilInvestasi,
-      belanjaKebutuhan,
-      transportasi,
-      sedekahDonasi,
-      pendidikanExpense,
-      pajakExpense,
-      premiAsuransi,
-      tabungInvestasiBulanan,
-      totalTabunganSaatIni,
-      crowdFunding,
-      logamMulia,
-      saham,
-      unitLink,
-      reksadana,
-      obligasiP2P,
-      deposito,
-      ebaRitel,
-      punyaAset,
-      vehicles,
-      rumahValue,
-      tanahValue,
-      bangunanValue,
-      punyaUtang,
-      debts,
-      emergencyFund,
-      budget,
-      bitcoinCurrentValue,
-      ethereumCurrentValue,
-      cryptoScenarioPercentage,
-    };
-    localStorage.setItem("financialData", JSON.stringify(financialData));
-
-    console.log("Data Input berhasil diperbarui dan disimpan!"); // Replaced alert
+    alert("Data Input Diperbarui!");
   };
 
   const getAiFinancialAdvice = async () => {
@@ -542,13 +414,9 @@ const useFinancialHealthData = () => {
     pendapatanPasif,
     setPendapatanPasif,
     bisnisUsaha,
-    setBisnisUsaha, // Still needed for direct manipulation if necessary, but updateBisnisUsaha is preferred
+    setBisnisUsaha,
     hasilInvestasi,
-    setHasilInvestasi, // Still needed for direct manipulation if necessary, but updateHasilInvestasi is preferred
-    updateBisnisUsaha, // Exposed for updating specific entries
-    updateHasilInvestasi, // Exposed for updating specific entries
-    addBisnisUsaha, // Exposed for adding new entries
-    addHasilInvestasi, // Exposed for adding new entries
+    setHasilInvestasi,
     belanjaKebutuhan,
     setBelanjaKebutuhan,
     transportasi,
@@ -619,9 +487,14 @@ const useFinancialHealthData = () => {
     handleFinancialGoalsSubmit,
     activeDataInputTab,
     setActiveDataInputTab,
-    cryptoScenarioResult,
-    // Removed showBisnisUsaha, setShowBisnisUsaha, toggleBisnisUsaha
-    // Removed showHasilInvestasi, setShowHasilInvestasi, toggleHasilInvestasi
+    cryptoScenarioResult, // NEW: Kembalikan cryptoScenarioResult
+    // NEW: Tambahkan state dan fungsi toggle untuk visibilitas
+    showBisnisUsaha,
+    setShowBisnisUsaha,
+    toggleBisnisUsaha,
+    showHasilInvestasi,
+    setShowHasilInvestasi,
+    toggleHasilInvestasi,
     showTransportasi,
     setShowTransportasi,
     toggleTransportasi,
@@ -661,12 +534,13 @@ const useFinancialHealthData = () => {
     showBangunan,
     setShowBangunan,
     toggleBangunan,
+    // NEW: Tambahkan state dan handler untuk transaksi
     transactions,
-    setTransactions,
+    setTransactions, // State transaksi
     formData,
-    setFormData,
-    handleTransactionChange,
-    handleTransactionSubmit,
+    setFormData, // State form transaksi
+    handleTransactionChange, // Handler perubahan form transaksi
+    handleTransactionSubmit, // Handler submit form transaksi
   };
 };
 

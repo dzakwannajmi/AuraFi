@@ -191,7 +191,7 @@ function DataInputPage() {
       </h2>
 
       {/* Tab Navigation for Data Input */}
-      <div className="flex justify-center mb-8 border-b border-gray-700 overflow-x-auto whitespace-nowrap">
+      <div className="flex justify-start mb-8 border-b border-gray-700 overflow-x-auto whitespace-nowrap px-2 scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-gray-700">
         <button
           type="button"
           onClick={() => setActiveDataInputTab("penghasilan")}
@@ -251,12 +251,12 @@ function DataInputPage() {
       </div>
 
       {/* Content based on active tab */}
-      {activeDataInputTab === "penghasilan" && (
-        <div className="space-y-8">
-          <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Berapa sih penghasilan kamu setiap bulannya?
-            </h3>
+          {activeDataInputTab === "penghasilan" && (
+            <div className="space-y-8">
+              <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5 max-w-xl mx-auto">
+                <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
+                  Berapa sih penghasilan kamu setiap bulannya?
+                </h3>
             <div className="mb-5">
               <label
                 htmlFor="gajiBulanan"
@@ -1152,40 +1152,42 @@ function DataInputPage() {
                 Potensi Perubahan Nilai Investasi Crypto:{" "}
                 <span
                   className={`font-bold ${
-                    cryptoScenarioResult.potentialGainLoss >= 0
+                    cryptoScenarioResult && cryptoScenarioResult.potentialGainLoss >= 0
                       ? "text-green-primary"
                       : "text-red-primary"
                   }`}
                 >
                   Rp{" "}
-                  {cryptoScenarioResult.potentialGainLoss.toLocaleString(
-                    "id-ID"
-                  )}
+                  {cryptoScenarioResult
+                    ? cryptoScenarioResult.potentialGainLoss.toLocaleString("id-ID")
+                    : "0"}
                 </span>
               </p>
               <p className="text-lg text-gray-300">
                 Nilai Bitcoin Baru:{" "}
                 <span className="font-bold text-white-default">
                   Rp{" "}
-                  {cryptoScenarioResult.newBitcoinValue.toLocaleString("id-ID")}
+                  {cryptoScenarioResult
+                    ? cryptoScenarioResult.newBitcoinValue.toLocaleString("id-ID")
+                    : "0"}
                 </span>
               </p>
               <p className="text-lg text-gray-300">
                 Nilai Ethereum Baru:{" "}
                 <span className="font-bold text-white-default">
                   Rp{" "}
-                  {cryptoScenarioResult.newEthereumValue.toLocaleString(
-                    "id-ID"
-                  )}
+                  {cryptoScenarioResult
+                    ? cryptoScenarioResult.newEthereumValue.toLocaleString("id-ID")
+                    : "0"}
                 </span>
               </p>
               <p className="text-lg text-gray-300">
                 Kekayaan Bersih Proyeksi:{" "}
                 <span className="font-bold gradient-text">
                   Rp{" "}
-                  {cryptoScenarioResult.projectedNetWorth.toLocaleString(
-                    "id-ID"
-                  )}
+                  {cryptoScenarioResult
+                    ? cryptoScenarioResult.projectedNetWorth.toLocaleString("id-ID")
+                    : "0"}
                 </span>
               </p>
             </div>

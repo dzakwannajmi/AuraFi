@@ -5,12 +5,8 @@
       "type": "motoko"
     },
     "HopeBridge_frontend": {
-      "dependencies": [
-        "HopeBridge_backend"
-      ],
-      "source": [
-        "src/HopeBridge_frontend/dist"
-      ],
+      "dependencies": ["HopeBridge_backend"],
+      "source": ["src/HopeBridge_frontend/dist"],
       "type": "assets",
       "workspace": "HopeBridge_frontend"
     }

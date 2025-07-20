@@ -10,10 +10,7 @@ import Footer from "../Footer";
 
 // Hapus import komponen halaman di sini, karena mereka akan dirender oleh Outlet
 
-function Layout(
-  {
-  }
-) {
+function Layout({}) {
   const { authReady, user, login, logout } = useAuth();
 
   const {
@@ -209,6 +206,13 @@ function Layout(
             to="/data-input"
             iconClass="fas fa-clipboard-list"
             label="Data Input"
+            currentPagePath={currentPagePath}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+          <SidebarLink
+            to="/portfolio" // Tambahkan link ini
+            iconClass="fas fa-chart-pie" // Icon untuk portofolio, Anda bisa pilih yang lain
+            label="Portofolio"
             currentPagePath={currentPagePath}
             setIsSidebarOpen={setIsSidebarOpen}
           />

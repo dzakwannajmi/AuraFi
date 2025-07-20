@@ -225,6 +225,7 @@ const InvestmentForm = ({ onAddInvestment, showMessage }) => {
             <option value="Dogecoin">Dogecoin (DOGE)</option>
             <option value="Stablecoin">Stablecoin (USDT, USDC, BUSD)</option>
             <option value="NFT">NFT (Non-Fungible Token)</option>
+            <option value="XRP">XRP</option>
             <option value="Lainnya">Lainnya</option>
           </select>
         </div>

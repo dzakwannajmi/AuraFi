@@ -6,6 +6,48 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Warna dasar */
+  --color-black-primary: #000000;
+  --color-white-default: #ffffff;
+  --color-gray-dark: #333;
+  --color-gray-medium: #999;
+  --color-gray-light: rgba(255, 255, 255, 0.7);
+  --color-gray-input-bg: rgba(0, 0, 0, 0.4);
+  --color-gray-card-bg: rgba(255, 255, 255, 0.05);
+  --color-gray-table-header: rgba(255, 255, 255, 0.08);
+  --color-gray-table-hover: rgba(255, 255, 255, 0.03);
+  --color-gray-border: rgba(255, 255, 255, 0.1);
+  --color-gray-input-border: rgba(255, 255, 255, 0.2);
+  --color-gray-text-secondary: rgba(255, 255, 255, 0.5);
+  --color-gray-text-tertiary: rgba(255, 255, 255, 0.8);
+  --color-gray-text-placeholder: #a0a0a0;
+  --color-gray-tooltip-bg: #1a1a1a;
+  --color-gray-tooltip-border: #3ad9a3;
+  --color-gray-tooltip-label: #3ad9a3;
+  --color-gray-tooltip-item: #fff;
+  --color-gray-legend: #fff;
+  --color-gray-grid: #333;
+
+  /* Warna Aksen Hijau */
+  --color-green-primary: #3ad9a3;
+  --color-green-secondary: #0f7c5f;
+  --color-green-accent-1: #1abc9c;
+  --color-green-accent-2: #2ecc71;
+  --color-green-accent-3: #27ae60;
+  --color-green-accent-4: #16a085;
+  --color-green-accent-5: #2c3e50;
+
+  /* Warna Aksen Merah */
+  --color-red-primary: #ff6b6b;
+  --color-red-secondary: #e74c3c;
+  --color-red-accent-1: #c0392b;
+  --color-red-accent-2: #a93226;
+
+  /* Warna lainnya */
+  --color-purple-recharts: #8884d8;
+}
+
 .gradient-text {
   background: linear-gradient(
     90deg,

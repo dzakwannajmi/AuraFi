@@ -1,52 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* HopeBridge_frontend/src/index.css */
 
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Warna dasar */
-  --color-black-primary: #000000;
-  --color-white-default: #ffffff;
-  --color-gray-dark: #333;
-  --color-gray-medium: #999;
-  --color-gray-light: rgba(255, 255, 255, 0.7);
-  --color-gray-input-bg: rgba(0, 0, 0, 0.4);
-  --color-gray-card-bg: rgba(255, 255, 255, 0.05);
-  --color-gray-table-header: rgba(255, 255, 255, 0.08);
-  --color-gray-table-hover: rgba(255, 255, 255, 0.03);
-  --color-gray-border: rgba(255, 255, 255, 0.1);
-  --color-gray-input-border: rgba(255, 255, 255, 0.2);
-  --color-gray-text-secondary: rgba(255, 255, 255, 0.5);
-  --color-gray-text-tertiary: rgba(255, 255, 255, 0.8);
-  --color-gray-text-placeholder: #a0a0a0;
-  --color-gray-tooltip-bg: #1a1a1a;
-  --color-gray-tooltip-border: #3ad9a3;
-  --color-gray-tooltip-label: #3ad9a3;
-  --color-gray-tooltip-item: #fff;
-  --color-gray-legend: #fff;
-  --color-gray-grid: #333;
-
-  /* Warna Aksen Hijau */
-  --color-green-primary: #3ad9a3;
-  --color-green-secondary: #0f7c5f;
-  --color-green-accent-1: #1abc9c;
-  --color-green-accent-2: #2ecc71;
-  --color-green-accent-3: #27ae60;
-  --color-green-accent-4: #16a085;
-  --color-green-accent-5: #2c3e50;
-
-  /* Warna Aksen Merah */
-  --color-red-primary: #ff6b6b;
-  --color-red-secondary: #e74c3c;
-  --color-red-accent-1: #c0392b;
-  --color-red-accent-2: #a93226;
-
-  /* Warna lainnya */
-  --color-purple-recharts: #8884d8;
-}
+/* CSS Variables for colors are now defined in tailwind.config.js */
+/* The :root block is removed as colors are now Tailwind classes */
 
 .gradient-text {
   background: linear-gradient(
@@ -60,114 +22,65 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: var(--color-black-primary);
-  color: var(--color-white-default);
-  @apply font-poppins;
-  margin: 0; /* Ensure no default body margin */
-  padding: 0; /* Ensure no default body padding */
-  min-height: 100vh; /* Ensure body takes full viewport height */
+  /* Use Tailwind classes for background and text color directly */
+  @apply bg-black-primary text-white-default font-poppins;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
-/* General styles for cards, buttons, inputs, tables */
+/* General styles for cards, buttons, inputs, tables - now using Tailwind classes */
 .card {
-  background-color: var(--color-gray-card-bg);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  margin-bottom: 24px;
-  border: 1px solid var(--color-gray-border);
+  @apply bg-gray-card-bg rounded-xl shadow-md p-6 mb-6 border border-gray-border;
 }
 .btn-primary {
-  background-color: var(--color-green-primary);
-  color: var(--color-black-primary);
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  @apply bg-green-primary text-black-primary px-5 py-2.5 rounded-lg font-semibold transition-colors;
 }
 .btn-primary:hover {
-  background-color: var(--color-green-secondary);
+  @apply bg-green-secondary;
 }
 .btn-secondary {
-  background-color: var(--color-gray-input-bg);
-  color: var(--color-green-primary);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-  border: 1px solid var(--color-gray-input-border);
+  @apply bg-gray-input-bg text-green-primary px-4 py-2 rounded-lg font-medium transition-colors border border-gray-input-border;
 }
 .btn-secondary:hover {
-  background-color: var(--color-gray-table-hover);
+  @apply bg-gray-table-hover;
 }
 .input-field {
-  padding: 10px;
-  border: 1px solid var(--color-gray-input-border);
-  border-radius: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: var(--color-gray-input-bg);
-  color: var(--color-white-default);
-  transition: border-color 0.3s ease;
+  @apply p-2.5 border border-gray-input-border rounded-lg w-full box-border bg-gray-input-bg text-white-default transition-colors;
 }
 .input-field::placeholder {
-  color: var(--color-gray-text-placeholder);
+  @apply text-gray-text-placeholder;
 }
 .input-field:focus {
-  outline: none;
-  border-color: var(--color-green-primary);
-  box-shadow: 0 0 0 2px rgba(58, 217, 163, 0.2);
+  @apply outline-none border-green-primary shadow-outline-green; /* Custom shadow for focus */
 }
 table {
-  width: 100%;
-  border-collapse: collapse;
+  @apply w-full border-collapse;
 }
 th,
 td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid var(--color-gray-border);
-  color: var(--color-white-default);
+  @apply p-3 text-left border-b border-gray-border text-white-default;
 }
 th {
-  background-color: var(--color-gray-table-header);
-  font-weight: 600;
-  color: var(--color-gray-light);
+  @apply bg-gray-table-header font-semibold text-gray-light;
 }
 .profit {
-  color: var(--color-green-primary);
-  font-weight: 500;
+  @apply text-green-primary font-medium;
 }
 .loss {
-  color: var(--color-red-primary);
-  font-weight: 500;
+  @apply text-red-primary font-medium;
 }
 canvas {
-  display: block;
-  width: 100%;
-  max-width: 600px;
-  height: 300px;
-  margin: 0 auto;
-  background-color: var(--color-gray-input-bg);
-  border-radius: 8px;
-  border: 1px solid var(--color-gray-border);
+  /* Hapus max-w-xl, h-72, dan mx-auto */
+  /* Cukup w-full dan h-full agar memenuhi parent div-nya */
+  @apply block w-full h-full bg-gray-input-bg rounded-lg border border-gray-border;
 }
 .loading-spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid var(--color-green-primary);
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  animation: spin 1s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 8px;
+  /* Spinner animation is now defined in tailwind.config.js */
+  @apply border-4 border-gray-light border-t-green-primary rounded-full w-6 h-6 inline-block align-middle ml-2 animate-spin;
 }
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+
+/* Custom shadow for input focus, as direct rgba in @apply is not supported */
+.shadow-outline-green {
+  box-shadow: 0 0 0 2px rgba(58, 217, 163, 0.2);
 }

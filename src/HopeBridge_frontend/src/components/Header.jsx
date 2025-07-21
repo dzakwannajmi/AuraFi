@@ -1,17 +1,81 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // Import Link untuk navigasi
 import useAuth from "../hooks/useAuth";
 
-// Pastikan setIsSidebarOpen diterima di sini
-const Header = ({ greetText, isSidebarOpen, setIsSidebarOpen }) => {
-  const { user, login, logout } = useAuth();
+const Header = ({ user, login, logout, isScrolled }) => {
+  // isScrolled diterima dari Layout.jsx
+  // isScrolled state dan useEffect untuk scroll dihapus dari sini
 
   return (
-    <header className="flex justify-between items-center py-5 px-10 border-b border-gray-border bg-black-primary">
-      <h1 className="text-2xl font-bold gradient-text">AuraFi</h1>
-      <div className="flex items-center space-x-4">
+    <header
+      className={`
+        fixed top-0 left-0 w-full z-50 flex items-center py-5 px-10 border-b border-gray-border
+        transition-all duration-300 ease-in-out
+        ${
+          isScrolled
+            ? "bg-gradient-to-r from-green-secondary to-black-primary shadow-lg"
+            : "bg-black-primary"
+        }
+      `}
+    >
+      <h1 className="text-2xl font-bold gradient-text mr-auto">AuraFi</h1>{" "}
+      {/* mr-auto untuk mendorong ke kiri */}
+      {/* Navigasi Utama (Desktop) */}
+      {/* Menggunakan flex-1 dan justify-center untuk memusatkan navigasi */}
+      <nav className="hidden lg:flex items-center justify-center flex-1 space-x-12">
+        {" "}
+        {/* Meningkatkan space-x- dan menambahkan flex-1, justify-center */}
+        <Link
+          to="/"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          Home
+        </Link>
+        <Link
+          to="/dashboard"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          Dashboard
+        </Link>
+        <Link
+          to="/transactions"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          Transaksi
+        </Link>
+        <Link
+          to="/ai-care"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          AI Care
+        </Link>
+        <Link
+          to="/data-input"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          Data Input
+        </Link>
+        <Link
+          to="/portfolio"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          Portofolio
+        </Link>
+        <Link
+          to="/about"
+          className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
+        >
+          About
+        </Link>
+      </nav>
+      <div className="flex items-center space-x-4 ml-auto">
+        {" "}
+        {/* ml-auto untuk mendorong ke kanan */}
         {user ? (
           <>
-            <p className="text-gray-300 text-sm">
+            <p className="text-gray-300 text-sm hidden md:block">
+              {" "}
+              {/* Sembunyikan di mobile */}
               Logged in as:{" "}
               <span className="font-medium text-white-default">{user}</span>
             </p>
@@ -38,15 +102,7 @@ const Header = ({ greetText, isSidebarOpen, setIsSidebarOpen }) => {
             </button>
           </>
         )}
-
-        {/* Hamburger icon for mobile/tablet */}
-        {/* Pastikan onClick memanggil setIsSidebarOpen yang diterima dari prop */}
-        <button
-          className="lg:hidden p-2 rounded-md text-gray-400 hover:text-green-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-primary"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        >
-          <i className="fas fa-bars text-xl"></i>
-        </button>
+        {/* Hamburger icon untuk mobile navigation (jika diperlukan) - Dihapus karena navigasi utama ada di header */}
       </div>
     </header>
   );

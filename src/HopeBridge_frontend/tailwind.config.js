@@ -48,6 +48,10 @@ export default {
         "purple-recharts": "#8884d8", // Warna default recharts (jika tidak di-override)
       },
       keyframes: {
+        spin: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
         fadeIn: {
           "0%": { opacity: 0, transform: "scale(0.95)" },
           "100%": { opacity: 1, transform: "scale(1)" },
@@ -59,6 +63,7 @@ export default {
         },
       },
       animation: {
+        spin: "spin 1s linear infinite",
         "fade-in": "fadeIn 0.3s ease-out forwards",
         "bounce-once": "bounceOnce 1.5s ease-in-out",
       },

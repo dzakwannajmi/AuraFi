@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import InvestmentForm from "../investments/InvestmentForm";
-import PortfolioList from "../investments/PortfolioList";
+import InvestmentForm from "../investments/InvestmentForm"; // Pastikan jalur impor ini benar
+import PortfolioList from "../investments/PortfolioList"; // Pastikan jalur impor ini benar
 
 // Mapping nama aset ke ID CoinGecko (penting untuk fetching harga)
+// Perluas daftar ini jika Anda ingin melacak lebih banyak aset kripto.
 const cryptoIdMap = {
   Bitcoin: "bitcoin",
   Ethereum: "ethereum",
@@ -12,7 +13,7 @@ const cryptoIdMap = {
   Solana: "solana",
   Dogecoin: "dogecoin",
   Stablecoin: "tether", // Contoh: menggunakan Tether sebagai representasi stablecoin
-  NFT: null, // NFT tidak memiliki harga pasar tunggal seperti koin
+  NFT: null, // NFT tidak memiliki harga pasar tunggal yang mudah diakses via API ini
 };
 
 const PortfolioPage = () => {
@@ -20,22 +21,23 @@ const PortfolioPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
 
-  // Fungsi untuk menampilkan pesan (pengganti alert)
+  // Fungsi untuk menampilkan pesan notifikasi (pengganti alert)
   const showMessage = (text, type) => {
     setMessage({ text, type });
     setTimeout(() => {
-      setMessage({ text: "", type: "" });
+      setMessage({ text: "", type: "" }); // Hapus pesan setelah 3 detik
     }, 3000);
   };
 
   // Fungsi untuk mengambil harga cryptocurrency dari CoinGecko API
   const fetchCryptoPrices = async () => {
-    setIsLoading(true);
+    setIsLoading(true); // Tampilkan indikator loading
 
+    // Kumpulkan semua ID koin unik yang ada di portofolio untuk permintaan API
     const uniqueCryptoTypes = new Set(investments.map((inv) => inv.assetType));
     const idsToFetch = Array.from(uniqueCryptoTypes)
       .map((type) => cryptoIdMap[type])
-      .filter((id) => id && id !== "null"); // Filter out null for NFT or unknown types
+      .filter((id) => id && id !== "null"); // Filter ID yang valid (bukan null atau undefined)
 
     if (idsToFetch.length === 0) {
       setIsLoading(false);
@@ -46,13 +48,14 @@ const PortfolioPage = () => {
       return;
     }
 
-    const ids = idsToFetch.join(",");
-    const vsCurrencies = "idr";
+    const ids = idsToFetch.join(","); // Gabungkan ID menjadi string yang dipisahkan koma
+    const vsCurrencies = "idr"; // Mata uang perbandingan (Indonesian Rupiah)
     const coingeckoApiUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=${vsCurrencies}`;
 
     try {
-      // Menggunakan LLM sebagai proxy untuk melakukan fetch
-      const apiKey = ""; // Disediakan oleh Canvas
+      // Menggunakan LLM (Gemini 2.0 Flash) sebagai proxy untuk melakukan fetch
+      // Ini membantu mengatasi masalah CORS atau batasan lingkungan eksekusi.
+      const apiKey = ""; // API Key akan disediakan oleh lingkungan Canvas secara otomatis
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       const prompt = `Fetch the following URL and return the JSON response:\n${coingeckoApiUrl}`;
@@ -60,7 +63,7 @@ const PortfolioPage = () => {
       const payload = {
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         generationConfig: {
-          responseMimeType: "application/json",
+          responseMimeType: "application/json", // Minta LLM mengembalikan respons dalam format JSON
         },
       };
 
@@ -71,6 +74,7 @@ const PortfolioPage = () => {
       });
 
       if (!response.ok) {
+        // Jika respons dari LLM proxy tidak OK, log error dan lempar exception
         console.error("Respons LLM proxy tidak OK:", response);
         throw new Error(
           `Kesalahan dari LLM proxy: ${response.status} ${response.statusText}`
@@ -80,6 +84,7 @@ const PortfolioPage = () => {
       const result = await response.json();
       let data;
       try {
+        // LLM mengembalikan JSON sebagai string di dalam parts[0].text, jadi perlu di-parse
         data = JSON.parse(result.candidates[0].content.parts[0].text);
       } catch (parseError) {
         console.error(
@@ -90,15 +95,18 @@ const PortfolioPage = () => {
         throw new Error("Gagal mengurai respons API dari LLM proxy.");
       }
 
+      // Perbarui harga setiap investasi dalam state
       setInvestments((prevInvestments) => {
         return prevInvestments.map((inv) => {
           const cryptoId = cryptoIdMap[inv.assetType];
+          // Cek apakah harga ditemukan di data API
           if (cryptoId && data[cryptoId] && data[cryptoId][vsCurrencies]) {
             return { ...inv, currentPrice: data[cryptoId][vsCurrencies] };
           } else if (inv.assetType === "NFT") {
-            return { ...inv, currentPrice: 0 }; // NFT price remains 0
+            // Untuk NFT, harga tetap 0 karena tidak ada harga pasar tunggal
+            return { ...inv, currentPrice: 0 };
           } else {
-            // Fallback to buyPrice if current price not found
+            // Fallback: Jika harga tidak ditemukan dari API, gunakan harga beli sebagai harga saat ini
             console.warn(
               `Harga tidak ditemukan untuk ${inv.assetName} (${inv.assetType}). Menggunakan harga beli sebagai harga saat ini.`
             );
@@ -113,40 +121,42 @@ const PortfolioPage = () => {
         "Gagal memperbarui harga kripto. Ini mungkin masalah koneksi, batasan API rate limit, atau masalah dengan proxy LLM. Coba lagi nanti.",
         "error"
       );
-      // Fallback for all investments if fetching fails
+      // Fallback untuk semua investasi jika seluruh proses pengambilan gagal
       setInvestments((prevInvestments) => {
         return prevInvestments.map((inv) => {
           if (inv.currentPrice === 0) {
-            // Only fallback if currentPrice hasn't been set
+            // Hanya terapkan fallback jika currentPrice belum diatur
             return { ...inv, currentPrice: inv.buyPrice };
           }
           return inv;
         });
       });
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Sembunyikan indikator loading
     }
   };
 
-  // Load investments from localStorage on component mount
+  // Efek samping untuk memuat investasi dari localStorage saat komponen dimuat
   useEffect(() => {
     const storedInvestments = localStorage.getItem("cryptoInvestments");
     if (storedInvestments) {
       setInvestments(JSON.parse(storedInvestments));
     }
-    fetchCryptoPrices(); // Fetch prices on initial load
-  }, []);
+    fetchCryptoPrices(); // Ambil harga saat halaman pertama kali dimuat
+  }, []); // Dependensi kosong berarti efek ini hanya berjalan sekali saat mount
 
-  // Save investments to localStorage whenever they change
+  // Efek samping untuk menyimpan investasi ke localStorage setiap kali state investments berubah
   useEffect(() => {
     localStorage.setItem("cryptoInvestments", JSON.stringify(investments));
-  }, [investments]);
+  }, [investments]); // Efek ini berjalan setiap kali 'investments' berubah
 
+  // Handler untuk menambah investasi baru
   const handleAddInvestment = (newInvestment) => {
     setInvestments((prevInvestments) => [...prevInvestments, newInvestment]);
-    fetchCryptoPrices(); // Refresh prices after adding
+    fetchCryptoPrices(); // Perbarui harga setelah menambah investasi baru
   };
 
+  // Handler untuk menghapus investasi
   const handleDeleteInvestment = (id) => {
     setInvestments((prevInvestments) =>
       prevInvestments.filter((inv) => inv.id !== id)
@@ -160,24 +170,28 @@ const PortfolioPage = () => {
         Portofolio Investasi Saya
       </h1>
 
+      {/* Komponen untuk menampilkan pesan notifikasi */}
       {message.text && (
         <div
           className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white-default z-50 ${
             message.type === "success"
-              ? "bg-green-primary"
+              ? "bg-green-primary" // Kelas Tailwind untuk sukses
               : message.type === "error"
-              ? "bg-red-primary"
-              : "bg-purple-recharts"
+              ? "bg-red-primary" // Kelas Tailwind untuk error
+              : "bg-purple-recharts" // Kelas Tailwind untuk info
           }`}
         >
           {message.text}
         </div>
       )}
 
+      {/* Komponen Form Penambahan Investasi */}
       <InvestmentForm
         onAddInvestment={handleAddInvestment}
         showMessage={showMessage}
       />
+
+      {/* Komponen Daftar Portofolio dan Visualisasi */}
       <PortfolioList
         investments={investments}
         onDeleteInvestment={handleDeleteInvestment}

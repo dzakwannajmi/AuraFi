@@ -49,6 +49,11 @@ function DashboardPage() {
     financialStatus,
     monthlyData,
     categoryExpenseData,
+    // Pastikan Anda juga meneruskan data ini dari useFinancialHealthData jika ingin menggunakannya
+    // incomeChartData,
+    // expenseChartData,
+    // investmentChartData,
+    // assetDebtChartData,
   } = context;
 
   // Pastikan data penting yang akan digunakan di .toLocaleString() tidak undefined
@@ -196,35 +201,46 @@ function DashboardPage() {
                 data={monthlyData}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="gray-grid" />
-                <XAxis dataKey="name" stroke="gray-medium" />
-                <YAxis stroke="gray-medium" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#555" />{" "}
+                {/* Warna grid lebih terang */}
+                <XAxis dataKey="name" stroke="#BBB" />{" "}
+                {/* Warna teks sumbu lebih terang */}
+                <YAxis stroke="#BBB" /> {/* Warna teks sumbu lebih terang */}
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "gray-tooltip-bg",
-                    border: "1px solid gray-tooltip-border",
+                    backgroundColor: "var(--color-gray-tooltip-bg)",
+                    border: "1px solid var(--color-gray-tooltip-border)",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "white-default" }} // Menggunakan nama warna dari tailwind.config.js
-                  labelStyle={{ color: "gray-tooltip-label" }}
+                  itemStyle={{ color: "var(--color-white-default)" }}
+                  labelStyle={{ color: "var(--color-gray-tooltip-label)" }}
                   formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
                 />
                 <Legend
-                  wrapperStyle={{ color: "gray-legend", paddingTop: "10px" }}
+                  wrapperStyle={{
+                    color: "var(--color-gray-legend)",
+                    paddingTop: "10px",
+                  }}
                 />
                 <Line
                   type="monotone"
                   dataKey="Pemasukan"
-                  stroke="green-primary"
+                  stroke="var(--color-green-accent-2)" /* Warna hijau terang */
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
+                  connectNulls={
+                    true
+                  } /* Tambahkan ini untuk menghubungkan titik null */
                 />
                 <Line
                   type="monotone"
                   dataKey="Pengeluaran"
-                  stroke="red-primary"
+                  stroke="var(--color-red-primary)" /* Warna merah terang */
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
+                  connectNulls={
+                    true
+                  } /* Tambahkan ini untuk menghubungkan titik null */
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -240,25 +256,30 @@ function DashboardPage() {
                 data={categoryExpenseData}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="gray-grid" />
-                <XAxis dataKey="name" stroke="gray-medium" />
-                <YAxis stroke="gray-medium" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#555" />{" "}
+                {/* Warna grid lebih terang */}
+                <XAxis dataKey="name" stroke="#BBB" />{" "}
+                {/* Warna teks sumbu lebih terang */}
+                <YAxis stroke="#BBB" /> {/* Warna teks sumbu lebih terang */}
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "gray-tooltip-bg",
-                    border: "1px solid gray-tooltip-border",
+                    backgroundColor: "var(--color-gray-tooltip-bg)",
+                    border: "1px solid var(--color-gray-tooltip-border)",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "white-default" }} // Menggunakan nama warna dari tailwind.config.js
-                  labelStyle={{ color: "gray-tooltip-label" }}
+                  itemStyle={{ color: "var(--color-white-default)" }}
+                  labelStyle={{ color: "var(--color-gray-tooltip-label)" }}
                   formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
                 />
                 <Legend
-                  wrapperStyle={{ color: "gray-legend", paddingTop: "10px" }}
+                  wrapperStyle={{
+                    color: "var(--color-gray-legend)",
+                    paddingTop: "10px",
+                  }}
                 />
                 <Bar
                   dataKey="Pengeluaran"
-                  fill="red-primary"
+                  fill="var(--color-red-primary)" /* Warna merah terang */
                   radius={[10, 10, 0, 0]}
                 />
               </BarChart>

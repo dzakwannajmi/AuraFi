@@ -17,19 +17,19 @@ import { useOutletContext } from "react-router-dom";
 function DataInputPage() {
   const context = useOutletContext();
 
-  // --- DEBUGGING: Log semua data yang diterima di DataInputPage ---
+  // --- DEBUGGING: Log all received context data in DataInputPage ---
   console.log("DataInputPage: Context received:", context);
 
-  // Periksa apakah context atau propertinya undefined sebelum mendestrukturisasi
+  // Check if context or its properties are undefined before destructuring
   if (!context || Object.keys(context).length === 0) {
     console.log(
-      "DataInputPage: Context kosong atau belum tersedia, menampilkan loading."
+      "DataInputPage: Context is empty or not yet available, displaying loading."
     );
     return (
       <div className="text-center text-gray-400 mt-20">
-        Memuat data input...
+        Loading input data...
         <br />
-        Cek console browser Anda untuk detail lebih lanjut.
+        Check your browser console for more details.
       </div>
     );
   }
@@ -37,64 +37,64 @@ function DataInputPage() {
   const {
     activeDataInputTab,
     setActiveDataInputTab,
-    handleFinancialGoalsSubmit, // Ini untuk form goals umum
-    gajiBulanan,
+    handleFinancialGoalsSubmit, // This is for general goals form
+    gajiBulanan, // Monthly Salary
     setGajiBulanan,
-    pendapatanPasif,
+    pendapatanPasif, // Passive Income
     setPendapatanPasif,
-    bisnisUsaha,
+    bisnisUsaha, // Business Income
     setBisnisUsaha,
-    hasilInvestasi,
+    hasilInvestasi, // Investment Income
     setHasilInvestasi,
-    belanjaKebutuhan,
+    belanjaKebutuhan, // Essential Spending
     setBelanjaKebutuhan,
-    transportasi,
+    transportasi, // Transportation Expense
     setTransportasi,
-    sedekahDonasi,
+    sedekahDonasi, // Charity/Donation Expense
     setSedekahDonasi,
-    pendidikanExpense,
+    pendidikanExpense, // Education Expense
     setPendidikanExpense,
-    pajakExpense,
+    pajakExpense, // Tax Expense
     setPajakExpense,
-    premiAsuransi,
+    premiAsuransi, // Insurance Premium
     setPremiAsuransi,
-    tabungInvestasiBulanan,
+    tabungInvestasiBulanan, // Monthly Savings/Investment
     setTabungInvestasiBulanan,
-    totalTabunganSaatIni,
+    totalTabunganSaatIni, // Current Total Savings
     setTotalTabunganSaatIni,
-    crowdFunding,
+    crowdFunding, // Crowdfunding Investment
     setCrowdFunding,
-    logamMulia,
+    logamMulia, // Precious Metals Investment
     setLogamMulia,
-    saham,
+    saham, // Stock Investment
     setSaham,
-    unitLink,
+    unitLink, // Unit Link Investment
     setUnitLink,
-    reksadana,
+    reksadana, // Mutual Fund Investment
     setReksadana,
-    obligasiP2P,
+    obligasiP2P, // Bonds/P2P Lending Investment
     setObligasiP2P,
-    deposito,
+    deposito, // Deposit Investment
     setDeposito,
-    ebaRitel,
+    ebaRitel, // Retail ABS (Asset-Backed Securities) Investment
     setEbaRitel,
-    punyaAset,
+    punyaAset, // Has Assets checkbox
     setPunyaAset,
-    vehicles,
+    vehicles, // Vehicle Value
     setVehicles,
-    rumahValue,
+    rumahValue, // House Value
     setRumahValue,
-    tanahValue,
+    tanahValue, // Land Value
     setTanahValue,
-    bangunanValue,
+    bangunanValue, // Building Value
     setBangunanValue,
-    punyaUtang,
+    punyaUtang, // Has Debts checkbox
     setPunyaUtang,
-    debts,
+    debts, // Total Debts
     setDebts,
-    emergencyFund,
+    emergencyFund, // Emergency Fund
     setEmergencyFund,
-    budget,
+    budget, // Monthly Budget
     setBudget,
     incomeChartData,
     expenseChartData,
@@ -108,7 +108,7 @@ function DataInputPage() {
     setCryptoScenarioPercentage,
     cryptoScenarioResult,
     netWorth,
-    // INI BAGIAN PENTING: Destrukturisasi SEMUA state show dan fungsi toggle dari context
+    // IMPORTANT PART: Destructure ALL show states and toggle functions from context
     showBisnisUsaha,
     toggleBisnisUsaha,
     showHasilInvestasi,
@@ -194,75 +194,78 @@ function DataInputPage() {
       <div className="flex justify-start mb-8 border-b border-gray-700 overflow-x-auto whitespace-nowrap px-2 scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-gray-700">
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("penghasilan")}
+          onClick={() => setActiveDataInputTab("income")}
           className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "penghasilan"
+            activeDataInputTab === "income"
               ? "gradient-text border-b-2 border-green-primary"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Penghasilan
+          Income
         </button>
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("pengeluaran")}
+          onClick={() => setActiveDataInputTab("expenses")}
           className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "pengeluaran"
+            activeDataInputTab === "expenses"
               ? "gradient-text border-b-2 border-green-primary"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Pengeluaran
+          Expenses
         </button>
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("tabunganInvestasi")}
+          onClick={() => setActiveDataInputTab("savingsInvestments")}
           className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "tabunganInvestasi"
+            activeDataInputTab === "savingsInvestments"
               ? "gradient-text border-b-2 border-green-primary"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Tabungan & Investasi
+          Savings & Investments
         </button>
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("asetUtang")}
+          onClick={() => setActiveDataInputTab("assetsDebts")}
           className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "asetUtang"
+            activeDataInputTab === "assetsDebts"
               ? "gradient-text border-b-2 border-green-primary"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Aset & Utang
+          Assets & Debts
         </button>
-        {/* Tab Analisis Crypto */}
+        {/* Crypto Analysis Tab */}
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("analisisCrypto")}
+          onClick={() => setActiveDataInputTab("cryptoAnalysis")}
           className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "analisisCrypto"
+            activeDataInputTab === "cryptoAnalysis"
               ? "gradient-text border-b-2 border-green-primary"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Analisis Crypto
+          Crypto Analysis
         </button>
       </div>
 
       {/* Content based on active tab */}
-          {activeDataInputTab === "penghasilan" && (
-            <div className="space-y-8">
-              <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5 max-w-xl mx-auto">
-                <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-                  Berapa sih penghasilan kamu setiap bulannya?
-                </h3>
+      {activeDataInputTab === "income" && (
+        <div className="space-y-8">
+          <form
+            onSubmit={handleFinancialGoalsSubmit}
+            className="space-y-5 max-w-xl mx-auto"
+          >
+            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
+              What is your monthly income?
+            </h3>
             <div className="mb-5">
               <label
                 htmlFor="gajiBulanan"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Gaji Bulanan
+                Monthly Salary
               </label>
               <input
                 type="number"
@@ -278,7 +281,7 @@ function DataInputPage() {
                 htmlFor="pendapatanPasif"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Pendapatan Pasif
+                Passive Income
               </label>
               <input
                 type="number"
@@ -290,32 +293,32 @@ function DataInputPage() {
               />
             </div>
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Punya penghasilan lainnya?
+              Do you have other income sources?
             </h3>
             <div className="flex flex-wrap gap-3 mb-5">
               <button
                 type="button"
-                onClick={toggleBisnisUsaha} // Menggunakan fungsi toggle dari context
+                onClick={toggleBisnisUsaha} // Using toggle function from context
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Bisnis Usaha
+                <i className="fas fa-plus-circle mr-2"></i> Business Income
               </button>
               <button
                 type="button"
-                onClick={toggleHasilInvestasi} // Menggunakan fungsi toggle dari context
+                onClick={toggleHasilInvestasi} // Using toggle function from context
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Hasil Investasi
+                <i className="fas fa-plus-circle mr-2"></i> Investment Income
               </button>
             </div>
-            {/* Conditional Input Fields for Penghasilan */}
+            {/* Conditional Input Fields for Income */}
             {showBisnisUsaha && (
               <div className="mb-5">
                 <label
                   htmlFor="bisnisUsaha"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Bisnis Usaha
+                  Business Income Value
                 </label>
                 <input
                   type="number"
@@ -333,7 +336,7 @@ function DataInputPage() {
                   htmlFor="hasilInvestasi"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Hasil Investasi
+                  Investment Income Value
                 </label>
                 <input
                   type="number"
@@ -349,14 +352,14 @@ function DataInputPage() {
               type="submit"
               className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
             >
-              Simpan Penghasilan
+              Save Income
             </button>
           </form>
 
           {/* Income Distribution Chart */}
           <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Distribusi Penghasilan
+              Income Distribution
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -396,18 +399,18 @@ function DataInputPage() {
         </div>
       )}
 
-      {activeDataInputTab === "pengeluaran" && (
+      {activeDataInputTab === "expenses" && (
         <div className="space-y-8">
           <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Dalam sebulan, berapa biaya pengeluaranmu?
+              How much are your monthly expenses?
             </h3>
             <div className="mb-5">
               <label
                 htmlFor="belanjaKebutuhan"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Belanja Kebutuhan
+                Essential Spending
               </label>
               <input
                 type="number"
@@ -419,7 +422,7 @@ function DataInputPage() {
               />
             </div>
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Punya pengeluaran lainnya?
+              Do you have other expenses?
             </h3>
             <div className="flex flex-wrap gap-3 mb-5">
               <button
@@ -427,46 +430,46 @@ function DataInputPage() {
                 onClick={toggleTransportasi}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Transportasi
+                <i className="fas fa-plus-circle mr-2"></i> Transportation
               </button>
               <button
                 type="button"
                 onClick={toggleSedekahDonasi}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Sedekah/Donasi
+                <i className="fas fa-plus-circle mr-2"></i> Charity/Donation
               </button>
               <button
                 type="button"
                 onClick={togglePendidikanExpense}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Pendidikan
+                <i className="fas fa-plus-circle mr-2"></i> Education
               </button>
               <button
                 type="button"
                 onClick={togglePajakExpense}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Pajak
+                <i className="fas fa-plus-circle mr-2"></i> Tax
               </button>
               <button
                 type="button"
                 onClick={togglePremiAsuransi}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Premi Asuransi
-                Bulanan
+                <i className="fas fa-plus-circle mr-2"></i> Monthly Insurance
+                Premium
               </button>
             </div>
-            {/* Conditional Input Fields for Pengeluaran */}
+            {/* Conditional Input Fields for Expenses */}
             {showTransportasi && (
               <div className="mb-5">
                 <label
                   htmlFor="transportasi"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Transportasi
+                  Transportation Value
                 </label>
                 <input
                   type="number"
@@ -484,7 +487,7 @@ function DataInputPage() {
                   htmlFor="sedekahDonasi"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Sedekah/Donasi
+                  Charity/Donation Value
                 </label>
                 <input
                   type="number"
@@ -502,7 +505,7 @@ function DataInputPage() {
                   htmlFor="pendidikanExpense"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Pendidikan
+                  Education Value
                 </label>
                 <input
                   type="number"
@@ -520,7 +523,7 @@ function DataInputPage() {
                   htmlFor="pajakExpense"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Pajak
+                  Tax Value
                 </label>
                 <input
                   type="number"
@@ -538,7 +541,7 @@ function DataInputPage() {
                   htmlFor="premiAsuransi"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Premi Asuransi Bulanan
+                  Monthly Insurance Premium Value
                 </label>
                 <input
                   type="number"
@@ -554,14 +557,14 @@ function DataInputPage() {
               type="submit"
               className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
             >
-              Simpan Pengeluaran
+              Save Expenses
             </button>
           </form>
 
           {/* Expense Distribution Chart */}
           <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Distribusi Pengeluaran
+              Expense Distribution
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -601,18 +604,18 @@ function DataInputPage() {
         </div>
       )}
 
-      {activeDataInputTab === "tabunganInvestasi" && (
+      {activeDataInputTab === "savingsInvestments" && (
         <div className="space-y-8">
           <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Berapa banyak uang untuk kamu tabung dan investasi tiap bulannya?
+              How much do you save and invest monthly?
             </h3>
             <div className="mb-5">
               <label
                 htmlFor="tabungInvestasiBulanan"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Menabung + berinvestasi tiap bulan
+                Monthly Savings + Investments
               </label>
               <input
                 type="number"
@@ -625,8 +628,8 @@ function DataInputPage() {
                 className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Uang yang kamu sisihkan perbulannya untuk menabung dan
-                berinvestasi. (reksadana, emas, dsb)
+                Money you set aside monthly for savings and investments (mutual
+                funds, gold, etc.)
               </p>
             </div>
             <div className="mb-5">
@@ -634,7 +637,7 @@ function DataInputPage() {
                 htmlFor="totalTabunganSaatIni"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Total tabungan kamu saat ini
+                Current Total Savings
               </label>
               <input
                 type="number"
@@ -648,7 +651,7 @@ function DataInputPage() {
               />
             </div>
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Sudah punya produk investasi apa saja?
+              What investment products do you currently own?
             </h3>
             <div className="space-y-4 mb-5">
               <div>
@@ -661,7 +664,7 @@ function DataInputPage() {
                 <input
                   type="number"
                   id="crowdFunding"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
+                  placeholder="Rp 0 (Leave blank if none)"
                   value={crowdFunding}
                   onChange={(e) => setCrowdFunding(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
@@ -672,12 +675,12 @@ function DataInputPage() {
                   htmlFor="logamMulia"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Logam Mulia
+                  Precious Metals
                 </label>
                 <input
                   type="number"
                   id="logamMulia"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
+                  placeholder="Rp 0 (Leave blank if none)"
                   value={logamMulia}
                   onChange={(e) => setLogamMulia(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
@@ -688,12 +691,12 @@ function DataInputPage() {
                   htmlFor="saham"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Saham
+                  Stocks
                 </label>
                 <input
                   type="number"
                   id="saham"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
+                  placeholder="Rp 0 (Leave blank if none)"
                   value={saham}
                   onChange={(e) => setSaham(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
@@ -709,7 +712,7 @@ function DataInputPage() {
                 <input
                   type="number"
                   id="unitLink"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
+                  placeholder="Rp 0 (Leave blank if none)"
                   value={unitLink}
                   onChange={(e) => setUnitLink(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
@@ -717,7 +720,7 @@ function DataInputPage() {
               </div>
             </div>
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Pilih produk investasi lainnya
+              Select other investment products
             </h3>
             <div className="flex flex-wrap gap-3 mb-5">
               <button
@@ -725,28 +728,28 @@ function DataInputPage() {
                 onClick={toggleReksadana}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Reksadana
+                <i className="fas fa-plus-circle mr-2"></i> Mutual Funds
               </button>
               <button
                 type="button"
                 onClick={toggleObligasiP2P}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Obligasi/P2P Lending
+                <i className="fas fa-plus-circle mr-2"></i> Bonds/P2P Lending
               </button>
               <button
                 type="button"
                 onClick={toggleDeposito}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> Deposito
+                <i className="fas fa-plus-circle mr-2"></i> Deposits
               </button>
               <button
                 type="button"
                 onClick={toggleEbaRitel}
                 className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
               >
-                <i className="fas fa-plus-circle mr-2"></i> EBA Ritel
+                <i className="fas fa-plus-circle mr-2"></i> Retail ABS
               </button>
             </div>
             {showReksadana && (
@@ -755,7 +758,7 @@ function DataInputPage() {
                   htmlFor="reksadana"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Reksadana
+                  Mutual Funds Value
                 </label>
                 <input
                   type="number"
@@ -773,7 +776,7 @@ function DataInputPage() {
                   htmlFor="obligasiP2P"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Obligasi/P2P Lending
+                  Bonds/P2P Lending Value
                 </label>
                 <input
                   type="number"
@@ -791,7 +794,7 @@ function DataInputPage() {
                   htmlFor="deposito"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai Deposito
+                  Deposits Value
                 </label>
                 <input
                   type="number"
@@ -809,7 +812,7 @@ function DataInputPage() {
                   htmlFor="ebaRitel"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Nilai EBA Ritel
+                  Retail ABS Value
                 </label>
                 <input
                   type="number"
@@ -825,14 +828,14 @@ function DataInputPage() {
               type="submit"
               className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
             >
-              Simpan Tabungan & Investasi
+              Save Savings & Investments
             </button>
           </form>
 
           {/* Investment Breakdown Chart */}
           <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Distribusi Investasi
+              Investment Distribution
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
@@ -866,18 +869,18 @@ function DataInputPage() {
         </div>
       )}
 
-      {activeDataInputTab === "asetUtang" && (
+      {activeDataInputTab === "assetsDebts" && (
         <div className="space-y-8">
           <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Berapa jumlah aset dan utang yang kamu miliki?
+              What are your assets and debts?
             </h3>
             <div className="flex items-center mb-5">
               <label
                 htmlFor="punyaAset"
                 className="font-medium text-gray-text-tertiary mr-3"
               >
-                Punya aset?
+                Do you own assets?
               </label>
               <input
                 type="checkbox"
@@ -887,7 +890,7 @@ function DataInputPage() {
                 className="form-checkbox h-5 w-5 text-green-primary rounded border-gray-600 bg-gray-700"
               />
               <span className="ml-2 text-gray-300">
-                {punyaAset ? "Ya" : "Tidak"}
+                {punyaAset ? "Yes" : "No"}
               </span>
             </div>
             {punyaAset && (
@@ -897,32 +900,32 @@ function DataInputPage() {
                   onClick={toggleKendaraan}
                   className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
                 >
-                  <i className="fas fa-plus-circle mr-2"></i> Kendaraan
+                  <i className="fas fa-plus-circle mr-2"></i> Vehicle
                 </button>
                 <button
                   type="button"
                   onClick={toggleRumah}
                   className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
                 >
-                  <i className="fas fa-plus-circle mr-2"></i> Rumah
+                  <i className="fas fa-plus-circle mr-2"></i> House
                 </button>
                 <button
                   type="button"
                   onClick={toggleTanah}
                   className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
                 >
-                  <i className="fas fa-plus-circle mr-2"></i> Tanah
+                  <i className="fas fa-plus-circle mr-2"></i> Land
                 </button>
                 <button
                   type="button"
                   onClick={toggleBangunan}
                   className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
                 >
-                  <i className="fas fa-plus-circle mr-2"></i> Bangunan
+                  <i className="fas fa-plus-circle mr-2"></i> Building
                 </button>
               </div>
             )}
-            {/* Example input fields for assets if 'Punya aset' is checked */}
+            {/* Example input fields for assets if 'Do you own assets?' is checked */}
             {punyaAset && (
               <>
                 <div className="mb-5">
@@ -930,7 +933,7 @@ function DataInputPage() {
                     htmlFor="vehicles"
                     className="block mb-2 font-medium text-gray-text-tertiary"
                   >
-                    Nilai Kendaraan
+                    Vehicle Value
                   </label>
                   <input
                     type="number"
@@ -946,7 +949,7 @@ function DataInputPage() {
                     htmlFor="rumahValue"
                     className="block mb-2 font-medium text-gray-text-tertiary"
                   >
-                    Nilai Rumah
+                    House Value
                   </label>
                   <input
                     type="number"
@@ -962,7 +965,7 @@ function DataInputPage() {
                     htmlFor="tanahValue"
                     className="block mb-2 font-medium text-gray-text-tertiary"
                   >
-                    Nilai Tanah
+                    Land Value
                   </label>
                   <input
                     type="number"
@@ -978,7 +981,7 @@ function DataInputPage() {
                     htmlFor="bangunanValue"
                     className="block mb-2 font-medium text-gray-text-tertiary"
                   >
-                    Nilai Bangunan
+                    Building Value
                   </label>
                   <input
                     type="number"
@@ -997,7 +1000,7 @@ function DataInputPage() {
                 htmlFor="punyaUtang"
                 className="font-medium text-gray-text-tertiary mr-3"
               >
-                Punya utang?
+                Do you have debts?
               </label>
               <input
                 type="checkbox"
@@ -1007,7 +1010,7 @@ function DataInputPage() {
                 className="form-checkbox h-5 w-5 text-green-primary rounded border-gray-600 bg-gray-700"
               />
               <span className="ml-2 text-gray-300">
-                {punyaUtang ? "Ya" : "Tidak"}
+                {punyaUtang ? "Yes" : "No"}
               </span>
             </div>
             {punyaUtang && (
@@ -1016,7 +1019,7 @@ function DataInputPage() {
                   htmlFor="debts"
                   className="block mb-2 font-medium text-gray-text-tertiary"
                 >
-                  Total Utang
+                  Total Debts
                 </label>
                 <input
                   type="number"
@@ -1032,14 +1035,14 @@ function DataInputPage() {
               type="submit"
               className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
             >
-              Simpan Aset & Utang
+              Save Assets & Debts
             </button>
           </form>
 
           {/* Assets vs Debts Bar Chart */}
           <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Perbandingan Aset dan Utang
+              Assets vs Debts Comparison
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
@@ -1072,19 +1075,19 @@ function DataInputPage() {
           </div>
         </div>
       )}
-      {/* NEW: Analisis Crypto Tab Content */}
-      {activeDataInputTab === "analisisCrypto" && (
+      {/* NEW: Crypto Analysis Tab Content */}
+      {activeDataInputTab === "cryptoAnalysis" && (
         <div className="space-y-8">
           <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Analisis Potensi Perubahan Investasi Crypto Anda
+              Analyze Potential Changes in Your Crypto Investments
             </h3>
             <div className="mb-5">
               <label
                 htmlFor="bitcoinCurrentValue"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Nilai Bitcoin Anda Saat Ini (Rp)
+                Your Current Bitcoin Value (Rp)
               </label>
               <input
                 type="number"
@@ -1100,7 +1103,7 @@ function DataInputPage() {
                 htmlFor="ethereumCurrentValue"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Nilai Ethereum Anda Saat Ini (Rp)
+                Your Current Ethereum Value (Rp)
               </label>
               <input
                 type="number"
@@ -1118,12 +1121,12 @@ function DataInputPage() {
                 htmlFor="cryptoScenarioPercentage"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Skenario Perubahan Harga (%)
+                Price Change Scenario (%)
               </label>
               <input
                 type="number"
                 id="cryptoScenarioPercentage"
-                placeholder="e.g., 10 untuk 10% naik, -5 untuk 5% turun"
+                placeholder="e.g., 10 for 10% increase, -5 for 5% decrease"
                 value={cryptoScenarioPercentage}
                 onChange={(e) =>
                   setCryptoScenarioPercentage(Number(e.target.value))
@@ -1131,62 +1134,71 @@ function DataInputPage() {
                 className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Masukkan angka positif untuk kenaikan, negatif untuk penurunan.
+                Enter a positive number for increase, negative for decrease.
               </p>
             </div>
             <button
               type="submit"
               className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
             >
-              Simulasikan Perubahan
+              Simulate Change
             </button>
           </form>
 
-          {/* Hasil Simulasi */}
+          {/* Simulation Results */}
           <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
             <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Hasil Simulasi
+              Simulation Results
             </h3>
             <div className="space-y-3">
               <p className="text-lg text-gray-300">
-                Potensi Perubahan Nilai Investasi Crypto:{" "}
+                Potential Change in Crypto Investment Value:{" "}
                 <span
                   className={`font-bold ${
-                    cryptoScenarioResult && cryptoScenarioResult.potentialGainLoss >= 0
+                    cryptoScenarioResult &&
+                    cryptoScenarioResult.potentialGainLoss >= 0
                       ? "text-green-primary"
                       : "text-red-primary"
                   }`}
                 >
                   Rp{" "}
                   {cryptoScenarioResult
-                    ? cryptoScenarioResult.potentialGainLoss.toLocaleString("id-ID")
+                    ? cryptoScenarioResult.potentialGainLoss.toLocaleString(
+                        "id-ID"
+                      )
                     : "0"}
                 </span>
               </p>
               <p className="text-lg text-gray-300">
-                Nilai Bitcoin Baru:{" "}
+                New Bitcoin Value:{" "}
                 <span className="font-bold text-white-default">
                   Rp{" "}
                   {cryptoScenarioResult
-                    ? cryptoScenarioResult.newBitcoinValue.toLocaleString("id-ID")
+                    ? cryptoScenarioResult.newBitcoinValue.toLocaleString(
+                        "id-ID"
+                      )
                     : "0"}
                 </span>
               </p>
               <p className="text-lg text-gray-300">
-                Nilai Ethereum Baru:{" "}
+                New Ethereum Value:{" "}
                 <span className="font-bold text-white-default">
                   Rp{" "}
                   {cryptoScenarioResult
-                    ? cryptoScenarioResult.newEthereumValue.toLocaleString("id-ID")
+                    ? cryptoScenarioResult.newEthereumValue.toLocaleString(
+                        "id-ID"
+                      )
                     : "0"}
                 </span>
               </p>
               <p className="text-lg text-gray-300">
-                Kekayaan Bersih Proyeksi:{" "}
+                Projected Net Worth:{" "}
                 <span className="font-bold gradient-text">
                   Rp{" "}
                   {cryptoScenarioResult
-                    ? cryptoScenarioResult.projectedNetWorth.toLocaleString("id-ID")
+                    ? cryptoScenarioResult.projectedNetWorth.toLocaleString(
+                        "id-ID"
+                      )
                     : "0"}
                 </span>
               </p>

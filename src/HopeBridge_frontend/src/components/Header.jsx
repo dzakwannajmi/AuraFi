@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Import Link untuk navigasi
+import { Link } from "react-router-dom"; // Import Link for navigation
 import useAuth from "../hooks/useAuth";
 
 const Header = ({ user, login, logout, isScrolled }) => {
-  // isScrolled diterima dari Layout.jsx
-  // isScrolled state dan useEffect untuk scroll dihapus dari sini
+  // isScrolled received from Layout.jsx
+  // isScrolled state and useEffect for scroll removed from here
 
   return (
     <header
@@ -19,12 +19,12 @@ const Header = ({ user, login, logout, isScrolled }) => {
       `}
     >
       <h1 className="text-2xl font-bold gradient-text mr-auto">AuraFi</h1>{" "}
-      {/* mr-auto untuk mendorong ke kiri */}
-      {/* Navigasi Utama (Desktop) */}
-      {/* Menggunakan flex-1 dan justify-center untuk memusatkan navigasi */}
+      {/* mr-auto to push to the left */}
+      {/* Main Navigation (Desktop) */}
+      {/* Using flex-1 and justify-center to center navigation */}
       <nav className="hidden lg:flex items-center justify-center flex-1 space-x-12">
         {" "}
-        {/* Meningkatkan space-x- dan menambahkan flex-1, justify-center */}
+        {/* Increased space-x- and added flex-1, justify-center */}
         <Link
           to="/"
           className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
@@ -41,7 +41,7 @@ const Header = ({ user, login, logout, isScrolled }) => {
           to="/transactions"
           className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
         >
-          Transaksi
+          Transactions
         </Link>
         <Link
           to="/ai-care"
@@ -59,7 +59,7 @@ const Header = ({ user, login, logout, isScrolled }) => {
           to="/portfolio"
           className="text-gray-light hover:text-white-default transition-colors whitespace-nowrap"
         >
-          Portofolio
+          Portfolio
         </Link>
         <Link
           to="/about"
@@ -70,12 +70,12 @@ const Header = ({ user, login, logout, isScrolled }) => {
       </nav>
       <div className="flex items-center space-x-4 ml-auto">
         {" "}
-        {/* ml-auto untuk mendorong ke kanan */}
+        {/* ml-auto to push to the right */}
         {user ? (
           <>
             <p className="text-gray-300 text-sm hidden md:block">
               {" "}
-              {/* Sembunyikan di mobile */}
+              {/* Hide on mobile */}
               Logged in as:{" "}
               <span className="font-medium text-white-default">{user}</span>
             </p>
@@ -98,11 +98,11 @@ const Header = ({ user, login, logout, isScrolled }) => {
               onClick={login}
               className="hidden lg:block px-6 py-3 rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
             >
-              Hubungkan Wallet
+              Connect Wallet
             </button>
           </>
         )}
-        {/* Hamburger icon untuk mobile navigation (jika diperlukan) - Dihapus karena navigasi utama ada di header */}
+        {/* Hamburger icon for mobile navigation (if needed) - Removed because main navigation is in header */}
       </div>
     </header>
   );

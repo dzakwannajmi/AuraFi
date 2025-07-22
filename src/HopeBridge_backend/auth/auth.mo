@@ -1,17 +1,17 @@
-// HopeBridge_backend/src/auth/auth.mo
-// Modul fungsi-fungsi autentikasi
+// Module for basic authentication-related functions
 
 import Principal "mo:base/Principal";
 
 module {
-  // Fungsi publik untuk mendapatkan Principal dari pemanggil,
-  // dengan caller dioper sebagai parameter dari actor.
+  /// Returns the caller's principal.
+  /// The `caller` is passed as an argument from the actor's shared function context.
   public func getCallerPrincipal(caller: Principal) : Principal {
     return caller;
   };
 
-  // Contoh fungsi dummy untuk autentikasi.
-  // `_` menandakan parameter tidak digunakan.
+  /// Dummy authentication function.
+  /// Currently always returns `true`, meaning the user is considered authenticated.
+  /// The underscore `_` means the input `Principal` is unused.
   public func isAuthenticated(_: Principal) : Bool {
     return true;
   };

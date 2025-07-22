@@ -8,9 +8,11 @@ import Iter "mo:base/Iter";
 import Types "../core/types";
 
 module {
+  // Alias for convenience
   type Investment = Types.Investment;
   type UserPortfoliosMap = HashMap.HashMap<Principal, [Investment]>;
 
+  /// Add a new investment to a user's portfolio
   public func addInvestment(
     userPortfolios: UserPortfoliosMap,
     caller: Principal,
@@ -24,8 +26,10 @@ module {
     buyDate: Text,
     initialCurrentValueInIDR: Float,
   ) : Investment {
+    // Use current timestamp as a unique ID
     let newId : Time.Time = Time.now();
 
+    // Create new investment object
     let newInvestment : Investment = {
       id = newId;
       assetName;
@@ -40,6 +44,7 @@ module {
       currentValueInIDR = initialCurrentValueInIDR;
     };
 
+    // Add to existing portfolio or create a new one
     switch (userPortfolios.get(caller)) {
       case (null) {
         userPortfolios.put(caller, [newInvestment]);
@@ -53,6 +58,7 @@ module {
     return newInvestment;
   };
 
+  /// Retrieve the full portfolio of a user
   public func getMyPortfolio(
     userPortfolios: UserPortfoliosMap,
     caller: Principal
@@ -63,6 +69,7 @@ module {
     };
   };
 
+  /// Update the current price and value (in IDR) of an investment
   public func updateInvestmentPrice(
     userPortfolios: UserPortfoliosMap,
     caller: Principal,
@@ -75,6 +82,7 @@ module {
       case (?investments) {
         var updated : ?Investment = null;
 
+        // Map through investments and update the matching one
         let updatedInvestments = Array.map(
           investments,
           func(inv: Investment) : Investment {
@@ -100,12 +108,14 @@ module {
           }
         );
 
+        // Save updated list back to user portfolio
         userPortfolios.put(caller, updatedInvestments);
         return updated;
       };
     };
   };
 
+  /// Remove an investment from the user's portfolio by ID
   public func deleteInvestment(
     userPortfolios: UserPortfoliosMap,
     caller: Principal,
@@ -114,12 +124,14 @@ module {
     switch (userPortfolios.get(caller)) {
       case (null) return false;
       case (?investments) {
+        // Filter out the investment to be deleted
         let filtered = Array.filter(
           investments,
           func (inv: Investment) : Bool {
             inv.id != investmentId;
           }
         );
+        // Check if any change happened
         if (Array.size(filtered) < Array.size(investments)) {
           userPortfolios.put(caller, filtered);
           return true;
@@ -129,6 +141,7 @@ module {
     };
   };
 
+  /// Calculate the total current value of a user's portfolio (in IDR)
   public func getTotalPortfolioValueInIDR(
     userPortfolios: UserPortfoliosMap,
     caller: Principal
@@ -145,6 +158,7 @@ module {
     };
   };
 
+  /// Calculate the total buy cost (quantity * buy price) of the user's portfolio (in IDR)
   public func getTotalBuyValueInIDR(
     userPortfolios: UserPortfoliosMap,
     caller: Principal
@@ -161,6 +175,7 @@ module {
     };
   };
 
+  /// Clear all investments from the user's portfolio
   public func clearMyPortfolio(
     userPortfolios: UserPortfoliosMap,
     caller: Principal

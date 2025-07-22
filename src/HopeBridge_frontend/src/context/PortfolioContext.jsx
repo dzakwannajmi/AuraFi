@@ -1,22 +1,26 @@
 import React, { createContext, useContext } from "react";
-import usePortfolioData from "../hooks/usePortfolio";
+import usePortfolio from "../hooks/usePortfolio"; // Import custom hook usePortfolio
 
-const PortofolioContext = CreateContext(null);
+// Buat Context baru
+const PortfolioContext = createContext(null);
 
-export const PortofolioProvider = ({ Children }) => {
-  const usePortofolio = usePortfolio();
+// Provider untuk PortfolioContext
+export const PortfolioProvider = ({ children }) => { // Perbaikan: 'children' lowercase
+  // Panggil custom hook usePortfolio untuk mendapatkan data dan fungsi
+  const portfolioData = usePortfolio(); // Perbaikan: gunakan nama hook yang benar
 
   return (
-    <PortofolioContext.Provider value={usePortofolio}>
-      {Children}
-    </PortofolioContext.Provider>
+    <PortfolioContext.Provider value={portfolioData}>
+      {children}
+    </PortfolioContext.Provider>
   );
 };
 
-export const usePortfolio = () => {
-  const context = useContext(PortofolioContext);
+// Custom hook untuk mengkonsumsi PortfolioContext
+export const usePortfolioContext = () => { // Perbaikan: Ganti nama hook ini agar tidak konflik dengan usePortfolio dari hooks/
+  const context = useContext(PortfolioContext);
   if (!context) {
-    throw new Error("usePortfolio must be used within a PortofolioProvider");
+    throw new Error("usePortfolioContext must be used within a PortfolioProvider"); // Perbaikan pesan error
   }
   return context;
 };

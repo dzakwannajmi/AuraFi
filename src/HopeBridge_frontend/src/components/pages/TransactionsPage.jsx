@@ -6,16 +6,16 @@ function TransactionsPage() {
       id: 1,
       type: "expense",
       amount: 200000,
-      category: "Obat-obatan",
-      description: "Paracetamol dan antibiotik",
+      category: "Medication",
+      description: "Paracetamol and antibiotics",
       date: "2025-07-18",
     },
     {
       id: 2,
       type: "income",
       amount: 500000,
-      category: "Klaim Asuransi",
-      description: "Reimburse rawat jalan",
+      category: "Insurance Claim",
+      description: "Outpatient reimbursement",
       date: "2025-07-17",
     },
   ]);
@@ -28,10 +28,10 @@ function TransactionsPage() {
     date: "",
   });
 
-  const [editingId, setEditingId] = useState(null); // State untuk melacak ID transaksi yang sedang diedit
-  const [message, setMessage] = useState({ text: "", type: "" }); // State untuk notifikasi
+  const [editingId, setEditingId] = useState(null); // State to track the ID of the transaction being edited
+  const [message, setMessage] = useState({ text: "", type: "" }); // State for notifications
 
-  // Fungsi untuk menampilkan pesan notifikasi
+  // Function to display notification messages
   const showMessage = (text, type) => {
     setMessage({ text, type });
     setTimeout(() => {
@@ -53,18 +53,18 @@ function TransactionsPage() {
       !formData.description ||
       !formData.date
     ) {
-      showMessage("Harap isi semua kolom dengan nilai yang valid.", "error");
+      showMessage("Please fill in all fields with valid values.", "error");
       return;
     }
 
     const parsedAmount = parseInt(formData.amount, 10);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      showMessage("Jumlah harus berupa angka positif.", "error");
+      showMessage("Amount must be a positive number.", "error");
       return;
     }
 
     if (editingId) {
-      // Mode Edit
+      // Edit Mode
       setTransactions((prev) =>
         prev.map((t) =>
           t.id === editingId
@@ -72,17 +72,17 @@ function TransactionsPage() {
             : t
         )
       );
-      setEditingId(null); // Reset mode edit
-      showMessage("Transaksi berhasil diperbarui!", "success");
+      setEditingId(null); // Reset edit mode
+      showMessage("Transaction updated successfully!", "success");
     } else {
-      // Mode Tambah Baru
+      // Add New Mode
       const newTransaction = {
         ...formData,
-        id: Date.now(), // ID unik sederhana
+        id: Date.now(), // Simple unique ID
         amount: parsedAmount,
       };
       setTransactions((prev) => [newTransaction, ...prev]);
-      showMessage("Transaksi berhasil ditambahkan!", "success");
+      showMessage("Transaction added successfully!", "success");
     }
 
     // Reset form
@@ -105,26 +105,26 @@ function TransactionsPage() {
         description: transactionToEdit.description,
         date: transactionToEdit.date,
       });
-      setEditingId(transactionId); // Set ID transaksi yang sedang diedit
+      setEditingId(transactionId); // Set ID of the transaction being edited
     }
   };
 
   const handleDelete = (transactionId) => {
-    // Konfirmasi sebelum menghapus (opsional, bisa diganti modal kustom)
-    if (window.confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
+    // Confirmation before deleting (optional, can be replaced with custom modal)
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
       setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
-      showMessage("Transaksi berhasil dihapus.", "info");
+      showMessage("Transaction deleted successfully.", "info");
     }
   };
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
       {" "}
-      {/* Menggunakan max-w-6xl untuk layout 2 kolom */}
+      {/* Using max-w-6xl for 2-column layout */}
       <h1 className="text-4xl font-bold text-center mb-8 text-white-default">
-        Manajemen Transaksi Kesehatan
+        Health Transaction Management
       </h1>
-      {/* Notifikasi Pesan */}
+      {/* Message Notification */}
       {message.text && (
         <div
           className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white-default z-50 ${
@@ -140,11 +140,11 @@ function TransactionsPage() {
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {" "}
-        {/* Layout 2 kolom */}
+        {/* 2-column layout */}
         {/* Form */}
         <section className="p-6 bg-gray-card-bg rounded-xl shadow-md border border-gray-border">
           <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
-            {editingId ? "Edit Transaksi" : "Tambah Transaksi Baru"}
+            {editingId ? "Edit Transaction" : "Add New Transaction"}
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
@@ -152,7 +152,7 @@ function TransactionsPage() {
                 htmlFor="type"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Jenis Transaksi
+                Transaction Type
               </label>
               <select
                 id="type"
@@ -160,8 +160,8 @@ function TransactionsPage() {
                 onChange={handleChange}
                 className="input-field"
               >
-                <option value="expense">Pengeluaran Medis</option>
-                <option value="income">Klaim Asuransi</option>
+                <option value="expense">Medical Expense</option>
+                <option value="income">Insurance Claim</option>
               </select>
             </div>
             <div className="mb-5">
@@ -169,7 +169,7 @@ function TransactionsPage() {
                 htmlFor="amount"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Jumlah
+                Amount
               </label>
               <input
                 type="number"
@@ -185,14 +185,14 @@ function TransactionsPage() {
                 htmlFor="category"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Kategori
+                Category
               </label>
               <input
                 type="text"
                 id="category"
                 value={formData.category}
                 onChange={handleChange}
-                placeholder="e.g., Obat-obatan"
+                placeholder="e.g., Medication"
                 className="input-field"
               />
             </div>
@@ -201,13 +201,13 @@ function TransactionsPage() {
                 htmlFor="description"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Deskripsi
+                Description
               </label>
               <textarea
                 id="description"
                 value={formData.description}
                 onChange={handleChange}
-                placeholder="Deskripsi singkat transaksi"
+                placeholder="Brief transaction description"
                 className="input-field min-h-[80px] resize-y"
               ></textarea>
             </div>
@@ -216,7 +216,7 @@ function TransactionsPage() {
                 htmlFor="date"
                 className="block mb-2 font-medium text-gray-text-tertiary"
               >
-                Tanggal
+                Date
               </label>
               <input
                 type="date"
@@ -230,14 +230,14 @@ function TransactionsPage() {
               type="submit"
               className="w-full py-3 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90"
             >
-              {editingId ? "Simpan Perubahan" : "Tambah Transaksi"}
+              {editingId ? "Save Changes" : "Add Transaction"}
             </button>
           </form>
         </section>
         {/* List */}
         <section className="p-6 bg-gray-card-bg rounded-xl shadow-md border border-gray-border">
           <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
-            Daftar Transaksi Kesehatan
+            Health Transaction List
           </h2>
           <div className="overflow-x-auto rounded-xl border border-gray-border bg-gray-card-bg shadow-md">
             <table className="w-full border-collapse min-w-[700px]">
@@ -246,12 +246,12 @@ function TransactionsPage() {
               <thead>
                 <tr>
                   {[
-                    "Tanggal",
-                    "Jenis",
-                    "Kategori",
-                    "Deskripsi",
-                    "Jumlah",
-                    "Aksi",
+                    "Date",
+                    "Type",
+                    "Category",
+                    "Description",
+                    "Amount",
+                    "Actions",
                   ].map((text) => (
                     <th
                       key={text}
@@ -272,9 +272,7 @@ function TransactionsPage() {
                       {transaction.date}
                     </td>
                     <td className="p-4 text-left border-b border-gray-border text-gray-300">
-                      {transaction.type === "expense"
-                        ? "Pengeluaran"
-                        : "Pemasukan"}
+                      {transaction.type === "expense" ? "Expense" : "Income"}
                     </td>
                     <td className="p-4 text-left border-b border-gray-border text-gray-300">
                       {transaction.category}
@@ -304,7 +302,7 @@ function TransactionsPage() {
                         onClick={() => handleDelete(transaction.id)}
                         className="btn-secondary text-red-primary hover:bg-red-secondary hover:text-white-default"
                       >
-                        Hapus
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -314,7 +312,7 @@ function TransactionsPage() {
                     <td colSpan="6" className="p-4 text-center text-gray-400">
                       {" "}
                       {/* Updated colspan */}
-                      Belum ada transaksi.
+                      No transactions yet.
                     </td>
                   </tr>
                 )}

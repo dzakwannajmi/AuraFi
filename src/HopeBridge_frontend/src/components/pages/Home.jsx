@@ -10,7 +10,7 @@ function HomePage() {
     // --- Setup Scene Three.js ---
     let scene, camera, renderer;
     let particles = []; // Array untuk menyimpan objek partikel
-    const numParticles = 150; // Jumlah partikel yang lebih banyak untuk efek yang lebih padat
+    const numParticles = 150; // Jumlah partikel
     const particleSpeed = 0.005; // Kecepatan animasi partikel
     const particleSize = 0.15; // Ukuran partikel
 
@@ -49,30 +49,49 @@ function HomePage() {
       ); // Gunakan clientWidth/Height dari ref
       mountRef.current.appendChild(renderer.domElement);
 
+      // Enable shadows
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
+
       // 4. Lighting
-      // Cahaya lembut dari berbagai arah untuk menonjolkan partikel
-      const light1 = new THREE.PointLight(0x00ff00, 0.5, 100); // Hijau
-      light1.position.set(10, 10, 10);
-      scene.add(light1);
-
-      const light2 = new THREE.PointLight(0x0000ff, 0.5, 100); // Biru
-      light2.position.set(-10, -10, -10);
-      scene.add(light2);
-
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.5); // Cahaya ambient umum
+      // Hapus light1 dan light2 yang lama
+      // Cahaya Ambient untuk penerangan dasar
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.8); // Cahaya ambient umum, intensitas lebih tinggi
       scene.add(ambientLight);
 
+      // Cahaya Directional untuk simulasi cahaya matahari / sumber cahaya utama
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); // Cahaya putih, intensitas sedang
+      directionalLight.position.set(5, 10, 7); // Posisi cahaya
+      directionalLight.castShadow = true; // Cahaya ini akan menghasilkan bayangan
+      scene.add(directionalLight);
+
+      // Konfigurasi bayangan untuk directionalLight
+      directionalLight.shadow.mapSize.width = 1024;
+      directionalLight.shadow.mapSize.height = 1024;
+      directionalLight.shadow.camera.near = 0.5;
+      directionalLight.shadow.camera.far = 50;
+      directionalLight.shadow.camera.left = -10;
+      directionalLight.shadow.camera.right = 10;
+      directionalLight.shadow.camera.top = 10;
+      directionalLight.shadow.camera.bottom = -10;
+
+      // PointLight tambahan untuk efek highlight atau warna
+      const pointLight = new THREE.PointLight(0x3ad9a3, 0.5, 50); // Cahaya hijau, intensitas lebih rendah
+      pointLight.position.set(-5, 5, 5);
+      scene.add(pointLight);
+
       // 5. Create Particles (representing abstract financial elements)
-      const geometry = new THREE.SphereGeometry(particleSize, 16, 16); // Bentuk bola
+      const geometry = new THREE.SphereGeometry(particleSize, 32, 32); // Bentuk bola dengan lebih banyak segmen untuk kehalusan
       for (let i = 0; i < numParticles; i++) {
         const randomColor =
           abstractColors[Math.floor(Math.random() * abstractColors.length)];
-        const material = new THREE.MeshPhongMaterial({
-          color: randomColor, // Warna dari daftar abstrak
+        // Menggunakan MeshStandardMaterial untuk PBR (Physically Based Rendering)
+        const material = new THREE.MeshStandardMaterial({
+          color: randomColor,
+          roughness: 0.5, // Seberapa kasar permukaan (0=halus, 1=kasar)
+          metalness: 0.2, // Seberapa metalik permukaan (0=non-metal, 1=metal)
           emissive: randomColor, // Efek cahaya sendiri (glow)
-          emissiveIntensity: 0.1, // Intensitas glow
-          specular: 0xcccccc, // Pantulan cahaya
-          shininess: 50,
+          emissiveIntensity: 0.05, // Intensitas glow lebih rendah
         });
         const particle = new THREE.Mesh(geometry, material);
 
@@ -85,9 +104,25 @@ function HomePage() {
         const scale = Math.random() * 0.5 + 0.5;
         particle.scale.set(scale, scale, scale);
 
+        particle.castShadow = true; // Partikel menghasilkan bayangan
+        particle.receiveShadow = true; // Partikel menerima bayangan
+
         particles.push(particle);
         scene.add(particle);
       }
+
+      // Tambahkan bidang dasar untuk menerima bayangan
+      const planeGeometry = new THREE.PlaneGeometry(100, 100);
+      const planeMaterial = new THREE.MeshStandardMaterial({
+        color: 0x0a0a0a,
+        roughness: 0.8,
+        metalness: 0.1,
+      });
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      plane.rotation.x = -Math.PI / 2; // Putar agar horizontal
+      plane.position.y = -5; // Posisikan di bawah partikel
+      plane.receiveShadow = true; // Bidang menerima bayangan
+      scene.add(plane);
     };
 
     // --- Animation Loop ---
@@ -168,9 +203,9 @@ function HomePage() {
   return (
     <section
       id="home"
-      // Menggunakan w-screen h-screen untuk memenuhi seluruh viewport
+      // Menggunakan w-full h-full untuk memenuhi seluruh parent <main>
       // flex items-center justify-center untuk memusatkan konten secara vertikal dan horizontal
-      className="w-screen h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
     >
       {/* Container untuk scene 3D */}
       <div

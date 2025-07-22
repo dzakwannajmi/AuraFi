@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
+import { currencies, formatCurrency } from "../utils/currencyUtils.js"; // Import from utility file
 
-// Mapping nama aset ke ID CoinGecko
+// Mapping asset names to CoinGecko IDs
 const cryptoIdMap = {
   Bitcoin: "bitcoin",
   Ethereum: "ethereum",
@@ -9,8 +10,8 @@ const cryptoIdMap = {
   Cardano: "cardano",
   Solana: "solana",
   Dogecoin: "dogecoin",
-  Stablecoin: "tether", // Contoh: menggunakan Tether
-  NFT: null, // NFT tidak memiliki harga pasar tunggal seperti koin
+  Stablecoin: "tether", // Example: using Tether
+  NFT: null, // NFTs typically don't have a single market price like coins
 };
 
 const PortfolioList = ({
@@ -19,10 +20,14 @@ const PortfolioList = ({
   onRefreshPrices,
   showMessage,
   isLoading,
+  // New props for calculated totals in IDR from PortfolioPage
+  totalPortfolioValueIDR,
+  totalProfitLossIDR,
+  overallPercentageChangeIDR,
 }) => {
   const canvasRef = useRef(null);
 
-  // Fungsi untuk menggambar grafik portofolio menggunakan Canvas
+  // Function to draw the portfolio chart using Canvas
   const drawPortfolioChart = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -41,25 +46,27 @@ const PortfolioList = ({
       ctx.font = "16px Poppins";
       ctx.textAlign = "center";
       ctx.fillText(
-        "Tidak ada data untuk visualisasi.",
+        "No data for visualization.",
         canvas.width / 2,
         canvas.height / 2
       );
       return;
     }
 
+    // Use current value in purchase currency for chart bars
     const assetValues = investments.map(
       (inv) => inv.quantity * inv.currentPrice
     );
     const assetNames = investments.map((inv) => inv.assetName);
-    const totalValue = assetValues.reduce((sum, val) => sum + val, 0);
+    const totalValueChart = assetValues.reduce((sum, val) => sum + val, 0); // Total value for chart scaling
 
-    if (totalValue === 0) {
+    if (totalValueChart === 0) {
+      // Check against chart specific total
       ctx.fillStyle = "var(--color-gray-medium)";
       ctx.font = "16px Poppins";
       ctx.textAlign = "center";
       ctx.fillText(
-        "Total nilai portofolio nol.",
+        "Total portfolio value is zero.",
         canvas.width / 2,
         canvas.height / 2
       );
@@ -94,7 +101,7 @@ const PortfolioList = ({
       ctx.font = "12px Poppins";
       ctx.textAlign = "center";
       ctx.fillText(
-        `Rp ${value.toLocaleString("id-ID")}`,
+        formatCurrency(value, investments[index].currency), // Use formatCurrency
         x + (barWidth - 10) / 2,
         y - 5
       );
@@ -113,64 +120,52 @@ const PortfolioList = ({
     return () => window.removeEventListener("resize", drawPortfolioChart);
   }, [investments]); // Redraw chart when investments change
 
-  let totalPortfolioValue = 0;
-  let totalProfitLoss = 0;
-  let totalBuyValue = 0;
-
-  investments.forEach((inv) => {
-    const currentValue = inv.quantity * inv.currentPrice;
-    const buyValue = inv.quantity * inv.buyPrice;
-    const profitLoss = currentValue - buyValue;
-
-    totalPortfolioValue += currentValue;
-    totalProfitLoss += profitLoss;
-    totalBuyValue += buyValue;
-  });
-
-  const overallPercentageChange =
-    totalBuyValue > 0 ? (totalProfitLoss / totalBuyValue) * 100 : 0;
+  // Total values are now passed as props from PortfolioPage
+  // Removed local calculation: totalPortfolioValue, totalProfitLoss, totalBuyValue, overallPercentageChange
 
   return (
     <>
-      {/* Ringkasan Portofolio */}
+      {/* Portfolio Summary */}
       <div className="card grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
         <div>
-          <p className="text-sm text-gray-light">Total Nilai Portofolio</p>
+          <p className="text-sm text-gray-light">Total Portfolio Value</p>
           <p
             id="totalPortfolioValue"
             className="text-3xl font-bold text-white-default mt-1"
           >
-            Rp {totalPortfolioValue.toLocaleString("id-ID")}
+            {formatCurrency(totalPortfolioValueIDR, "IDR")}{" "}
+            {/* Use formatCurrency for summary */}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-light">Total Keuntungan/Kerugian</p>
+          <p className="text-sm text-gray-light">Total Profit/Loss</p>
           <p
             id="totalProfitLoss"
             className={`text-3xl font-bold mt-1 ${
-              totalProfitLoss >= 0 ? "profit" : "loss"
+              totalProfitLossIDR >= 0 ? "profit" : "loss"
             }`}
           >
-            Rp {totalProfitLoss.toLocaleString("id-ID")}
+            {formatCurrency(totalProfitLossIDR, "IDR")}{" "}
+            {/* Use formatCurrency for summary */}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-light">Persentase Perubahan</p>
+          <p className="text-sm text-gray-light">Percentage Change</p>
           <p
             id="percentageChange"
             className={`text-3xl font-bold mt-1 ${
-              overallPercentageChange >= 0 ? "profit" : "loss"
+              overallPercentageChangeIDR >= 0 ? "profit" : "loss"
             }`}
           >
-            {overallPercentageChange.toFixed(2)}%
+            {overallPercentageChangeIDR.toFixed(2)}%
           </p>
         </div>
       </div>
 
-      {/* Daftar Investasi */}
+      {/* Investment List */}
       <div className="card">
         <h2 className="text-2xl font-semibold mb-6 text-gray-text-tertiary">
-          Daftar Investasi Anda
+          Your Investments
         </h2>
         <div className="flex justify-end mb-4">
           <button
@@ -178,7 +173,7 @@ const PortfolioList = ({
             className="btn-secondary flex items-center"
             disabled={isLoading}
           >
-            Perbarui Harga
+            Refresh Prices
             {isLoading && <span className="loading-spinner"></span>}
           </button>
         </div>
@@ -186,18 +181,18 @@ const PortfolioList = ({
           <table className="min-w-full">
             <thead>
               <tr>
-                <th>Aset</th>
-                <th>Jenis</th>
-                <th>Kategori</th>
+                <th>Asset</th>
+                <th>Type</th>
+                <th>Category</th>
                 <th>Platform</th>
-                <th>Mata Uang</th>
-                <th>Jumlah</th>
-                <th>Harga Beli</th>
-                <th>Harga Saat Ini</th>
-                <th>Nilai Sekarang</th>
-                <th>P/L (Rp)</th>
+                <th>Currency</th>
+                <th>Quantity</th>
+                <th>Buy Price</th>
+                <th>Current Price</th>
+                <th>Current Value</th>
+                <th>P/L</th>
                 <th>P/L (%)</th>
-                <th>Aksi</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="investmentTableBody">
@@ -207,7 +202,7 @@ const PortfolioList = ({
                     colSpan="12"
                     className="text-center text-gray-medium py-4"
                   >
-                    Belum ada investasi ditambahkan.
+                    No investments added yet.
                   </td>
                 </tr>
               ) : (
@@ -224,12 +219,12 @@ const PortfolioList = ({
                       <td>{inv.sector}</td>
                       <td>{inv.broker}</td>
                       <td>{inv.currency}</td>
-                      <td>{inv.quantity.toLocaleString("id-ID")}</td>
-                      <td>Rp {inv.buyPrice.toLocaleString("id-ID")}</td>
-                      <td>Rp {inv.currentPrice.toLocaleString("id-ID")}</td>
-                      <td>Rp {currentValue.toLocaleString("id-ID")}</td>
+                      <td>{inv.quantity.toLocaleString("en-US")}</td>
+                      <td>{formatCurrency(inv.buyPrice, inv.currency)}</td>
+                      <td>{formatCurrency(inv.currentPrice, inv.currency)}</td>
+                      <td>{formatCurrency(currentValue, inv.currency)}</td>
                       <td className={profitLoss >= 0 ? "profit" : "loss"}>
-                        Rp {profitLoss.toLocaleString("id-ID")}
+                        {formatCurrency(profitLoss, inv.currency)}
                       </td>
                       <td className={profitLoss >= 0 ? "profit" : "loss"}>
                         {profitLossPercentage.toFixed(2)}%
@@ -239,7 +234,7 @@ const PortfolioList = ({
                           onClick={() => onDeleteInvestment(inv.id)}
                           className="btn-secondary text-red-primary hover:bg-red-secondary"
                         >
-                          Hapus
+                          Delete
                         </button>
                       </td>
                     </tr>
@@ -251,15 +246,15 @@ const PortfolioList = ({
         </div>
       </div>
 
-      {/* Visualisasi Portofolio (Canvas) */}
+      {/* Portfolio Visualization (Canvas) */}
       <div className="card">
         <h2 className="text-2xl font-semibold mb-6 text-gray-text-tertiary">
-          Distribusi Portofolio
+          Portfolio Distribution
         </h2>
         <canvas ref={canvasRef} id="portfolioChart"></canvas>
         <p className="text-sm text-gray-text-secondary text-center mt-4">
-          Visualisasi ini menunjukkan proporsi nilai setiap aset dalam
-          portofolio Anda.
+          This visualization shows the proportion of each asset's value in your
+          portfolio.
         </p>
       </div>
     </>

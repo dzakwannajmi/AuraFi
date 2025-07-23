@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
 import * as THREE from "three";
-
-// Create an instance of Three.js TextureLoader
+// Three.js imports remain the same for texture loading
 const textureLoader = new THREE.TextureLoader();
 
 function HomePage() {
@@ -39,9 +38,9 @@ function HomePage() {
       "/Crypto/Bitconnect.svg",
       "/Crypto/Bitshares.svg",
       "/Crypto/Dash.svg",
-      "/Crypto/decred.svg", // Note: "decred copy" might be a typo for "decred.svg"
+      "/Crypto/decred.svg",
       "/Crypto/Devcoin.svg",
-      "/Crypto/DOGE.svg", // Assuming this is Dogecoin
+      "/Crypto/DOGE.svg",
       "/Crypto/EtheriumClassic.svg",
       "/Crypto/Etherium.svg",
       "/Crypto/Europecoin.svg",
@@ -64,7 +63,7 @@ function HomePage() {
       "/Crypto/Neo.svg",
       "/Crypto/Nxt.svg",
       "/Crypto/OMNI.svg",
-      "/Crypto/Omnisego.svg", // Note: "Omnise go" might be specific
+      "/Crypto/Omnisego.svg",
       "/Crypto/Peercoin.svg",
       "/Crypto/PIVX.svg",
       "/Crypto/Potcoin.svg",
@@ -80,16 +79,13 @@ function HomePage() {
       "/Crypto/Synergy.svg",
       "/Crypto/Tether.svg",
       "/Crypto/ubq.svg",
-      "/Crypto/ven.svg", // Assuming this is VeChain
+      "/Crypto/ven.svg",
       "/Crypto/Verge.svg",
       "/Crypto/Vertcoin.svg",
       "/Crypto/WAVES.svg",
-      "/Crypto/xrp.svg", // Assuming this is Ripple
-      "/Crypto/xtz.svg", // Assuming this is Tezos
-      "/Crypto/ZcashWallet.svg", // Assuming this is Zcash
-      // Note: "crypto-coins.svg" from your previous input seems to be a composite file.
-      // If you intend to use individual icons from it, they must be exported as separate SVGs.
-      // For now, I'm excluding it as it's not a single distinct crypto icon in the same way as others.
+      "/Crypto/xrp.svg",
+      "/Crypto/xtz.svg",
+      "/Crypto/ZcashWallet.svg",
     ];
 
     // Function to create a Three.js texture from an image (PNG/SVG) loaded via its path
@@ -186,7 +182,9 @@ function HomePage() {
             transparent: true,
             alphaTest: 0.1,
             side: THREE.DoubleSide,
-            // You can optionally apply a color tint to the icon here
+            // Optionally, apply a tint color to the icon from your palette
+            // This will tint the icon over its original color.
+            // Uncomment the line below to enable tinting:
             // color: new THREE.Color(iconColors[Math.floor(Math.random() * iconColors.length)]),
           });
 

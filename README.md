@@ -66,48 +66,44 @@ HopeBridge/
 │   ├── HopeBridge_frontend.did
 │   └── HopeBridge_frontend.js
 ├── HopeBridge_backend/          # Motoko backend code
-│   └── main.mo
+│   ├── auth/
+│   │   └── auth.mo               # Internet Identity handler
+│   ├── core/
+│   │   └── types.mo             # Shared types/modules
+│   ├── services/
+│   │   └── portfolio_service.mo # Business logic for portfolio
+│   └── main.mo                  # Entry point
 ├── HopeBridge_frontend/         # React frontend
 │   ├── index.html
 │   ├── vite-env.d.ts
-│   ├── public/                  # Static files
+│   ├── public/
 │   │   └── Crypto/             # Custom SVGs for 3D animation
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   ├── index.css
-│   │   ├── assets/             # For image/logo resources (optional)
-│   │   ├── components/         # Reusable components
-│   │   │   ├── investments/
-│   │   │   │   ├── InvestmentForm.jsx
-│   │   │   │   └── PortfolioList.jsx
-│   │   │   ├── modals/
-│   │   │   │   └── OnboardingModal.jsx
-│   │   │   ├── utils/
-│   │   │   │   ├── Header.jsx
-│   │   │   │   └── Footer.jsx
-│   │   ├── context/            # React Contexts
-│   │   │   ├── AuthContext.jsx
-│   │   │   ├── FinancialHealthContext.jsx
-│   │   │   └── PortfolioContext.jsx
-│   │   ├── hooks/              # Custom hooks
-│   │   │   ├── useAuth.jsx
-│   │   │   ├── useFinancialHealthData.jsx
-│   │   │   └── usePortfolio.jsx
-│   │   ├── pages/              # Main Pages
-│   │   │   ├── AboutPage.jsx
-│   │   │   ├── AICarePage.jsx
-│   │   │   ├── DashboardPage.jsx
-│   │   │   ├── DataInputPage.jsx
-│   │   │   ├── HomePage.jsx
-│   │   │   ├── Layout.jsx
-│   │   │   └── PortfolioPage.jsx
-│   │   ├── services/           # Service API handlers
-│   │   │   └── authService.js
-
+│   └── src/
+│       ├── App.jsx
+│       ├── main.jsx
+│       ├── index.css
+│       ├── assets/             # Optional static assets
+│       ├── components/         # Reusable UI components
+│       │   ├── investments/
+│       │   │   ├── InvestmentForm.jsx
+│       │   │   └── PortfolioList.jsx
+│       │   ├── modals/
+│       │   │   └── OnboardingModal.jsx
+│       │   └── utils/
+│       │       ├── Header.jsx
+│       │       └── Footer.jsx
+│       ├── context/            # Context for auth & state
+│       │   ├── AuthContext.jsx
+│       │   ├── FinancialHealthContext.jsx
+│       │   └── PortfolioContext.jsx
+│       ├── hooks/              # Custom React hooks
+│       │   ├── useAuth.jsx
+│       │   ├── useFinancialHealthData.jsx
+│       │   └── usePortfolio.jsx
+│       ├── pages/              # Main feature pages
+│       └── services/           # API handlers / utilities
+│           └── authService.js
 ```
-
----
 
 ## ✨ Features
 

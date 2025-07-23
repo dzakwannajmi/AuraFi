@@ -1,6 +1,3 @@
-Certainly\! Here's the `README.md` file in English for your `AuraFi` project.
-
-```markdown
 # `AuraFi`
 
 Welcome to AuraFi, your personal financial health companion built on the Internet Computer! This DApp (Decentralized Application) helps you track, analyze, and improve your financial well-being with smart insights and a secure, decentralized foundation.
@@ -9,10 +6,10 @@ By default, creating a new project adds this README and some template files to y
 
 To learn more before you start working with `HopeBridge`, see the following documentation available online:
 
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
+* [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
+* [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
+* [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
+* [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
 
 ---
 
@@ -21,6 +18,7 @@ To learn more before you start working with `HopeBridge`, see the following docu
 AuraFi leverages a variety of powerful libraries and frameworks to deliver its features:
 
 ### Frontend
+
 * **React**: For building the user interface.
 * **Three.js**: For creating the engaging 3D floating icon animation on the homepage.
 * **Recharts**: For rendering beautiful and interactive data visualizations (charts) on the Dashboard and Data Input pages.
@@ -30,6 +28,7 @@ AuraFi leverages a variety of powerful libraries and frameworks to deliver its f
 * **Custom SVG Icons**: Specific cryptocurrency icons are loaded as individual SVG files from the `public/Crypto/` folder for the Three.js animation on the homepage, offering high design flexibility.
 
 ### Backend
+
 * **Motoko**: The native programming language for building smart contracts (canisters) on the Internet Computer.
 
 ---
@@ -46,45 +45,43 @@ AuraFi leverages a variety of powerful libraries and frameworks to deliver its f
 The project follows a standard structure for Internet Computer DApps with a React frontend:
 
 ```
-
 HopeBridge/
-├── dfx.json                      \# DFX configuration file
+├── dfx.json                      # DFX configuration file
 ├── src/
-│   ├── HopeBridge\_backend/       \# Backend Motoko canister code
-│   │   └── main.mo               \# Main canister logic
-│   ├── HopeBridge\_frontend/      \# Frontend React application
-│   │   ├── public/               \# Static assets (HTML, manifest, images, SVGs)
-│   │   │   ├── Crypto/           \# Folder containing custom cryptocurrency SVG icons for Three.js animation
+│   ├── HopeBridge_backend/       # Backend Motoko canister code
+│   │   └── main.mo               # Main canister logic
+│   ├── HopeBridge_frontend/      # Frontend React application
+│   │   ├── public/               # Static assets (HTML, manifest, images, SVGs)
+│   │   │   ├── Crypto/           # Folder containing custom cryptocurrency SVG icons for Three.js animation
 │   │   │   └── ... (other static files like favicon.ico, logo2.svg)
 │   │   ├── src/
-│   │   │   ├── components/       \# Reusable UI components
-│   │   │   │   ├── Investments/  \# Investment-related forms/lists
-│   │   │   │   ├── modals/       \# Modal components (e.g., OnboardingModal)
-│   │   │   │   └── ...           \# Other components
-│   │   │   ├── hooks/            \# Custom React hooks (e.g., useFinancialHealthData.jsx)
-│   │   │   ├── pages/            \# Main application pages
+│   │   │   ├── components/       # Reusable UI components
+│   │   │   │   ├── Investments/  # Investment-related forms/lists
+│   │   │   │   ├── modals/       # Modal components (e.g., OnboardingModal)
+│   │   │   │   └── ...           # Other components
+│   │   │   ├── hooks/            # Custom React hooks (e.g., useFinancialHealthData.jsx)
+│   │   │   ├── pages/            # Main application pages
 │   │   │   │   ├── AboutPage.jsx
 │   │   │   │   ├── AICarePage.jsx
 │   │   │   │   ├── DashboardPage.jsx
 │   │   │   │   ├── DataInputPage.jsx
-│   │   │   │   ├── HomePage.jsx  \# Homepage with 3D animation
-│   │   │   │   ├── Layout.jsx    \# Main layout/router outlet
+│   │   │   │   ├── HomePage.jsx  # Homepage with 3D animation
+│   │   │   │   ├── Layout.jsx    # Main layout/router outlet
 │   │   │   │   └── PortfolioPage.jsx
-│   │   │   ├── App.jsx           \# Root React component
-│   │   │   ├── index.css         \# Global styles (Tailwind CSS imports)
-│   │   │   └── main.jsx          \# React entry point
-│   │   └── package.json          \# Frontend dependencies and scripts
-│   ├── declarations/             \# Auto-generated Candid interface declarations
-│   │   ├── HopeBridge\_backend.did
-│   │   ├── HopeBridge\_backend.js
-│   │   ├── HopeBridge\_frontend.did
-│   │   └── HopeBridge\_frontend.js
-│   └── README.md                 \# This README file
-├── .env                          \# Environment variables
-├── .gitignore                    \# Git ignored files/folders
-└── package.json                  \# Root project dependencies and scripts
-
-````
+│   │   │   ├── App.jsx           # Root React component
+│   │   │   ├── index.css         # Global styles (Tailwind CSS imports)
+│   │   │   └── main.jsx          # React entry point
+│   │   └── package.json          # Frontend dependencies and scripts
+│   ├── declarations/             # Auto-generated Candid interface declarations
+│   │   ├── HopeBridge_backend.did
+│   │   ├── HopeBridge_backend.js
+│   │   ├── HopeBridge_frontend.did
+│   │   └── HopeBridge_frontend.js
+│   └── README.md                 # This README file
+├── .env                          # Environment variables
+├── .gitignore                    # Git ignored files/folders
+└── package.json                  # Root project dependencies and scripts
+```
 
 ---
 
@@ -98,9 +95,10 @@ AuraFi provides a comprehensive suite of features to empower your financial jour
 * **Cryptocurrency Analysis**: A specialized tool within Data Input to simulate potential gains or losses based on hypothetical price changes for your crypto holdings.
 * **Personalized AI Care**: An AI-powered financial advisor (`AICarePage`) that provides tailored recommendations and insights based on your input financial data.
 * **Comprehensive Dashboard**: A centralized view (`DashboardPage`) offering an overview of your financial health, including:
-    * **Financial Level**: A simplified indicator of your financial standing.
-    * **Key Metrics**: Total income, total expenses, net worth, emergency fund status, and debt overview.
-    * **Visual Trends**: Intuitive charts and graphs (powered by Recharts) showcasing your financial patterns over time.
+
+  * **Financial Level**: A simplified indicator of your financial standing.
+  * **Key Metrics**: Total income, total expenses, net worth, emergency fund status, and debt overview.
+  * **Visual Trends**: Intuitive charts and graphs (powered by Recharts) showcasing your financial patterns over time.
 * **Transaction Management**: Track and manage your financial transactions.
 * **Investment Portfolio**: View and manage your investment portfolio details.
 * **User Authentication**: Secure login and logout functionality using Internet Identity.
@@ -117,7 +115,7 @@ dfx start --background
 
 # Deploys your canisters to the replica and generates your candid interface
 dfx deploy
-````
+```
 
 Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
 
@@ -141,12 +139,8 @@ Which will start a server at `http://localhost:8080`, proxying API requests to t
 
 If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
 
-  * Set `DFX_NETWORK` to `ic` if you are using Webpack
-  * Use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-      * Setting `canisters -> {asset_canister_id} -> declarations -> env_override` to a string in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-  * Write your own `createActor` constructor
+* Set `DFX_NETWORK` to `ic` if you are using Webpack
+* Use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
 
-<!-- end list -->
-
-```
-```
+  * Setting `canisters -> {asset_canister_id} -> declarations -> env_override` to a string in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
+* Write your own `createActor` constructor

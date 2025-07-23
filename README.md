@@ -1,5 +1,3 @@
-Certainly\! Here's the `README.md` file in English for your `AuraFi` project.
-
 ```markdown
 # `AuraFi`
 

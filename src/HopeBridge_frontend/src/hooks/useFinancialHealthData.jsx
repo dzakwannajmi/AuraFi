@@ -4,71 +4,61 @@ import { HopeBridge_backend } from "declarations/HopeBridge_backend";
 
 const useFinancialHealthData = () => {
   const [greetText, setGreetText] = useState("");
-  const [budget, setBudget] = useState(5000000);
-  const [savings, setSavings] = useState(15000000);
-  const [retirementSavings, setRetirementSavings] = useState(25000000);
-  const [vehicles, setVehicles] = useState(50000000);
-  const [otherAssets, setOtherAssets] = useState(10000000);
-  const [debts, setDebts] = useState(20000000);
-  const [emergencyFund, setEmergencyFund] = useState(10000000);
+  // All financial values set to 0 initially
+  const [budget, setBudget] = useState(0);
+  const [savings, setSavings] = useState(0);
+  const [retirementSavings, setRetirementSavings] = useState(0);
+  const [vehicles, setVehicles] = useState(0);
+  const [otherAssets, setOtherAssets] = useState(0);
+  const [debts, setDebts] = useState(0);
+  const [emergencyFund, setEmergencyFund] = useState(0);
 
-  const [gajiBulanan, setGajiBulanan] = useState(5000000);
-  const [pendapatanPasif, setPendapatanPasif] = useState(1000000);
-  const [bisnisUsaha, setBisnisUsaha] = useState(0);
-  const [hasilInvestasi, setHasilInvestasi] = useState(0);
+  // Income States - All set to 0
+  const [gajiBulanan, setGajiBulanan] = useState(0); // Monthly Salary
+  const [pendapatanPasif, setPendapatanPasif] = useState(0); // Passive Income
+  const [bisnisUsaha, setBisnisUsaha] = useState(0); // Business Income
+  const [hasilInvestasi, setHasilInvestasi] = useState(0); // Investment Income
 
-  const [belanjaKebutuhan, setBelanjaKebutuhan] = useState(2500000);
-  const [transportasi, setTransportasi] = useState(0);
-  const [sedekahDonasi, setSedekahDonasi] = useState(0);
-  const [pendidikanExpense, setPendidikanExpense] = useState(0);
-  const [pajakExpense, setPajakExpense] = useState(0); // <--- Pastikan ini sudah benar
-  const [premiAsuransi, setPremiAsuransi] = useState(0);
+  // Expense States - All set to 0
+  const [belanjaKebutuhan, setBelanjaKebutuhan] = useState(0); // Essential Spending
+  const [transportasi, setTransportasi] = useState(0); // Transportation Expense
+  const [sedekahDonasi, setSedekahDonasi] = useState(0); // Charity/Donation Expense
+  const [pendidikanExpense, setPendidikanExpense] = useState(0); // Education Expense
+  const [pajakExpense, setPajakExpense] = useState(0); // Tax Expense
+  const [premiAsuransi, setPremiAsuransi] = useState(0); // Insurance Premium
 
-  const [tabungInvestasiBulanan, setTabungInvestasiBulanan] = useState(1000000);
-  const [totalTabunganSaatIni, setTotalTabunganSaatIni] = useState(15000000);
-  const [crowdFunding, setCrowdFunding] = useState(0);
-  const [logamMulia, setLogamMulia] = useState(0);
-  const [saham, setSaham] = useState(0);
-  const [unitLink, setUnitLink] = useState(0);
-  const [reksadana, setReksadana] = useState(0);
-  const [obligasiP2P, setObligasiP2P] = useState(0);
-  const [deposito, setDeposito] = useState(0);
-  const [ebaRitel, setEbaRitel] = useState(0);
+  // Savings & Investment States - All set to 0
+  const [tabungInvestasiBulanan, setTabungInvestasiBulanan] = useState(0); // Monthly Savings/Investment
+  const [totalTabunganSaatIni, setTotalTabunganSaatIni] = useState(0); // Current Total Savings
+  const [crowdFunding, setCrowdFunding] = useState(0); // Crowdfunding Investment
+  const [logamMulia, setLogamMulia] = useState(0); // Precious Metals Investment
+  const [saham, setSaham] = useState(0); // Stock Investment
+  const [unitLink, setUnitLink] = useState(0); // Unit Link Investment
+  const [reksadana, setReksadana] = useState(0); // Mutual Fund Investment
+  const [obligasiP2P, setObligasiP2P] = useState(0); // Bonds/P2P Lending Investment
+  const [deposito, setDeposito] = useState(0); // Deposit Investment
+  const [ebaRitel, setEbaRitel] = useState(0); // Retail ABS (Asset-Backed Securities) Investment
 
-  const [punyaAset, setPunyaAset] = useState(true);
-  const [rumahValue, setRumahValue] = useState(0);
-  const [tanahValue, setTanahValue] = useState(0);
-  const [bangunanValue, setBangunanValue] = useState(0);
-  const [punyaUtang, setPunyaUtang] = useState(true);
+  // Assets & Debts States - Boolean to false, values to 0
+  const [punyaAset, setPunyaAset] = useState(false); // Has Assets checkbox - Set to false
+  const [rumahValue, setRumahValue] = useState(0); // House Value
+  const [tanahValue, setTanahValue] = useState(0); // Land Value
+  const [bangunanValue, setBangunanValue] = useState(0); // Building Value
+  const [punyaUtang, setPunyaUtang] = useState(false); // Has Debts checkbox - Set to false
 
+  // Crypto Analysis States - All set to 0
   const [bitcoinCurrentValue, setBitcoinCurrentValue] = useState(0);
   const [ethereumCurrentValue, setEthereumCurrentValue] = useState(0);
   const [cryptoScenarioPercentage, setCryptoScenarioPercentage] = useState(0);
 
-  const [activeDataInputTab, setActiveDataInputTab] = useState("penghasilan");
+  // Active tab set to 'income' for initial display
+  const [activeDataInputTab, setActiveDataInputTab] = useState("income");
   const [aiCareInput, setAiCareInput] = useState("");
   const [aiCareResponse, setAiCareResponse] = useState("");
   const [aiCareLoading, setAiCareLoading] = useState(false);
 
-  // State dan Fungsi Transaksi
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      type: "expense",
-      amount: 200000,
-      category: "Obat-obatan",
-      description: "Paracetamol dan antibiotik",
-      date: "2025-07-18",
-    },
-    {
-      id: 2,
-      type: "income",
-      amount: 500000,
-      category: "Klaim Asuransi",
-      description: "Reimburse rawat jalan",
-      date: "2025-07-17",
-    },
-  ]);
+  // Transaction States and Functions - Initial transactions empty
+  const [transactions, setTransactions] = useState([]); // Empty initial array for transactions
 
   const [formData, setFormData] = useState({
     type: "expense",
@@ -92,7 +82,7 @@ const useFinancialHealthData = () => {
       !formData.description ||
       !formData.date
     ) {
-      alert("Harap isi semua field transaksi!");
+      alert("Please fill in all transaction fields!");
       return;
     }
 
@@ -110,10 +100,10 @@ const useFinancialHealthData = () => {
       description: "",
       date: "",
     });
-    alert("Transaksi berhasil ditambahkan!");
+    alert("Transaction successfully added!");
   };
 
-  // States untuk mengontrol visibilitas input tambahan
+  // States to control visibility of additional inputs - All set to false
   const [showBisnisUsaha, setShowBisnisUsaha] = useState(false);
   const [showHasilInvestasi, setShowHasilInvestasi] = useState(false);
 
@@ -133,13 +123,12 @@ const useFinancialHealthData = () => {
   const [showTanah, setShowTanah] = useState(false);
   const [showBangunan, setShowBangunan] = useState(false);
 
-  // Fungsi Toggle untuk visibilitas
+  // Toggle functions for visibility (remain unchanged as they toggle boolean states)
   const toggleBisnisUsaha = () => setShowBisnisUsaha((prev) => !prev);
   const toggleHasilInvestasi = () => setShowHasilInvestasi((prev) => !prev);
   const toggleTransportasi = () => setShowTransportasi((prev) => !prev);
   const toggleSedekahDonasi = () => setShowSedekahDonasi((prev) => !prev);
-  const togglePendidikanExpense = () =>
-    setShowPendidikanExpense((prev) => !prev);
+  const togglePendidikanExpense = () => setShowPendidikanExpense((prev) => !prev);
   const togglePajakExpense = () => setShowPajakExpense((prev) => !prev);
   const togglePremiAsuransi = () => setShowPremiAsuransi((prev) => !prev);
   const toggleReksadana = () => setShowReksadana((prev) => !prev);
@@ -151,7 +140,7 @@ const useFinancialHealthData = () => {
   const toggleTanah = () => setShowTanah((prev) => !prev);
   const toggleBangunan = () => setShowBangunan((prev) => !prev);
 
-  // Kalkulasi dinamis
+  // Dynamic calculations (these will now correctly reflect initial 0 values)
   const calculatedTotalIncome =
     gajiBulanan + pendapatanPasif + bisnisUsaha + hasilInvestasi;
   const calculatedTotalExpenses =
@@ -183,61 +172,62 @@ const useFinancialHealthData = () => {
     ethereumCurrentValue -
     debts;
 
+  // Chart Data - values will be 0, so filters will correctly show empty charts or "no data" if values are 0
   const monthlyData = [
-    { name: "Jan", Pemasukan: 1500000, Pengeluaran: 800000 },
-    { name: "Feb", Pemasukan: 1800000, Pengeluaran: 950000 },
-    { name: "Mar", Pemasukan: 1600000, Pengeluaran: 700000 },
-    { name: "Apr", Pemasukan: 2000000, Pengeluaran: 1200000 },
-    { name: "Mei", Pemasukan: 1700000, Pengeluaran: 850000 },
-    { name: "Jun", Pemasukan: 1900000, Pengeluaran: 1000000 },
+    { name: "Jan", Income: 0, Expenses: 0 },
+    { name: "Feb", Income: 0, Expenses: 0 },
+    { name: "Mar", Income: 0, Expenses: 0 },
+    { name: "Apr", Income: 0, Expenses: 0 },
+    { name: "May", Income: 0, Expenses: 0 },
+    { name: "Jun", Income: 0, Expenses: 0 },
     {
       name: "Jul",
-      Pemasukan: calculatedTotalIncome,
-      Pengeluaran: calculatedTotalExpenses,
+      Income: calculatedTotalIncome,
+      Expenses: calculatedTotalExpenses,
     },
   ];
 
   const categoryExpenseData = [
-    { name: "Belanja Kebutuhan", Pengeluaran: belanjaKebutuhan },
-    { name: "Transportasi", Pengeluaran: transportasi },
-    { name: "Sedekah/Donasi", Pengeluaran: sedekahDonasi },
-    { name: "Pendidikan", Pengeluaran: pendidikanExpense },
-    { name: "Pajak", Pengeluaran: pajakExpense },
-    { name: "Premi Asuransi", Pengeluaran: premiAsuransi },
-  ].filter((item) => item.Pengeluaran > 0);
+    { name: "Essential Spending", Expenses: belanjaKebutuhan },
+    { name: "Transportation", Expenses: transportasi },
+    { name: "Charity/Donation", Expenses: sedekahDonasi },
+    { name: "Education", Expenses: pendidikanExpense },
+    { name: "Tax", Expenses: pajakExpense },
+    { name: "Insurance Premium", Expenses: premiAsuransi },
+  ].filter((item) => item.Expenses > 0);
 
   const incomeChartData = [
-    { name: "Gaji Bulanan", value: gajiBulanan },
-    { name: "Pendapatan Pasif", value: pendapatanPasif },
-    { name: "Bisnis Usaha", value: bisnisUsaha },
-    { name: "Hasil Investasi", value: hasilInvestasi },
+    { name: "Monthly Salary", value: gajiBulanan },
+    { name: "Passive Income", value: pendapatanPasif },
+    { name: "Business Income", value: bisnisUsaha },
+    { name: "Investment Income", value: hasilInvestasi },
   ].filter((item) => item.value > 0);
 
   const expenseChartData = [
-    { name: "Belanja Kebutuhan", value: belanjaKebutuhan },
-    { name: "Transportasi", value: transportasi },
-    { name: "Sedekah/Donasi", value: sedekahDonasi },
-    { name: "Pendidikan", value: pendidikanExpense },
-    { name: "Pajak", value: pajakExpense },
-    { name: "Premi Asuransi", value: premiAsuransi },
+    { name: "Essential Spending", value: belanjaKebutuhan },
+    { name: "Transportation", value: transportasi },
+    { name: "Charity/Donation", value: sedekahDonasi },
+    { name: "Education", value: pendidikanExpense },
+    { name: "Tax", value: pajakExpense },
+    { name: "Insurance Premium", value: premiAsuransi },
   ].filter((item) => item.value > 0);
 
   const investmentChartData = [
     { name: "Crowd-Funding", value: crowdFunding },
-    { name: "Logam Mulia", value: logamMulia },
-    { name: "Saham", value: saham },
+    { name: "Precious Metals", value: logamMulia },
+    { name: "Stocks", value: saham },
     { name: "Unit Link", value: unitLink },
-    { name: "Reksadana", value: reksadana },
-    { name: "Obligasi/P2P Lending", value: obligasiP2P },
-    { name: "Deposito", value: deposito },
-    { name: "EBA Ritel", value: ebaRitel },
+    { name: "Mutual Funds", value: reksadana },
+    { name: "Bonds/P2P Lending", value: obligasiP2P },
+    { name: "Deposits", value: deposito },
+    { name: "Retail ABS", value: ebaRitel },
     { name: "Bitcoin", value: bitcoinCurrentValue },
     { name: "Ethereum", value: ethereumCurrentValue },
   ].filter((item) => item.value > 0);
 
   const assetDebtChartData = [
     {
-      name: "Total Aset",
+      name: "Total Assets",
       value:
         savings +
         retirementSavings +
@@ -257,7 +247,7 @@ const useFinancialHealthData = () => {
         bitcoinCurrentValue +
         ethereumCurrentValue,
     },
-    { name: "Total Utang", value: debts },
+    { name: "Total Debts", value: debts },
   ];
 
   const calculateCryptoScenario = () => {
@@ -282,36 +272,38 @@ const useFinancialHealthData = () => {
 
   const getFinancialLevel = (balance, netWorthValue, emergency) => {
     let level = 1;
-    let message = "Mulai Perjalanan Finansial Anda!";
-    if (balance > 0 && emergency >= 5000000 && netWorthValue > 0) {
+    let message = "Start Your Financial Journey!";
+    // Conditions adjusted for initial 0 values, so level 1 is always default
+    if (balance > 0 && emergency > 0 && netWorthValue > 0) { // Simplified checks for basic positive values
       level = 2;
-      message = "Dasar Keuangan Stabil!";
+      message = "Stable Financial Foundation!";
     }
+    // Subsequent levels require increasing positive values
     if (
-      balance > 1000000 &&
-      emergency >= 10000000 &&
-      netWorthValue > 20000000
+      balance >= 1000000 &&
+      emergency >= 5000000 &&
+      netWorthValue >= 20000000
     ) {
       level = 3;
-      message = "Membangun Fondasi Kuat!";
+      message = "Building a Strong Foundation!";
     }
     if (
-      balance > 5000000 &&
-      emergency >= 20000000 &&
-      netWorthValue > 50000000 &&
-      retirementSavings > 10000000
+      balance >= 5000000 &&
+      emergency >= 10000000 &&
+      netWorthValue >= 50000000 &&
+      retirementSavings >= 10000000
     ) {
       level = 4;
-      message = "Keuangan Terkendali, Siap Bertumbuh!";
+      message = "Finances Under Control, Ready to Grow!";
     }
     if (
-      balance > 10000000 &&
-      emergency >= 30000000 &&
-      netWorthValue > 100000000 &&
-      retirementSavings > 20000000
+      balance >= 10000000 &&
+      emergency >= 20000000 &&
+      netWorthValue >= 100000000 &&
+      retirementSavings >= 20000000
     ) {
       level = 5;
-      message = "Master Keuangan Kesehatan!";
+      message = "Financial Health Master!";
     }
     return { level, message };
   };
@@ -324,7 +316,7 @@ const useFinancialHealthData = () => {
 
   const handleFinancialGoalsSubmit = (e) => {
     e.preventDefault();
-    alert("Data Input Diperbarui!");
+    alert("Input Data Updated!");
   };
 
   const getAiFinancialAdvice = async () => {
@@ -332,61 +324,61 @@ const useFinancialHealthData = () => {
     setAiCareResponse("");
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network request
     const currentFinancialSnapshot = `
-      Penghasilan Bulanan: Rp ${gajiBulanan.toLocaleString("id-ID")}
-      Pendapatan Pasif: Rp ${pendapatanPasif.toLocaleString("id-ID")}
-      Total Pengeluaran Medis: Rp ${calculatedTotalExpenses.toLocaleString(
+      Monthly Income: Rp ${gajiBulanan.toLocaleString("id-ID")}
+      Passive Income: Rp ${pendapatanPasif.toLocaleString("id-ID")}
+      Total Medical Expenses: Rp ${calculatedTotalExpenses.toLocaleString(
         "id-ID"
       )}
-      Total Klaim Asuransi: Rp ${calculatedTotalIncome.toLocaleString("id-ID")}
-      Saldo Bersih Kesehatan: Rp ${netBalance.toLocaleString("id-ID")}
-      Kekayaan Bersih (Net Worth): Rp ${netWorth.toLocaleString("id-ID")}
-      Anggaran Bulanan: Rp ${budget.toLocaleString("id-ID")}
-      Jumlah Tabungan: Rp ${savings.toLocaleString("id-ID")}
-      Dana Pensiun: Rp ${retirementSavings.toLocaleString("id-ID")}
-      Dana Darurat: Rp ${emergencyFund.toLocaleString("id-ID")}
-      Total Utang: Rp ${debts.toLocaleString("id-ID")}
-      Nilai Bitcoin: Rp ${bitcoinCurrentValue.toLocaleString("id-ID")}
-      Nilai Ethereum: Rp ${ethereumCurrentValue.toLocaleString("id-ID")}
+      Total Insurance Claims: Rp ${calculatedTotalIncome.toLocaleString("id-ID")}
+      Net Health Balance: Rp ${netBalance.toLocaleString("id-ID")}
+      Net Worth: Rp ${netWorth.toLocaleString("id-ID")}
+      Monthly Budget: Rp ${budget.toLocaleString("id-ID")}
+      Total Savings: Rp ${savings.toLocaleString("id-ID")}
+      Retirement Fund: Rp ${retirementSavings.toLocaleString("id-ID")}
+      Emergency Fund: Rp ${emergencyFund.toLocaleString("id-ID")}
+      Total Debts: Rp ${debts.toLocaleString("id-ID")}
+      Bitcoin Value: Rp ${bitcoinCurrentValue.toLocaleString("id-ID")}
+      Ethereum Value: Rp ${ethereumCurrentValue.toLocaleString("id-ID")}
       ${
         punyaAset
-          ? `Nilai Kendaraan: Rp ${vehicles.toLocaleString(
+          ? `Vehicle Value: Rp ${vehicles.toLocaleString(
               "id-ID"
-            )}, Nilai Rumah: Rp ${rumahValue.toLocaleString(
+            )}, House Value: Rp ${rumahValue.toLocaleString(
               "id-ID"
-            )}, Nilai Tanah: Rp ${tanahValue.toLocaleString(
+            )}, Land Value: Rp ${tanahValue.toLocaleString(
               "id-ID"
-            )}, Nilai Bangunan: Rp ${bangunanValue.toLocaleString("id-ID")}`
+            )}, Building Value: Rp ${bangunanValue.toLocaleString("id-ID")}`
           : ""
       }
-      ${aiCareInput ? `Pertanyaan/Situasi Tambahan: ${aiCareInput}` : ""}
+      ${aiCareInput ? `Additional Question/Situation: ${aiCareInput}` : ""}
     `;
-    setAiCareResponse(`Terima kasih atas pertanyaan Anda. Berdasarkan data yang Anda berikan, berikut adalah beberapa saran awal dari AI AuraFi (placeholder untuk LLM ICP Anda):\n\n
-    - **Analisis Penghasilan:** Dengan gaji bulanan Rp ${gajiBulanan.toLocaleString(
-      "id-ID"
-    )} dan pendapatan pasif Rp ${pendapatanPasif.toLocaleString(
-      "id-ID"
-    )}, Anda memiliki arus kas yang stabil. Pertimbangkan untuk mengoptimalkan pendapatan pasif lebih lanjut.
-    - **Pengelolaan Pengeluaran:** Total pengeluaran Anda saat ini adalah Rp ${calculatedTotalExpenses.toLocaleString(
-      "id-ID"
-    )}. Jika ada kategori pengeluaran yang tinggi, coba identifikasi area untuk penghematan.
-    - **Kekayaan Bersih:** Kekayaan bersih Anda sebesar Rp ${netWorth.toLocaleString(
-      "id-ID"
-    )} menunjukkan fondasi keuangan yang baik. Terus tingkatkan aset dan kurangi utang.
-    - **Dana Darurat:** Dana darurat Anda sebesar Rp ${emergencyFund.toLocaleString(
-      "id-ID"
-    )} sudah cukup baik. Idealnya, dana darurat mencakup 3-6 bulan pengeluaran.
-    - **Rekomendasi Umum:**
-        - Tinjau anggaran bulanan Anda secara berkala untuk memastikan pengeluaran tetap terkendali.
-        - Jika Anda memiliki utang dengan bunga tinggi, prioritaskan pelunasannya.
-        - Lanjutkan menabung untuk dana pensiun secara konsisten.
-        - Manfaatkan fitur 'Data Input' untuk melacak semua aset dan utang Anda secara rinci untuk analisis yang lebih akurat.
-    \nUntuk saran yang lebih mendalam, berikan detail lebih lanjut tentang tujuan finansial spesifik Anda.`);
+    setAiCareResponse(`Thank you for your question. Based on the data you provided, here is some initial advice from AuraFi AI (placeholder for your ICP LLM):\n\n
+      - **Income Analysis:** With a monthly salary of Rp ${gajiBulanan.toLocaleString(
+        "id-ID"
+      )} and passive income of Rp ${pendapatanPasif.toLocaleString(
+        "id-ID"
+      )}, you have a stable cash flow. Consider further optimizing your passive income.
+      - **Expense Management:** Your current total expenses are Rp ${calculatedTotalExpenses.toLocaleString(
+        "id-ID"
+      )}. If there are high spending categories, try to identify areas for savings.
+      - **Net Worth:** Your net worth of Rp ${netWorth.toLocaleString(
+        "id-ID"
+      )} indicates a good financial foundation. Continue to increase assets and reduce debt.
+      - **Emergency Fund:** Your emergency fund of Rp ${emergencyFund.toLocaleString(
+        "id-ID"
+      )} is quite good. Ideally, an emergency fund should cover 3-6 months of expenses.
+      - **General Recommendations:**
+          - Regularly review your monthly budget to ensure expenses remain under control.
+          - If you have high-interest debts, prioritize paying them off.
+          - Continue to save for retirement consistently.
+          - Utilize the 'Data Input' feature to track all your assets and debts in detail for more accurate analysis.
+      \nFor more in-depth advice, please provide more details about your specific financial goals.`);
     setAiCareLoading(false);
   };
 
   useEffect(() => {
     async function fetchGreeting() {
-      const result = await HopeBridge_backend.greet("Najmi");
+      const result = await HopeBridge_backend.greet("User");
       setGreetText(result);
     }
     fetchGreeting();
@@ -487,8 +479,7 @@ const useFinancialHealthData = () => {
     handleFinancialGoalsSubmit,
     activeDataInputTab,
     setActiveDataInputTab,
-    cryptoScenarioResult, // NEW: Kembalikan cryptoScenarioResult
-    // NEW: Tambahkan state dan fungsi toggle untuk visibilitas
+    cryptoScenarioResult,
     showBisnisUsaha,
     setShowBisnisUsaha,
     toggleBisnisUsaha,
@@ -534,13 +525,12 @@ const useFinancialHealthData = () => {
     showBangunan,
     setShowBangunan,
     toggleBangunan,
-    // NEW: Tambahkan state dan handler untuk transaksi
     transactions,
-    setTransactions, // State transaksi
+    setTransactions,
     formData,
-    setFormData, // State form transaksi
-    handleTransactionChange, // Handler perubahan form transaksi
-    handleTransactionSubmit, // Handler submit form transaksi
+    setFormData,
+    handleTransactionChange,
+    handleTransactionSubmit,
   };
 };
 

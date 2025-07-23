@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 107 91" width="107" height="91">
+	<title>Vert coin</title>
+	<style>
+		.s0 { fill: #166816 } 
+	</style>
+	<g id="Vert coin">
+		<g id="VTC">
+			<path id="Shape" fill-rule="evenodd" class="s0" d="m85 48c0 17.7-14.3 32-32 32-17.7 0-32-14.3-32-32 0-17.7 14.3-32 32-32 7.9 0 15.1 2.9 20.7 7.6l-26.7 38.3 4.4 5.9c0 0 0.7 0.8 1.7 0.8 1 0 1.5-0.8 1.5-0.8l25.7-36.4c3 4.8 4.7 10.5 4.7 16.6zm-55.8-0.8h5.1l-2.3-3.1zm3.6-4.1l13.4 17.7 6.1-8.8-6.9-9h-12.6z"/>
+		</g>
+	</g>
+</svg>

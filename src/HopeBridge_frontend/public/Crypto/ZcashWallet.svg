@@ -1,0 +1,13 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 116 94" width="116" height="94">
+	<title>Zcash Wallet</title>
+	<style>
+		.s0 { fill: #3a74be } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<g id="Zcash Wallet">
+		<g id="Group">
+			<path id="Oval" class="s0" d="m60.6 81.1c17.5 0 31.7-14.2 31.7-31.7 0-17.5-14.2-31.7-31.7-31.7-17.5 0-31.7 14.2-31.7 31.7 0 17.5 14.2 31.7 31.7 31.7z"/>
+			<path id="Shape" class="s1" d="m47.9 32c2.8 0 5.7 0 8.5 0v-5.5h9v5.5h8.8v8.4l-15.9 18.3h15.9v8.5h-8.7v5.1h-9.2v-5.1h-9.3v-8.3l15.9-18.4-15 0.4z"/>
+		</g>
+	</g>
+</svg>

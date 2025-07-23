@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 83 118" width="83" height="118">
+	<title>Aurouracoin</title>
+	<style>
+		.s0 { fill: #006859 } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<g id="Aurouracoin">
+		<path id="Oval" class="s0" d="m40.7 91.1c17.5 0 31.7-14.2 31.7-31.7 0-17.5-14.2-31.7-31.7-31.7-17.5 0-31.7 14.2-31.7 31.7 0 17.5 14.2 31.7 31.7 31.7z"/>
+		<path id="Shape" fill-rule="evenodd" class="s1" d="m35.2 60.1v-6.8l14.8-8.1-1.9-3.4-12.9 7.1v-6.1h-3.8v34.1h3.8v-12.4l14.8-7.7-1.8-3.4z"/>
+	</g>
+</svg>

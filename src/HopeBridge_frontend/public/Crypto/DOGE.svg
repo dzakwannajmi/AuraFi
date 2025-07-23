@@ -1,0 +1,12 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102 82" width="102" height="82">
+	<title>DOGE</title>
+	<style>
+		.s0 { fill: #f8bf1a } 
+	</style>
+	<g id="DOGE">
+		<g id="DOGE">
+			<path id="Shape" class="s0" d="m49.6 32h-4.6v9.1h7.2v3.8h-7.2v9.1h4.8c1.3 0 10.2 0.1 10.2-10.6 0-10.7-8.7-11.4-10.4-11.4z"/>
+			<path id="Shape" fill-rule="evenodd" class="s0" d="m81 43c0 17.7-14.3 32-32 32-17.7 0-32-14.3-32-32 0-17.7 14.3-32 32-32 17.7 0 32 14.3 32 32zm-14.4 0.3c0-18.1-15.6-17.6-18-17.6h-9.9v15.4h-4.1v3.8h4.1v15.4h11.6c0 0 16.3 1.3 16.3-17z"/>
+		</g>
+	</g>
+</svg>

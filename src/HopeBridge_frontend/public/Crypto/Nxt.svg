@@ -1,0 +1,16 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 91" width="95" height="91">
+	<title>Nxt</title>
+	<style>
+		.s0 { fill: #028fbb } 
+		.s1 { fill: none;stroke: #ffffff;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4 } 
+	</style>
+	<g id="Nxt">
+		<path id="Oval" class="s0" d="m45.6 79.5c17.5 0 31.7-14.2 31.7-31.7 0-17.5-14.2-31.7-31.7-31.7-17.5 0-31.7 14.2-31.7 31.7 0 17.5 14.2 31.7 31.7 31.7z"/>
+		<g id="Group">
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m32.1 51.4h-8.1"/>
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m29.4 44.2l10.8 7.2h6.3l-22.5-7.2"/>
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m44.7 44.2l10.8 7.2h6.3l-22.5-7.2"/>
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m67.2 44.2v6.3l-12.6-6.3"/>
+		</g>
+	</g>
+</svg>

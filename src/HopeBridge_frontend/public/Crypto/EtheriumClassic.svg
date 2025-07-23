@@ -1,0 +1,21 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 71 79" width="71" height="79">
+	<title>Etherium Classic</title>
+	<style>
+		.s0 { fill: #0c8312 } 
+		.s1 { fill: #034c03 } 
+		.s2 { fill: #3cb93c } 
+		.s3 { fill: #166816 } 
+	</style>
+	<g id="Etherium Classic">
+		<g id="Group">
+			<path id="Shape" fill-rule="evenodd" class="s0" d="m39.1 9.8l19.9 28.2-19.9-10.1z"/>
+			<path id="Shape" fill-rule="evenodd" class="s0" d="m39.1 72.1l19.9-28.2-19.9 10.1z"/>
+			<path id="Shape" fill-rule="evenodd" class="s0" d="m39.1 31.2l19.5 9.8-19.5 1.7z"/>
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m39.1 42.7l19.5-1.7-19.5 10z"/>
+			<path id="Shape" fill-rule="evenodd" class="s2" d="m39.1 9.8l-19.9 28.2 19.9-10.1z"/>
+			<path id="Shape" fill-rule="evenodd" class="s2" d="m39.1 72.1l-19.9-28.2 19.9 10.1z"/>
+			<path id="Shape" fill-rule="evenodd" class="s2" d="m39.1 31.2l-19.5 9.8 19.5 1.7z"/>
+			<path id="Shape" fill-rule="evenodd" class="s3" d="m39.1 42.7l-19.5-1.7 19.5 10z"/>
+		</g>
+	</g>
+</svg>

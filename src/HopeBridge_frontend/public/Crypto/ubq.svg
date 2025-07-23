@@ -1,0 +1,15 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98 83" width="98" height="83">
+	<title>ubq</title>
+	<style>
+		.s0 { fill: #01dc87 } 
+		.s1 { fill-opacity: .7;fill: #ffffff } 
+		.s2 { fill: #ffffff } 
+	</style>
+	<g id="ubq">
+		<g id="ubq">
+			<path id="Oval" class="s0" d="m46 72c17.7 0 32-14.3 32-32 0-17.7-14.3-32-32-32-17.7 0-32 14.3-32 32 0 17.7 14.3 32 32 32z"/>
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m50.4 23l0.6 17.3 15-9.1zm-8.9 33.8l-0.5-17.3-15 9.2z"/>
+			<path id="Shape" fill-rule="evenodd" class="s2" d="m44.4 62v-17.7l21.6-13.1v18.2zm3.3-44v17.6l-21.7 13.1v-18.2z"/>
+		</g>
+	</g>
+</svg>

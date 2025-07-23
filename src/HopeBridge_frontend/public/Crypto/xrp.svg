@@ -1,0 +1,13 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 103" width="110" height="103">
+	<title>xrp</title>
+	<style>
+		.s0 { fill: #23292f } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<g id="xrp">
+		<g id="xrp">
+			<path id="Oval" class="s0" d="m58 85c17.7 0 32-14.3 32-32 0-17.7-14.3-32-32-32-17.7 0-32 14.3-32 32 0 17.7 14.3 32 32 32z"/>
+			<path id="Shape" fill-rule="evenodd" class="s1" d="m63 46c-2.8 2.8-7.2 2.8-10 0l-9.1-9h-5.8l12 11.9c4.4 4.3 11.4 4.3 15.8 0l12-11.9h-5.8zm-19.2 24.1l9.3-9.1c2.7-2.8 7.2-2.8 9.9 0l9.3 9.1h5.7l-12.1-12c-4.3-4.3-11.4-4.3-15.7 0l-12.2 12z"/>
+		</g>
+	</g>
+</svg>

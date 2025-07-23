@@ -1,5 +1,7 @@
 # `AuraFi`
 
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/ab41b5f1-635c-4e00-9b45-092a50dd5335" />
+
 Welcome to AuraFi, your personal financial health companion built on the Internet Computer! This DApp (Decentralized Application) helps you track, analyze, and improve your financial well-being with smart insights and a secure, decentralized foundation.
 
 By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.

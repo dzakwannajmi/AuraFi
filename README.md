@@ -48,41 +48,63 @@ The project follows a standard structure for Internet Computer DApps with a Reac
 
 ```
 HopeBridge/
-├── dfx.json                      # DFX configuration file
-├── src/
-│   ├── HopeBridge_backend/       # Backend Motoko canister code
-│   │   └── main.mo               # Main canister logic
-│   ├── HopeBridge_frontend/      # Frontend React application
-│   │   ├── public/               # Static assets (HTML, manifest, images, SVGs)
-│   │   │   ├── Crypto/           # Folder containing custom cryptocurrency SVG icons for Three.js animation
-│   │   │   └── ... (other static files like favicon.ico, logo2.svg)
-│   │   ├── src/
-│   │   │   ├── components/       # Reusable UI components
-│   │   │   │   ├── Investments/  # Investment-related forms/lists
-│   │   │   │   ├── modals/       # Modal components (e.g., OnboardingModal)
-│   │   │   │   └── ...           # Other components
-│   │   │   ├── hooks/            # Custom React hooks (e.g., useFinancialHealthData.jsx)
-│   │   │   ├── pages/            # Main application pages
-│   │   │   │   ├── AboutPage.jsx
-│   │   │   │   ├── AICarePage.jsx
-│   │   │   │   ├── DashboardPage.jsx
-│   │   │   │   ├── DataInputPage.jsx
-│   │   │   │   ├── HomePage.jsx  # Homepage with 3D animation
-│   │   │   │   ├── Layout.jsx    # Main layout/router outlet
-│   │   │   │   └── PortfolioPage.jsx
-│   │   │   ├── App.jsx           # Root React component
-│   │   │   ├── index.css         # Global styles (Tailwind CSS imports)
-│   │   │   └── main.jsx          # React entry point
-│   │   └── package.json          # Frontend dependencies and scripts
-│   ├── declarations/             # Auto-generated Candid interface declarations
-│   │   ├── HopeBridge_backend.did
-│   │   ├── HopeBridge_backend.js
-│   │   ├── HopeBridge_frontend.did
-│   │   └── HopeBridge_frontend.js
-│   └── README.md                 # This README file
-├── .env                          # Environment variables
-├── .gitignore                    # Git ignored files/folders
-└── package.json                  # Root project dependencies and scripts
+├── dfx.json
+├── .env
+├── .gitignore
+├── LICENSE
+├── mops.toml
+├── package.json
+├── package-lock.json
+├── README.md
+├── tsconfig.json
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.js
+├── declarations/                 # Auto-generated Candid interface declarations
+│   ├── HopeBridge_backend.did
+│   ├── HopeBridge_backend.js
+│   ├── HopeBridge_frontend.did
+│   └── HopeBridge_frontend.js
+├── HopeBridge_backend/          # Motoko backend code
+│   └── main.mo
+├── HopeBridge_frontend/         # React frontend
+│   ├── index.html
+│   ├── vite-env.d.ts
+│   ├── public/                  # Static files
+│   │   └── Crypto/             # Custom SVGs for 3D animation
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   ├── index.css
+│   │   ├── assets/             # For image/logo resources (optional)
+│   │   ├── components/         # Reusable components
+│   │   │   ├── investments/
+│   │   │   │   ├── InvestmentForm.jsx
+│   │   │   │   └── PortfolioList.jsx
+│   │   │   ├── modals/
+│   │   │   │   └── OnboardingModal.jsx
+│   │   │   ├── utils/
+│   │   │   │   ├── Header.jsx
+│   │   │   │   └── Footer.jsx
+│   │   ├── context/            # React Contexts
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── FinancialHealthContext.jsx
+│   │   │   └── PortfolioContext.jsx
+│   │   ├── hooks/              # Custom hooks
+│   │   │   ├── useAuth.jsx
+│   │   │   ├── useFinancialHealthData.jsx
+│   │   │   └── usePortfolio.jsx
+│   │   ├── pages/              # Main Pages
+│   │   │   ├── AboutPage.jsx
+│   │   │   ├── AICarePage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── DataInputPage.jsx
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── Layout.jsx
+│   │   │   └── PortfolioPage.jsx
+│   │   ├── services/           # Service API handlers
+│   │   │   └── authService.js
+
 ```
 
 ---

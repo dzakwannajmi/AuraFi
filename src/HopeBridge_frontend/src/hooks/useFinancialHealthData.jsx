@@ -1,10 +1,9 @@
 // HopeBridge_frontend/src/hooks/useFinancialHealthData.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { HopeBridge_backend } from "declarations/HopeBridge_backend";
 
 const useFinancialHealthData = () => {
   const [greetText, setGreetText] = useState("");
-  // All financial values set to 0 initially
   const [budget, setBudget] = useState(0);
   const [savings, setSavings] = useState(0);
   const [retirementSavings, setRetirementSavings] = useState(0);
@@ -13,13 +12,13 @@ const useFinancialHealthData = () => {
   const [debts, setDebts] = useState(0);
   const [emergencyFund, setEmergencyFund] = useState(0);
 
-  // Income States - All set to 0
+  // Income States
   const [gajiBulanan, setGajiBulanan] = useState(0); // Monthly Salary
   const [pendapatanPasif, setPendapatanPasif] = useState(0); // Passive Income
   const [bisnisUsaha, setBisnisUsaha] = useState(0); // Business Income
   const [hasilInvestasi, setHasilInvestasi] = useState(0); // Investment Income
 
-  // Expense States - All set to 0
+  // Expense States
   const [belanjaKebutuhan, setBelanjaKebutuhan] = useState(0); // Essential Spending
   const [transportasi, setTransportasi] = useState(0); // Transportation Expense
   const [sedekahDonasi, setSedekahDonasi] = useState(0); // Charity/Donation Expense
@@ -27,7 +26,7 @@ const useFinancialHealthData = () => {
   const [pajakExpense, setPajakExpense] = useState(0); // Tax Expense
   const [premiAsuransi, setPremiAsuransi] = useState(0); // Insurance Premium
 
-  // Savings & Investment States - All set to 0
+  // Savings & Investment States
   const [tabungInvestasiBulanan, setTabungInvestasiBulanan] = useState(0); // Monthly Savings/Investment
   const [totalTabunganSaatIni, setTotalTabunganSaatIni] = useState(0); // Current Total Savings
   const [crowdFunding, setCrowdFunding] = useState(0); // Crowdfunding Investment
@@ -39,26 +38,22 @@ const useFinancialHealthData = () => {
   const [deposito, setDeposito] = useState(0); // Deposit Investment
   const [ebaRitel, setEbaRitel] = useState(0); // Retail ABS (Asset-Backed Securities) Investment
 
-  // Assets & Debts States - Boolean to false, values to 0
-  const [punyaAset, setPunyaAset] = useState(false); // Has Assets checkbox - Set to false
+  // Assets & Debts States
+  const [punyaAset, setPunyaAset] = useState(false); // Has Assets checkbox
   const [rumahValue, setRumahValue] = useState(0); // House Value
-  const [tanahValue, setTanahValue] = useState(0); // Land Value
-  const [bangunanValue, setBangunanValue] = useState(0); // Building Value
-  const [punyaUtang, setPunyaUtang] = useState(false); // Has Debts checkbox - Set to false
 
-  // Crypto Analysis States - All set to 0
+  // Crypto Analysis States
   const [bitcoinCurrentValue, setBitcoinCurrentValue] = useState(0);
   const [ethereumCurrentValue, setEthereumCurrentValue] = useState(0);
   const [cryptoScenarioPercentage, setCryptoScenarioPercentage] = useState(0);
 
-  // Active tab set to 'income' for initial display
   const [activeDataInputTab, setActiveDataInputTab] = useState("income");
   const [aiCareInput, setAiCareInput] = useState("");
   const [aiCareResponse, setAiCareResponse] = useState("");
   const [aiCareLoading, setAiCareLoading] = useState(false);
 
-  // Transaction States and Functions - Initial transactions empty
-  const [transactions, setTransactions] = useState([]); // Empty initial array for transactions
+  // Transaction States and Functions
+  const [transactions, setTransactions] = useState([]);
 
   const [formData, setFormData] = useState({
     type: "expense",
@@ -103,7 +98,7 @@ const useFinancialHealthData = () => {
     alert("Transaction successfully added!");
   };
 
-  // States to control visibility of additional inputs - All set to false
+  // States to control visibility of additional inputs
   const [showBisnisUsaha, setShowBisnisUsaha] = useState(false);
   const [showHasilInvestasi, setShowHasilInvestasi] = useState(false);
 
@@ -122,13 +117,17 @@ const useFinancialHealthData = () => {
   const [showRumah, setShowRumah] = useState(false);
   const [showTanah, setShowTanah] = useState(false);
   const [showBangunan, setShowBangunan] = useState(false);
+  const [tanahValue, setTanahValue] = useState(0); // Corrected from setTanahValue to useState(0)
+  const [bangunanValue, setBangunanValue] = useState(0);
+  const [punyaUtang, setPunyaUtang] = useState(false);
 
-  // Toggle functions for visibility (remain unchanged as they toggle boolean states)
+  // Toggle functions for visibility
   const toggleBisnisUsaha = () => setShowBisnisUsaha((prev) => !prev);
   const toggleHasilInvestasi = () => setShowHasilInvestasi((prev) => !prev);
   const toggleTransportasi = () => setShowTransportasi((prev) => !prev);
   const toggleSedekahDonasi = () => setShowSedekahDonasi((prev) => !prev);
-  const togglePendidikanExpense = () => setShowPendidikanExpense((prev) => !prev);
+  const togglePendidikanExpense = () =>
+    setShowPendidikanExpense((prev) => !prev);
   const togglePajakExpense = () => setShowPajakExpense((prev) => !prev);
   const togglePremiAsuransi = () => setShowPremiAsuransi((prev) => !prev);
   const toggleReksadana = () => setShowReksadana((prev) => !prev);
@@ -140,7 +139,7 @@ const useFinancialHealthData = () => {
   const toggleTanah = () => setShowTanah((prev) => !prev);
   const toggleBangunan = () => setShowBangunan((prev) => !prev);
 
-  // Dynamic calculations (these will now correctly reflect initial 0 values)
+  // Dynamic calculations
   const calculatedTotalIncome =
     gajiBulanan + pendapatanPasif + bisnisUsaha + hasilInvestasi;
   const calculatedTotalExpenses =
@@ -172,7 +171,6 @@ const useFinancialHealthData = () => {
     ethereumCurrentValue -
     debts;
 
-  // Chart Data - values will be 0, so filters will correctly show empty charts or "no data" if values are 0
   const monthlyData = [
     { name: "Jan", Income: 0, Expenses: 0 },
     { name: "Feb", Income: 0, Expenses: 0 },
@@ -273,12 +271,10 @@ const useFinancialHealthData = () => {
   const getFinancialLevel = (balance, netWorthValue, emergency) => {
     let level = 1;
     let message = "Start Your Financial Journey!";
-    // Conditions adjusted for initial 0 values, so level 1 is always default
-    if (balance > 0 && emergency > 0 && netWorthValue > 0) { // Simplified checks for basic positive values
+    if (balance > 0 && emergency > 0 && netWorthValue > 0) {
       level = 2;
       message = "Stable Financial Foundation!";
     }
-    // Subsequent levels require increasing positive values
     if (
       balance >= 1000000 &&
       emergency >= 5000000 &&
@@ -319,70 +315,103 @@ const useFinancialHealthData = () => {
     alert("Input Data Updated!");
   };
 
-  const getAiFinancialAdvice = async () => {
-    setAiCareLoading(true);
-    setAiCareResponse("");
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network request
-    const currentFinancialSnapshot = `
-      Monthly Income: Rp ${gajiBulanan.toLocaleString("id-ID")}
-      Passive Income: Rp ${pendapatanPasif.toLocaleString("id-ID")}
-      Total Medical Expenses: Rp ${calculatedTotalExpenses.toLocaleString(
-        "id-ID"
-      )}
-      Total Insurance Claims: Rp ${calculatedTotalIncome.toLocaleString("id-ID")}
-      Net Health Balance: Rp ${netBalance.toLocaleString("id-ID")}
-      Net Worth: Rp ${netWorth.toLocaleString("id-ID")}
-      Monthly Budget: Rp ${budget.toLocaleString("id-ID")}
-      Total Savings: Rp ${savings.toLocaleString("id-ID")}
-      Retirement Fund: Rp ${retirementSavings.toLocaleString("id-ID")}
-      Emergency Fund: Rp ${emergencyFund.toLocaleString("id-ID")}
-      Total Debts: Rp ${debts.toLocaleString("id-ID")}
-      Bitcoin Value: Rp ${bitcoinCurrentValue.toLocaleString("id-ID")}
-      Ethereum Value: Rp ${ethereumCurrentValue.toLocaleString("id-ID")}
-      ${
-        punyaAset
-          ? `Vehicle Value: Rp ${vehicles.toLocaleString(
-              "id-ID"
-            )}, House Value: Rp ${rumahValue.toLocaleString(
-              "id-ID"
-            )}, Land Value: Rp ${tanahValue.toLocaleString(
-              "id-ID"
-            )}, Building Value: Rp ${bangunanValue.toLocaleString("id-ID")}`
-          : ""
-      }
-      ${aiCareInput ? `Additional Question/Situation: ${aiCareInput}` : ""}
-    `;
-    setAiCareResponse(`Thank you for your question. Based on the data you provided, here is some initial advice from AuraFi AI (placeholder for your ICP LLM):\n\n
-      - **Income Analysis:** With a monthly salary of Rp ${gajiBulanan.toLocaleString(
-        "id-ID"
-      )} and passive income of Rp ${pendapatanPasif.toLocaleString(
-        "id-ID"
-      )}, you have a stable cash flow. Consider further optimizing your passive income.
-      - **Expense Management:** Your current total expenses are Rp ${calculatedTotalExpenses.toLocaleString(
-        "id-ID"
-      )}. If there are high spending categories, try to identify areas for savings.
-      - **Net Worth:** Your net worth of Rp ${netWorth.toLocaleString(
-        "id-ID"
-      )} indicates a good financial foundation. Continue to increase assets and reduce debt.
-      - **Emergency Fund:** Your emergency fund of Rp ${emergencyFund.toLocaleString(
-        "id-ID"
-      )} is quite good. Ideally, an emergency fund should cover 3-6 months of expenses.
-      - **General Recommendations:**
-          - Regularly review your monthly budget to ensure expenses remain under control.
-          - If you have high-interest debts, prioritize paying them off.
-          - Continue to save for retirement consistently.
-          - Utilize the 'Data Input' feature to track all your assets and debts in detail for more accurate analysis.
-      \nFor more in-depth advice, please provide more details about your specific financial goals.`);
-    setAiCareLoading(false);
-  };
+  // --- FUNGSI GET AI FINANCIAL ADVICE DENGAN INTEGRASI DEEPSEEK API ---
+  const getAiFinancialAdvice = useCallback(
+    async (userQuestion, currentFinancialSnapshot) => {
+      setAiCareLoading(true);
+      setAiCareResponse("");
 
+      // <<< UBAH CARA MEMBACA VARIABEL LINGKUNGAN DI SINI
+      const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY; // Gunakan import.meta.env
+      // Atau bisa juga process.env.VITE_DEEPSEEK_API_KEY, tergantung konfigurasi Vite/lingkungan
+
+      if (!DEEPSEEK_API_KEY) {
+        console.error("Deepseek API Key is not set in environment variables.");
+        setAiCareLoading(false);
+        return "Error: AI service not configured. Please check API Key.";
+      }
+
+      const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
+      const DEEPSEEK_MODEL = "deepseek-chat";
+
+      const messages = [
+        {
+          role: "system",
+          content:
+            "You are an AI financial advisor named AuraFi. Provide personalized and actionable financial advice. Prioritize clarity, actionable steps, and a positive, encouraging tone. Always respond in English.",
+        },
+        {
+          role: "user",
+          content: `Here is my current financial snapshot:\n${currentFinancialSnapshot}\n\nMy Question: ${userQuestion}\n\nPlease provide actionable advice, categorized (e.g., Income, Expenses, Savings, Investments, Debts). Keep it concise and helpful.`,
+        },
+      ];
+
+      const payload = {
+        model: DEEPSEEK_MODEL,
+        messages: messages,
+        stream: false,
+      };
+
+      try {
+        const response = await fetch(DEEPSEEK_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error(
+            "Deepseek API response not OK:",
+            response.status,
+            response.statusText,
+            errorData
+          );
+          return `Error from AI: ${
+            errorData.error?.message || response.statusText
+          }. Please try again later.`;
+        }
+
+        const result = await response.json();
+        const aiResponseContent =
+          result.choices?.[0]?.message?.content ||
+          "No specific advice could be generated by Deepseek.";
+
+        return aiResponseContent;
+      } catch (err) {
+        console.error("Error calling Deepseek API:", err);
+        const errorMessage = `Network error: Failed to reach AI service. Please check your internet connection or try again later.`;
+        return errorMessage;
+      } finally {
+        setAiCareLoading(false);
+      }
+    },
+    []
+  );
+
+  // Initial load: Fetch greeting text (assuming it's still needed)
   useEffect(() => {
     async function fetchGreeting() {
-      const result = await HopeBridge_backend.greet("User");
-      setGreetText(result);
+      try {
+        // Cek jika window.canister.HopeBridge_backend sudah tersedia
+        if (window.canister && window.canister.HopeBridge_backend) {
+          const result = await window.canister.HopeBridge_backend.greet("User");
+          setGreetText(result);
+        } else {
+          console.warn(
+            "Backend canister not yet available for greeting. Skipping greeting fetch."
+          );
+        }
+      } catch (error) {
+        console.error("Failed to fetch greeting:", error);
+        setGreetText("Hello!"); // Fallback greeting
+      }
     }
     fetchGreeting();
-  }, []);
+  }, [setGreetText]);
 
   return {
     greetText,
@@ -480,6 +509,7 @@ const useFinancialHealthData = () => {
     activeDataInputTab,
     setActiveDataInputTab,
     cryptoScenarioResult,
+    // Add visibility states and toggle functions
     showBisnisUsaha,
     setShowBisnisUsaha,
     toggleBisnisUsaha,
@@ -525,6 +555,7 @@ const useFinancialHealthData = () => {
     showBangunan,
     setShowBangunan,
     toggleBangunan,
+    // Add transaction states and handlers
     transactions,
     setTransactions,
     formData,

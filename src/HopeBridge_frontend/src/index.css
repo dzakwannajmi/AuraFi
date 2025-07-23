@@ -41,13 +41,16 @@ body {
 .gradient-text {
   background: linear-gradient(
     90deg,
-    var(--tw-gradient-from, #3ad9a3),
-    /* green-primary */ var(--tw-gradient-to, #0f7c5f) /* green-secondary */
+    #000000,
+    /* Hitam */ #0f7c5f,
+    /* green-secondary (Hijau gelap) */ #16a085,
+    /* green-accent-4 (lebih gelap dari green-accent-1) */ #0c6b4e
+      /* Ini adalah green-secondary yang sedikit digelapkan, atau bisa #0F7C5F */
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% auto; /* Penting untuk membuat gradien bisa bergerak */
-  animation: text-gradient-animation 5s linear infinite alternate; /* Animasi berulang */
+  background-size: 200% auto;
+  animation: text-gradient-animation 5s linear infinite alternate;
 }
 
 /* Keyframes untuk animasi gradien teks */
@@ -67,13 +70,13 @@ body {
   }
   50% {
     transform: scale(1.08);
-  } /* Sedikit lebih besar untuk efek pulse yang jelas */
+  }
   100% {
     transform: scale(1);
   }
 }
 .animate-pulse-fast {
-  animation: pulse-fast 1s ease-in-out infinite; /* Kecepatan 1s */
+  animation: pulse-fast 1s ease-in-out infinite;
 }
 
 /* Gaya umum untuk cards, buttons, inputs, tables */
@@ -180,10 +183,10 @@ canvas {
 /* --- Header Gradient Background Animation --- */
 /* Ini akan menjadi latar belakang header */
 .header-normal-gradient {
-  background-color: theme("colors.black-primary"); /* Warna solid hitam */
-  background-image: none; /* Hapus gambar gradien */
-  animation: none; /* Hapus animasi */
-  background-size: auto; /* Reset ukuran background */
+  background-color: theme("colors.black-primary");
+  background-image: none;
+  animation: none;
+  background-size: auto;
 }
 
 .header-scrolled-gradient {
@@ -216,8 +219,9 @@ canvas {
     270deg,
     /* Arah gradien, misalnya dari kanan ke kiri */ #000000,
     /* Hitam */ #0f7c5f,
-    /* green-secondary */ #1abc9c,
-    /* green-accent-1 */ #3ad9a3 /* green-primary */
+    /* green-secondary (Hijau gelap) */ #16a085,
+    /* green-accent-4 (lebih gelap dari green-accent-1) */ #0c6b4e
+      /* Ini adalah green-secondary yang sedikit digelapkan, atau bisa #0F7C5F */
   );
   background-size: 400% 400%; /* Membuat gradien lebih besar dari container */
   animation: gradient-background-animation 15s ease infinite; /* Animasi berulang */

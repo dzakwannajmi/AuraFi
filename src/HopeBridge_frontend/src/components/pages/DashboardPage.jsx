@@ -35,25 +35,25 @@ function DashboardPage() {
 
   // Destructure all required props from context
   const {
-    totalExpenses,
-    totalIncome,
+    calculatedTotalExpenses: totalExpenses, // Renamed for clarity in DashboardPage
+    calculatedTotalIncome: totalIncome, // Renamed for clarity in DashboardPage
     netBalance,
     netWorth,
     budget,
     savings,
     retirementSavings,
-    vehicles,
-    otherAssets,
-    debts,
+    vehicles, // Keeping original names for data values if they come directly from hook
+    otherAssets, // Keeping original names for data values
+    debts, // Keeping original names for data values
     emergencyFund,
     financialStatus,
     monthlyData, // Data for monthly income/expense trend
     categoryExpenseData, // Data for expenses by category
-    // Ensure you also pass these data from useFinancialHealthData if you want to use them
-    // incomeChartData, // If you have specific income chart data
-    // expenseChartData, // If you have specific expense chart data
-    // investmentChartData, // If you have specific investment chart data
-    // assetDebtChartData, // If you have specific asset/debt chart data
+    // These are already handled in useFinancialHealthData if needed:
+    // incomeChartData,
+    // expenseChartData,
+    // investmentChartData,
+    // assetDebtChartData,
   } = context;
 
   // Ensure important data used in .toLocaleString() are not undefined
@@ -85,34 +85,42 @@ function DashboardPage() {
     categoryExpenseData &&
     categoryExpenseData.length > 0;
 
+  // Helper to format currency for tooltips/labels (using IDR)
+  const formatRpCurrency = (value) => {
+    if (typeof value !== 'number') {
+      return `Rp 0`;
+    }
+    return `Rp ${value.toLocaleString("id-ID")}`;
+  };
+
   return (
-    <section id="dashboard" className="max-w-6xl mx-auto my-10">
-      <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
-        Health Financial Dashboard Summary
+    <section id="dashboard" className="max-w-6xl mx-auto my-10 p-4">
+      <h2 className="text-4xl font-extrabold text-center mb-10 gradient-text">
+        Financial Health Dashboard
       </h2>
 
       {/* Financial Level Indicator */}
-      <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mb-8 text-center">
-        <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
+      <div className="bg-gray-card-bg rounded-xl p-8 shadow-2xl border border-gray-border mb-8 text-center animate-fade-in-up animate-delay-100">
+        <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-4">
           Your Financial Level:{" "}
           <span className="gradient-text">
             Level {financialStatus ? financialStatus.level : "N/A"}
           </span>
         </h3>
-        <p className="text-lg text-gray-300 mb-4">
+        <p className="text-lg text-gray-300 mb-6">
           {financialStatus
             ? financialStatus.message
             : "Loading financial status..."}
         </p>
-        <div className="flex justify-center items-center space-x-2">
+        <div className="flex justify-center items-center space-x-3">
           {[1, 2, 3, 4, 5].map((lvl) => (
             <div
               key={lvl}
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-md font-bold transition-all duration-300 ease-in-out transform
                 ${
                   financialStatus && lvl <= financialStatus.level
-                    ? "bg-gradient-to-r from-green-primary to-green-secondary text-white-default"
-                    : "bg-gray-700 text-gray-400"
+                    ? "bg-gradient-to-r from-green-primary to-green-secondary text-white-default scale-110 shadow-lg"
+                    : "bg-gray-700 text-gray-400 scale-90"
                 }`}
             >
               {lvl}
@@ -122,41 +130,42 @@ function DashboardPage() {
       </div>
 
       {/* Brief Financial Note */}
-      <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mb-10 text-center">
-        <h3 className="text-xl font-semibold text-gray-text-tertiary mb-3">
+      <div className="bg-gray-card-bg rounded-xl p-8 shadow-2xl border border-gray-border mb-10 text-center animate-fade-in-up animate-delay-200">
+        <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-4">
           Brief Financial Health Note:
         </h3>
-        <p className="text-lg text-gray-300">{financialNote}</p>
+        <p className="text-lg text-gray-300 leading-relaxed">
+          {financialNote}
+        </p>
       </div>
 
       {/* Main Financial Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-300">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
-            Total Medical Expenses
+            Total Expenses
           </h3>
-          {/* Default to 0.00 if data is not yet available */}
           <p className="text-4xl font-bold gradient-text">
             Rp {safeTotalExpenses.toLocaleString("id-ID")}
           </p>
         </div>
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-400">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
-            Total Insurance Claims
+            Total Income
           </h3>
           <p className="text-4xl font-bold gradient-text">
             Rp {safeTotalIncome.toLocaleString("id-ID")}
           </p>
         </div>
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-500">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
-            Net Health Balance
+            Net Balance
           </h3>
           <p className="text-4xl font-bold gradient-text">
             Rp {safeNetBalance.toLocaleString("id-ID")}
           </p>
         </div>
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-600">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
             Net Worth
           </h3>
@@ -164,7 +173,7 @@ function DashboardPage() {
             Rp {safeNetWorth.toLocaleString("id-ID")}
           </p>
         </div>
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-700">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
             Monthly Budget
           </h3>
@@ -172,7 +181,7 @@ function DashboardPage() {
             Rp {safeBudget.toLocaleString("id-ID")}
           </p>
         </div>
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-800">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
             Retirement Savings
           </h3>
@@ -180,7 +189,7 @@ function DashboardPage() {
             Rp {safeRetirementSavings.toLocaleString("id-ID")}
           </p>
         </div>
-        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg">
+        <div className="bg-gray-card-bg rounded-xl p-6 shadow-md flex flex-col justify-between min-h-[150px] border border-gray-border transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg animate-fade-in-up animate-delay-900">
           <h3 className="text-lg font-semibold text-gray-text-tertiary mb-2">
             Emergency Fund
           </h3>
@@ -193,8 +202,8 @@ function DashboardPage() {
       {isChartDataReady ? (
         <>
           {/* Income vs Expense Line Chart */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10 mb-8">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10 mb-8 animate-fade-in-up animate-delay-1000">
+            <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6 text-center">
               Monthly Income & Expense Trend
             </h3>
             <ResponsiveContainer width="100%" height={300}>
@@ -202,54 +211,48 @@ function DashboardPage() {
                 data={monthlyData}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#555" />{" "}
-                {/* Lighter grid color */}
-                <XAxis dataKey="name" stroke="#BBB" />{" "}
-                {/* Lighter axis text color */}
-                <YAxis stroke="#BBB" /> {/* Lighter axis text color */}
+                <CartesianGrid strokeDashArray="3 3" stroke="#555" />
+                <XAxis dataKey="name" stroke="#BBB" />
+                <YAxis stroke="#BBB" formatter={formatRpCurrency} /> {/* Apply formatter to YAxis */}
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "var(--color-gray-tooltip-bg)",
-                    border: "1px solid var(--color-gray-tooltip-border)",
+                    backgroundColor: "#2C3E50", // Direct color from Tailwind's gray-tooltip-bg
+                    border: "1px solid #4F5D73", // Direct color from Tailwind's gray-tooltip-border
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "var(--color-white-default)" }}
-                  labelStyle={{ color: "var(--color-gray-tooltip-label)" }}
-                  formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
+                  itemStyle={{ color: "#FFFFFF" }} // Direct color from Tailwind's white-default
+                  labelStyle={{ color: "#9CA3AF" }} // Direct color from Tailwind's gray-tooltip-label
+                  formatter={formatRpCurrency}
                 />
                 <Legend
                   wrapperStyle={{
-                    color: "var(--color-gray-legend)",
+                    color: "#9CA3AF", // Direct color from Tailwind's gray-legend
                     paddingTop: "10px",
                   }}
                 />
                 <Line
                   type="monotone"
-                  dataKey="Pemasukan" // Data key for Income
-                  stroke="var(--color-green-accent-2)" /* Bright green color */
+                  dataKey="Income" // Data key for Income (English)
+                  stroke="#2ECC71" // Direct color from Tailwind's green-accent-2
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
-                  connectNulls={
-                    true
-                  } /* Add this to connect null points */
+                  connectNulls={true}
                 />
                 <Line
                   type="monotone"
-                  dataKey="Pengeluaran" // Data key for Expenses
-                  stroke="var(--color-red-primary)" /* Bright red color */
+                  dataKey="Expenses" // Data key for Expenses (English)
+                  stroke="#FF6B6B" // Direct color from Tailwind's red-primary
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
-                  connectNulls={
-                    true
-                  } /* Add this to connect null points */
+                  connectNulls={true}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
           {/* Category-wise Expense Bar Chart */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10 animate-fade-in-up animate-delay-1100">
+            <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6 text-center">
               Expenses by Category
             </h3>
             <ResponsiveContainer width="100%" height={300}>
@@ -257,30 +260,28 @@ function DashboardPage() {
                 data={categoryExpenseData}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#555" />{" "}
-                {/* Lighter grid color */}
-                <XAxis dataKey="name" stroke="#BBB" />{" "}
-                {/* Lighter axis text color */}
-                <YAxis stroke="#BBB" /> {/* Lighter axis text color */}
+                <CartesianGrid strokeDashArray="3 3" stroke="#555" />
+                <XAxis dataKey="name" stroke="#BBB" />
+                <YAxis stroke="#BBB" formatter={formatRpCurrency} /> {/* Apply formatter to YAxis */}
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "var(--color-gray-tooltip-bg)",
-                    border: "1px solid var(--color-gray-tooltip-border)",
+                    backgroundColor: "#2C3E50",
+                    border: "1px solid #4F5D73",
                     borderRadius: "8px",
                   }}
-                  itemStyle={{ color: "var(--color-white-default)" }}
-                  labelStyle={{ color: "var(--color-gray-tooltip-label)" }}
-                  formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
+                  itemStyle={{ color: "#FFFFFF" }}
+                  labelStyle={{ color: "#9CA3AF" }}
+                  formatter={formatRpCurrency}
                 />
                 <Legend
                   wrapperStyle={{
-                    color: "var(--color-gray-legend)",
+                    color: "#9CA3AF",
                     paddingTop: "10px",
                   }}
                 />
                 <Bar
-                  dataKey="Pengeluaran" // Data key for Expenses
-                  fill="var(--color-red-primary)" /* Bright red color */
+                  dataKey="Expenses" // Data key for Expenses (English)
+                  fill="#FF6B6B" // Direct color from Tailwind's red-primary
                   radius={[10, 10, 0, 0]}
                 />
               </BarChart>
@@ -288,11 +289,12 @@ function DashboardPage() {
           </div>
         </>
       ) : (
-        <div className="text-center text-gray-400 mt-20">
+        <div className="text-center text-gray-400 mt-20 animate-fade-in-up animate-delay-1000">
           Charts are loading or data is insufficient.
         </div>
       )}
     </section>
   );
 }
+
 export default DashboardPage;

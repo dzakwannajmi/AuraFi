@@ -1,13 +1,13 @@
 // HopeBridge_frontend/src/hooks/usePortfolio.jsx
 import { useState, useEffect, useCallback } from "react";
-import { Principal } from "@dfinity/principal"; // Pastikan Anda menginstal @dfinity/principal
-import { fetchExchangeRates, convertCurrency } from "../utils/currencyUtils";
+import { Principal } from "@dfinity/principal"; // Ensure @dfinity/principal is installed
+import { fetchExchangeRates, convertCurrency } from "../components/utils/currencyUtils";
 
-// Asumsi objek canister HopeBridge_backend tersedia secara global
-// Pastikan dfx generate sudah dijalankan setelah perubahan backend
-const backendCanister = window.canister.HopeBridge_backend; // Ganti dengan nama canister backend Anda
+// Assume the HopeBridge_backend canister object is globally available
+// Ensure dfx generate has been run after backend changes
+const backendCanister = window.canister.HopeBridge_backend; // Replace with your backend canister name
 
-// Mapping nama aset ke ID CoinGecko (digunakan untuk fetching harga)
+// Mapping asset names to CoinGecko IDs (used for fetching prices)
 const cryptoIdMap = {
   Bitcoin: "bitcoin",
   Ethereum: "ethereum",
@@ -16,8 +16,8 @@ const cryptoIdMap = {
   Cardano: "cardano",
   Solana: "solana",
   Dogecoin: "dogecoin",
-  Stablecoin: "tether", // Contoh: menggunakan Tether
-  NFT: null, // NFT tidak memiliki harga pasar tunggal
+  Stablecoin: "tether", // Example: using Tether as a stablecoin representation
+  NFT: null, // NFTs typically don't have a single market price easily accessible via this API
 };
 
 const usePortfolio = () => {
@@ -26,14 +26,14 @@ const usePortfolio = () => {
   const [error, setError] = useState(null);
   const [exchangeRates, setExchangeRates] = useState(null);
 
-  // Fungsi untuk menampilkan pesan (bisa diganti dengan notifikasi UI yang sebenarnya)
-  // Ini hanya placeholder untuk tujuan hook, notifikasi sebenarnya di PortfolioPage
+  // Function to display messages (can be replaced with actual UI notifications)
+  // This is just a placeholder for hook purposes; actual notifications would be in PortfolioPage
   const showMessage = (text, type) => {
     console.log(`[usePortfolio Message - ${type}]: ${text}`);
-    // Anda bisa mengintegrasikan dengan context notifikasi global jika ada
+    // You can integrate with a global notification context if available
   };
 
-  // 1. Fetch data portofolio dari backend
+  // 1. Fetch portfolio data from the backend
   const fetchPortfolioFromBackend = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -48,15 +48,15 @@ const usePortfolio = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []); // useCallback untuk mencegah re-render yang tidak perlu
+  }, []); // useCallback to prevent unnecessary re-renders
 
-  // 2. Fetch harga crypto dan konversi (mirip dengan yang ada di PortfolioPage)
+  // 2. Fetch crypto prices and convert (similar to what's in PortfolioPage)
   const fetchCryptoPricesAndConvert = useCallback(
     async (currentInvestments) => {
       setIsLoading(true);
       setError(null);
 
-      // Pastikan exchange rates sudah dimuat
+      // Ensure exchange rates are loaded
       if (!exchangeRates) {
         const rates = await fetchExchangeRates();
         if (rates) {
@@ -73,7 +73,7 @@ const usePortfolio = () => {
 
       const uniqueCryptoIds = new Set();
       const uniqueVsCurrencies = new Set();
-      uniqueVsCurrencies.add("idr"); // Selalu minta harga dalam IDR
+      uniqueVsCurrencies.add("idr"); // Always request price in IDR
 
       currentInvestments.forEach((inv) => {
         const cryptoId = cryptoIdMap[inv.assetType];
@@ -95,7 +95,7 @@ const usePortfolio = () => {
       const coingeckoApiUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=${vsCurrencies}`;
 
       try {
-        const apiKey = ""; // API Key disediakan oleh Canvas
+        const apiKey = ""; // API Key provided by Canvas
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
         const prompt = `Fetch the following URL and return the JSON response:\n${coingeckoApiUrl}`;
@@ -148,7 +148,7 @@ const usePortfolio = () => {
               );
             }
           } else if (inv.assetType === "NFT") {
-            newCurrentPrice = 0;
+            newCurrentPrice = 0; // NFT price is not fetched via CoinGecko
           }
 
           if (exchangeRates) {
@@ -159,7 +159,7 @@ const usePortfolio = () => {
               exchangeRates
             );
           } else {
-            newCurrentValueInIDR = newCurrentPrice * inv.quantity; // Fallback
+            newCurrentValueInIDR = newCurrentPrice * inv.quantity; // Fallback if rates not loaded
           }
 
           return {
@@ -171,9 +171,9 @@ const usePortfolio = () => {
 
         // Update backend with new prices
         for (const updatedInv of updatedInvestments) {
-          // Panggil backend canister untuk update harga per investasi
-          // Pastikan backendCanister.updateInvestmentPrice mengembalikan Opt<Investment>
-          // dan parameter id adalah Nat, price dan value adalah Float
+          // Call backend canister to update price per investment
+          // Ensure backendCanister.updateInvestmentPrice returns Opt<Investment>
+          // and parameters id is Nat, price and value are Float
           const updateResult = await backendCanister.updateInvestmentPrice(
             updatedInv.id,
             updatedInv.currentPrice,
@@ -216,13 +216,13 @@ const usePortfolio = () => {
     [backendCanister, exchangeRates]
   ); // Depend on backendCanister and exchangeRates
 
-  // 3. Fungsi untuk menambah investasi
+  // 3. Function to add an investment
   const addInvestment = useCallback(
     async (newInvestmentData) => {
       setIsLoading(true);
       setError(null);
       try {
-        // Hitung currentValueInIDR awal
+        // Calculate initial currentValueInIDR
         let initialCurrentValueInIDR =
           newInvestmentData.buyPrice * newInvestmentData.quantity;
         if (exchangeRates) {
@@ -234,7 +234,7 @@ const usePortfolio = () => {
           );
         }
 
-        // Panggil backend canister untuk menambah investasi
+        // Call backend canister to add investment
         const addedInvestment = await backendCanister.addInvestment(
           newInvestmentData.assetName,
           newInvestmentData.assetType,
@@ -247,14 +247,13 @@ const usePortfolio = () => {
           initialCurrentValueInIDR // Pass initial converted value
         );
 
-        // Setelah berhasil menambah, fetch ulang portofolio untuk mendapatkan state terbaru
-        // Atau langsung tambahkan ke state jika backend mengembalikan objek lengkap
-        // Jika backend mengembalikan Investment lengkap, kita bisa langsung update state
+        // After successful addition, update portfolio state
         setInvestments((prev) => [...prev, addedInvestment]);
         showMessage("Investment added successfully!", "success");
+        // Trigger price update for all investments including the new one
         fetchCryptoPricesAndConvert(
           Array.from(investments).concat(addedInvestment)
-        ); // Perbarui harga setelah menambah
+        );
       } catch (err) {
         console.error("Failed to add investment to backend:", err);
         setError("Failed to add investment.");
@@ -266,7 +265,7 @@ const usePortfolio = () => {
     [backendCanister, exchangeRates, investments, fetchCryptoPricesAndConvert]
   );
 
-  // 4. Fungsi untuk menghapus investasi
+  // 4. Function to delete an investment
   const deleteInvestment = useCallback(
     async (id) => {
       setIsLoading(true);
@@ -322,15 +321,15 @@ const usePortfolio = () => {
     }
   }, [investments, exchangeRates, fetchCryptoPricesAndConvert, isLoading]); // Depend on investments, exchangeRates, and fetchCryptoPricesAndConvert
 
-  // Hitung total nilai portofolio dalam IDR untuk ringkasan di UI
+  // Calculate total portfolio value in IDR for UI summary
   const totalPortfolioValueIDR = investments.reduce(
     (sum, inv) => sum + (inv.currentValueInIDR || 0),
     0
   );
 
-  // Perhitungan total nilai beli dalam IDR (memerlukan konversi saat beli)
+  // Calculate total buy value in IDR (requires conversion at buy time)
   const totalBuyValueIDR = investments.reduce((sum, inv) => {
-    // Jika rates tersedia, konversi harga beli ke IDR. Jika tidak, gunakan nilai yang ada (belum tentu IDR)
+    // If rates are available, convert buy price to IDR. Otherwise, use existing value (not necessarily IDR)
     if (exchangeRates) {
       return (
         sum +
@@ -342,7 +341,7 @@ const usePortfolio = () => {
         )
       );
     }
-    return sum + inv.buyPrice * inv.quantity; // Fallback jika rates belum dimuat
+    return sum + inv.buyPrice * inv.quantity; // Fallback if rates not loaded
   }, 0);
 
   const totalProfitLossIDR = totalPortfolioValueIDR - totalBuyValueIDR;
@@ -355,12 +354,12 @@ const usePortfolio = () => {
     error,
     addInvestment,
     deleteInvestment,
-    refreshPrices: () => fetchCryptoPricesAndConvert(investments), // Fungsi refresh yang memicu update harga
+    refreshPrices: () => fetchCryptoPricesAndConvert(investments), // Refresh function to trigger price update
     totalPortfolioValueIDR,
     totalProfitLossIDR,
     overallPercentageChangeIDR,
-    // Kita tidak mengembalikan showMessage karena itu seharusnya dikelola oleh komponen yang menggunakannya (misal PortfolioPage)
-    // namun untuk debugging di hook, kita bisa biarkan console.log di dalamnya.
+    // We don't return showMessage as it should be managed by the consuming component (e.g., PortfolioPage)
+    // but for debugging in the hook, we can keep console.log inside it.
   };
 };
 

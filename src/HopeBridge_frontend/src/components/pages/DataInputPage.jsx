@@ -17,19 +17,19 @@ import { useOutletContext } from "react-router-dom";
 function DataInputPage() {
   const context = useOutletContext();
 
-  // --- DEBUGGING: Log semua data yang diterima di DataInputPage ---
+  // --- DEBUGGING: Log all received context data in DataInputPage ---
   console.log("DataInputPage: Context received:", context);
 
-  // Periksa apakah context atau propertinya undefined sebelum mendestrukturisasi
+  // Check if context or its properties are undefined before destructuring
   if (!context || Object.keys(context).length === 0) {
     console.log(
-      "DataInputPage: Context kosong atau belum tersedia, menampilkan loading."
+      "DataInputPage: Context is empty or not yet available, displaying loading."
     );
     return (
       <div className="text-center text-gray-400 mt-20">
-        Memuat data input...
+        Loading input data...
         <br />
-        Cek console browser Anda untuk detail lebih lanjut.
+        Check your browser console for more details.
       </div>
     );
   }
@@ -37,7 +37,7 @@ function DataInputPage() {
   const {
     activeDataInputTab,
     setActiveDataInputTab,
-    handleFinancialGoalsSubmit, // Ini untuk form goals umum
+    handleFinancialGoalsSubmit,
     gajiBulanan,
     setGajiBulanan,
     pendapatanPasif,
@@ -93,9 +93,7 @@ function DataInputPage() {
     debts,
     setDebts,
     emergencyFund,
-    setEmergencyFund,
     budget,
-    setBudget,
     incomeChartData,
     expenseChartData,
     investmentChartData,
@@ -108,47 +106,47 @@ function DataInputPage() {
     setCryptoScenarioPercentage,
     cryptoScenarioResult,
     netWorth,
-    // INI BAGIAN PENTING: Destrukturisasi SEMUA state show dan fungsi toggle dari context
-    showBisnisUsaha,
-    toggleBisnisUsaha,
-    showHasilInvestasi,
-    toggleHasilInvestasi,
-    showTransportasi,
-    toggleTransportasi,
-    showSedekahDonasi,
-    toggleSedekahDonasi,
-    showPendidikanExpense,
-    togglePendidikanExpense,
-    showPajakExpense,
-    togglePajakExpense,
-    showPremiAsuransi,
-    togglePremiAsuransi,
-    showReksadana,
-    toggleReksadana,
-    showObligasiP2P,
-    toggleObligasiP2P,
-    showDeposito,
-    toggleDeposito,
-    showEbaRitel,
-    toggleEbaRitel,
-    showKendaraan,
-    toggleKendaraan,
-    showRumah,
-    toggleRumah,
-    showTanah,
-    toggleTanah,
-    showBangunan,
-    toggleBangunan,
+    // Ensure these are destructured with default values to prevent crashes if context is partial
+    showBisnisUsaha = false,
+    toggleBisnisUsaha = () => {},
+    showHasilInvestasi = false,
+    toggleHasilInvestasi = () => {},
+    showTransportasi = false,
+    toggleTransportasi = () => {},
+    showSedekahDonasi = false,
+    toggleSedekahDonasi = () => {},
+    showPendidikanExpense = false,
+    togglePendidikanExpense = () => {},
+    showPajakExpense = false,
+    togglePajakExpense = () => {},
+    showPremiAsuransi = false,
+    togglePremiAsuransi = () => {},
+    showReksadana = false,
+    toggleReksadana = () => {},
+    showObligasiP2P = false,
+    toggleObligasiP2P = () => {},
+    showDeposito = false,
+    toggleDeposito = () => {},
+    showEbaRitel = false,
+    toggleEbaRitel = () => {},
+    showKendaraan = false,
+    toggleKendaraan = () => {},
+    showRumah = false,
+    toggleRumah = () => {},
+    showTanah = false,
+    toggleTanah = () => {},
+    showBangunan = false,
+    toggleBangunan = () => {},
   } = context;
 
   const COLORS = [
-    "#3AD9A3",
-    "#0F7C5F",
-    "#1ABC9C",
-    "#2ECC71",
-    "#27AE60",
-    "#16A085",
-    "#2C3E50",
+    "#3AD9A3", // green-primary
+    "#0F7C5F", // green-secondary
+    "#1ABC9C", // green-accent-1
+    "#2ECC71", // green-accent-2
+    "#27AE60", // green-accent-3
+    "#16A085", // green-accent-4
+    "#2C3E50", // green-accent-5 (dark blue-gray)
   ];
   const RED_COLORS = ["#FF6B6B", "#E74C3C", "#C0392B", "#A93226"];
 
@@ -181,1019 +179,1062 @@ function DataInputPage() {
     );
   };
 
+  // Helper to format currency for tooltips/labels (using IDR)
+  const formatRpCurrency = (value) => {
+    if (typeof value !== "number") {
+      return `Rp 0`;
+    }
+    return `Rp ${value.toLocaleString("id-ID")}`;
+  };
+
   return (
     <section
       id="financial-goals"
-      className="p-10 max-w-3xl mx-auto mb-10 bg-gray-card-bg rounded-xl shadow-md border border-gray-border md:p-5 md:mx-5"
+      // Adjusted section padding and max-width for better aesthetics
+      className="p-8 max-w-6xl mx-auto mb-10 md:p-5"
     >
-      <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
-        Data Input
+      <h2 className="text-4xl font-extrabold text-center mb-8 gradient-text leading-tight">
+        Financial Data Input
       </h2>
 
       {/* Tab Navigation for Data Input */}
-      <div className="flex justify-start mb-8 border-b border-gray-700 overflow-x-auto whitespace-nowrap px-2 scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-gray-700">
+      <div className="bg-gray-card-bg rounded-t-xl p-4 shadow-md border border-gray-border border-b-0 flex justify-start overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-green-primary scrollbar-track-gray-700">
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("penghasilan")}
-          className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "penghasilan"
-              ? "gradient-text border-b-2 border-green-primary"
+          onClick={() => setActiveDataInputTab("income")}
+          className={`px-6 py-3 text-lg font-medium rounded-md ${
+            activeDataInputTab === "income"
+              ? "gradient-text border-b-2 border-green-primary bg-gray-dark"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Penghasilan
+          Income
         </button>
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("pengeluaran")}
-          className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "pengeluaran"
-              ? "gradient-text border-b-2 border-green-primary"
+          onClick={() => setActiveDataInputTab("expenses")}
+          className={`px-6 py-3 text-lg font-medium rounded-md ${
+            activeDataInputTab === "expenses"
+              ? "gradient-text border-b-2 border-green-primary bg-gray-dark"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Pengeluaran
+          Expenses
         </button>
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("tabunganInvestasi")}
-          className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "tabunganInvestasi"
-              ? "gradient-text border-b-2 border-green-primary"
+          onClick={() => setActiveDataInputTab("savingsInvestments")}
+          className={`px-6 py-3 text-lg font-medium rounded-md ${
+            activeDataInputTab === "savingsInvestments"
+              ? "gradient-text border-b-2 border-green-primary bg-gray-dark"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Tabungan & Investasi
+          Savings & Investments
         </button>
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("asetUtang")}
-          className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "asetUtang"
-              ? "gradient-text border-b-2 border-green-primary"
+          onClick={() => setActiveDataInputTab("assetsDebts")}
+          className={`px-6 py-3 text-lg font-medium rounded-md ${
+            activeDataInputTab === "assetsDebts"
+              ? "gradient-text border-b-2 border-green-primary bg-gray-dark"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Aset & Utang
+          Assets & Debts
         </button>
-        {/* Tab Analisis Crypto */}
+        {/* Crypto Analysis Tab */}
         <button
           type="button"
-          onClick={() => setActiveDataInputTab("analisisCrypto")}
-          className={`px-6 py-3 text-lg font-medium ${
-            activeDataInputTab === "analisisCrypto"
-              ? "gradient-text border-b-2 border-green-primary"
+          onClick={() => setActiveDataInputTab("cryptoAnalysis")}
+          className={`px-6 py-3 text-lg font-medium rounded-md ${
+            activeDataInputTab === "cryptoAnalysis"
+              ? "gradient-text border-b-2 border-green-primary bg-gray-dark"
               : "text-gray-400 hover:text-green-primary"
           } transition-all duration-300`}
         >
-          Analisis Crypto
+          Crypto Analysis
         </button>
       </div>
 
       {/* Content based on active tab */}
-          {activeDataInputTab === "penghasilan" && (
-            <div className="space-y-8">
-              <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5 max-w-xl mx-auto">
-                <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-                  Berapa sih penghasilan kamu setiap bulannya?
-                </h3>
-            <div className="mb-5">
-              <label
-                htmlFor="gajiBulanan"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Gaji Bulanan
-              </label>
-              <input
-                type="number"
-                id="gajiBulanan"
-                placeholder="Rp 0"
-                value={gajiBulanan}
-                onChange={(e) => setGajiBulanan(Number(e.target.value))}
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-            </div>
-            <div className="mb-5">
-              <label
-                htmlFor="pendapatanPasif"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Pendapatan Pasif
-              </label>
-              <input
-                type="number"
-                id="pendapatanPasif"
-                placeholder="Rp 0"
-                value={pendapatanPasif}
-                onChange={(e) => setPendapatanPasif(Number(e.target.value))}
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Punya penghasilan lainnya?
-            </h3>
-            <div className="flex flex-wrap gap-3 mb-5">
-              <button
-                type="button"
-                onClick={toggleBisnisUsaha} // Menggunakan fungsi toggle dari context
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Bisnis Usaha
-              </button>
-              <button
-                type="button"
-                onClick={toggleHasilInvestasi} // Menggunakan fungsi toggle dari context
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Hasil Investasi
-              </button>
-            </div>
-            {/* Conditional Input Fields for Penghasilan */}
-            {showBisnisUsaha && (
-              <div className="mb-5">
-                <label
-                  htmlFor="bisnisUsaha"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Bisnis Usaha
-                </label>
-                <input
-                  type="number"
-                  id="bisnisUsaha"
-                  placeholder="Rp 0"
-                  value={bisnisUsaha}
-                  onChange={(e) => setBisnisUsaha(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            {showHasilInvestasi && (
-              <div className="mb-5">
-                <label
-                  htmlFor="hasilInvestasi"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Hasil Investasi
-                </label>
-                <input
-                  type="number"
-                  id="hasilInvestasi"
-                  placeholder="Rp 0"
-                  value={hasilInvestasi}
-                  onChange={(e) => setHasilInvestasi(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            <button
-              type="submit"
-              className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
+      <div className="bg-gray-card-bg rounded-b-xl p-8 shadow-md border border-gray-border border-t-0">
+        {activeDataInputTab === "income" && (
+          <div className="space-y-8">
+            <form
+              onSubmit={handleFinancialGoalsSubmit}
+              className="space-y-6 max-w-lg mx-auto"
             >
-              Simpan Penghasilan
-            </button>
-          </form>
-
-          {/* Income Distribution Chart */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Distribusi Penghasilan
-            </h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={incomeChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={100}
-                  fill="purple-recharts"
-                  dataKey="value"
-                >
-                  {incomeChartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "gray-tooltip-bg",
-                    border: "1px solid gray-tooltip-border",
-                    borderRadius: "8px",
-                  }}
-                  itemStyle={{ color: "white-default" }}
-                  labelStyle={{ color: "gray-tooltip-label" }}
-                  formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
-                />
-                <Legend
-                  wrapperStyle={{ color: "gray-legend", paddingTop: "10px" }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-
-      {activeDataInputTab === "pengeluaran" && (
-        <div className="space-y-8">
-          <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Dalam sebulan, berapa biaya pengeluaranmu?
-            </h3>
-            <div className="mb-5">
-              <label
-                htmlFor="belanjaKebutuhan"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Belanja Kebutuhan
-              </label>
-              <input
-                type="number"
-                id="belanjaKebutuhan"
-                placeholder="Rp 0"
-                value={belanjaKebutuhan}
-                onChange={(e) => setBelanjaKebutuhan(Number(e.target.value))}
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Punya pengeluaran lainnya?
-            </h3>
-            <div className="flex flex-wrap gap-3 mb-5">
-              <button
-                type="button"
-                onClick={toggleTransportasi}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Transportasi
-              </button>
-              <button
-                type="button"
-                onClick={toggleSedekahDonasi}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Sedekah/Donasi
-              </button>
-              <button
-                type="button"
-                onClick={togglePendidikanExpense}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Pendidikan
-              </button>
-              <button
-                type="button"
-                onClick={togglePajakExpense}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Pajak
-              </button>
-              <button
-                type="button"
-                onClick={togglePremiAsuransi}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Premi Asuransi
-                Bulanan
-              </button>
-            </div>
-            {/* Conditional Input Fields for Pengeluaran */}
-            {showTransportasi && (
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6">
+                What is your monthly income?
+              </h3>
               <div className="mb-5">
                 <label
-                  htmlFor="transportasi"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
+                  htmlFor="gajiBulanan"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
                 >
-                  Nilai Transportasi
+                  Monthly Salary
                 </label>
                 <input
                   type="number"
-                  id="transportasi"
+                  id="gajiBulanan"
                   placeholder="Rp 0"
-                  value={transportasi}
-                  onChange={(e) => setTransportasi(Number(e.target.value))}
+                  value={gajiBulanan}
+                  onChange={(e) => setGajiBulanan(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
                 />
               </div>
-            )}
-            {showSedekahDonasi && (
               <div className="mb-5">
                 <label
-                  htmlFor="sedekahDonasi"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
+                  htmlFor="pendapatanPasif"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
                 >
-                  Nilai Sedekah/Donasi
+                  Passive Income
                 </label>
                 <input
                   type="number"
-                  id="sedekahDonasi"
+                  id="pendapatanPasif"
                   placeholder="Rp 0"
-                  value={sedekahDonasi}
-                  onChange={(e) => setSedekahDonasi(Number(e.target.value))}
+                  value={pendapatanPasif}
+                  onChange={(e) => setPendapatanPasif(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
                 />
               </div>
-            )}
-            {showPendidikanExpense && (
-              <div className="mb-5">
-                <label
-                  htmlFor="pendidikanExpense"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Pendidikan
-                </label>
-                <input
-                  type="number"
-                  id="pendidikanExpense"
-                  placeholder="Rp 0"
-                  value={pendidikanExpense}
-                  onChange={(e) => setPendidikanExpense(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            {showPajakExpense && (
-              <div className="mb-5">
-                <label
-                  htmlFor="pajakExpense"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Pajak
-                </label>
-                <input
-                  type="number"
-                  id="pajakExpense"
-                  placeholder="Rp 0"
-                  value={pajakExpense}
-                  onChange={(e) => setPajakExpense(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            {showPremiAsuransi && (
-              <div className="mb-5">
-                <label
-                  htmlFor="premiAsuransi"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Premi Asuransi Bulanan
-                </label>
-                <input
-                  type="number"
-                  id="premiAsuransi"
-                  placeholder="Rp 0"
-                  value={premiAsuransi}
-                  onChange={(e) => setPremiAsuransi(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            <button
-              type="submit"
-              className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
-            >
-              Simpan Pengeluaran
-            </button>
-          </form>
-
-          {/* Expense Distribution Chart */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Distribusi Pengeluaran
-            </h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={expenseChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={100}
-                  fill="purple-recharts"
-                  dataKey="value"
-                >
-                  {expenseChartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={RED_COLORS[index % RED_COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "gray-tooltip-bg",
-                    border: "1px solid gray-tooltip-border",
-                    borderRadius: "8px",
-                  }}
-                  itemStyle={{ color: "white-default" }}
-                  labelStyle={{ color: "gray-tooltip-label" }}
-                  formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
-                />
-                <Legend
-                  wrapperStyle={{ color: "gray-legend", paddingTop: "10px" }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-
-      {activeDataInputTab === "tabunganInvestasi" && (
-        <div className="space-y-8">
-          <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Berapa banyak uang untuk kamu tabung dan investasi tiap bulannya?
-            </h3>
-            <div className="mb-5">
-              <label
-                htmlFor="tabungInvestasiBulanan"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Menabung + berinvestasi tiap bulan
-              </label>
-              <input
-                type="number"
-                id="tabungInvestasiBulanan"
-                placeholder="Rp 0"
-                value={tabungInvestasiBulanan}
-                onChange={(e) =>
-                  setTabungInvestasiBulanan(Number(e.target.value))
-                }
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Uang yang kamu sisihkan perbulannya untuk menabung dan
-                berinvestasi. (reksadana, emas, dsb)
-              </p>
-            </div>
-            <div className="mb-5">
-              <label
-                htmlFor="totalTabunganSaatIni"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Total tabungan kamu saat ini
-              </label>
-              <input
-                type="number"
-                id="totalTabunganSaatIni"
-                placeholder="Rp 0"
-                value={totalTabunganSaatIni}
-                onChange={(e) =>
-                  setTotalTabunganSaatIni(Number(e.target.value))
-                }
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Sudah punya produk investasi apa saja?
-            </h3>
-            <div className="space-y-4 mb-5">
-              <div>
-                <label
-                  htmlFor="crowdFunding"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Crowd-Funding
-                </label>
-                <input
-                  type="number"
-                  id="crowdFunding"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
-                  value={crowdFunding}
-                  onChange={(e) => setCrowdFunding(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="logamMulia"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Logam Mulia
-                </label>
-                <input
-                  type="number"
-                  id="logamMulia"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
-                  value={logamMulia}
-                  onChange={(e) => setLogamMulia(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="saham"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Saham
-                </label>
-                <input
-                  type="number"
-                  id="saham"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
-                  value={saham}
-                  onChange={(e) => setSaham(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="unitLink"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Unit Link
-                </label>
-                <input
-                  type="number"
-                  id="unitLink"
-                  placeholder="Rp 0 (Kosongkan jika tidak ada)"
-                  value={unitLink}
-                  onChange={(e) => setUnitLink(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 mt-8">
-              Pilih produk investasi lainnya
-            </h3>
-            <div className="flex flex-wrap gap-3 mb-5">
-              <button
-                type="button"
-                onClick={toggleReksadana}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Reksadana
-              </button>
-              <button
-                type="button"
-                onClick={toggleObligasiP2P}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Obligasi/P2P Lending
-              </button>
-              <button
-                type="button"
-                onClick={toggleDeposito}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> Deposito
-              </button>
-              <button
-                type="button"
-                onClick={toggleEbaRitel}
-                className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-              >
-                <i className="fas fa-plus-circle mr-2"></i> EBA Ritel
-              </button>
-            </div>
-            {showReksadana && (
-              <div className="mb-5">
-                <label
-                  htmlFor="reksadana"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Reksadana
-                </label>
-                <input
-                  type="number"
-                  id="reksadana"
-                  placeholder="Rp 0"
-                  value={reksadana}
-                  onChange={(e) => setReksadana(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            {showObligasiP2P && (
-              <div className="mb-5">
-                <label
-                  htmlFor="obligasiP2P"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Obligasi/P2P Lending
-                </label>
-                <input
-                  type="number"
-                  id="obligasiP2P"
-                  placeholder="Rp 0"
-                  value={obligasiP2P}
-                  onChange={(e) => setObligasiP2P(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            {showDeposito && (
-              <div className="mb-5">
-                <label
-                  htmlFor="deposito"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai Deposito
-                </label>
-                <input
-                  type="number"
-                  id="deposito"
-                  placeholder="Rp 0"
-                  value={deposito}
-                  onChange={(e) => setDeposito(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            {showEbaRitel && (
-              <div className="mb-5">
-                <label
-                  htmlFor="ebaRitel"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
-                >
-                  Nilai EBA Ritel
-                </label>
-                <input
-                  type="number"
-                  id="ebaRitel"
-                  placeholder="Rp 0"
-                  value={ebaRitel}
-                  onChange={(e) => setEbaRitel(Number(e.target.value))}
-                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                />
-              </div>
-            )}
-            <button
-              type="submit"
-              className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
-            >
-              Simpan Tabungan & Investasi
-            </button>
-          </form>
-
-          {/* Investment Breakdown Chart */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Distribusi Investasi
-            </h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart
-                data={investmentChartData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="gray-grid" />
-                <XAxis dataKey="name" stroke="gray-medium" />
-                <YAxis stroke="gray-medium" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "gray-tooltip-bg",
-                    border: "1px solid gray-tooltip-border",
-                    borderRadius: "8px",
-                  }}
-                  itemStyle={{ color: "white-default" }}
-                  labelStyle={{ color: "gray-tooltip-label" }}
-                  formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
-                />
-                <Legend
-                  wrapperStyle={{ color: "gray-legend", paddingTop: "10px" }}
-                />
-                <Bar
-                  dataKey="value"
-                  fill="green-primary"
-                  radius={[10, 10, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-
-      {activeDataInputTab === "asetUtang" && (
-        <div className="space-y-8">
-          <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Berapa jumlah aset dan utang yang kamu miliki?
-            </h3>
-            <div className="flex items-center mb-5">
-              <label
-                htmlFor="punyaAset"
-                className="font-medium text-gray-text-tertiary mr-3"
-              >
-                Punya aset?
-              </label>
-              <input
-                type="checkbox"
-                id="punyaAset"
-                checked={punyaAset}
-                onChange={(e) => setPunyaAset(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-green-primary rounded border-gray-600 bg-gray-700"
-              />
-              <span className="ml-2 text-gray-300">
-                {punyaAset ? "Ya" : "Tidak"}
-              </span>
-            </div>
-            {punyaAset && (
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6 mt-8">
+                Do you have other income sources?
+              </h3>
               <div className="flex flex-wrap gap-3 mb-5">
                 <button
                   type="button"
-                  onClick={toggleKendaraan}
-                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
+                  onClick={toggleBisnisUsaha}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
                 >
-                  <i className="fas fa-plus-circle mr-2"></i> Kendaraan
+                  <i className="fas fa-plus-circle mr-2"></i> Business Income
                 </button>
                 <button
                   type="button"
-                  onClick={toggleRumah}
-                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
+                  onClick={toggleHasilInvestasi}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
                 >
-                  <i className="fas fa-plus-circle mr-2"></i> Rumah
-                </button>
-                <button
-                  type="button"
-                  onClick={toggleTanah}
-                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-                >
-                  <i className="fas fa-plus-circle mr-2"></i> Tanah
-                </button>
-                <button
-                  type="button"
-                  onClick={toggleBangunan}
-                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center"
-                >
-                  <i className="fas fa-plus-circle mr-2"></i> Bangunan
+                  <i className="fas fa-plus-circle mr-2"></i> Investment Income
                 </button>
               </div>
-            )}
-            {/* Example input fields for assets if 'Punya aset' is checked */}
-            {punyaAset && (
-              <>
+              {showBisnisUsaha && (
                 <div className="mb-5">
                   <label
-                    htmlFor="vehicles"
-                    className="block mb-2 font-medium text-gray-text-tertiary"
+                    htmlFor="bisnisUsaha"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
                   >
-                    Nilai Kendaraan
+                    Business Income Value
                   </label>
                   <input
                     type="number"
-                    id="vehicles"
+                    id="bisnisUsaha"
                     placeholder="Rp 0"
-                    value={vehicles}
-                    onChange={(e) => setVehicles(Number(e.target.value))}
+                    value={bisnisUsaha}
+                    onChange={(e) => setBisnisUsaha(Number(e.target.value))}
                     className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
                   />
                 </div>
+              )}
+              {showHasilInvestasi && (
                 <div className="mb-5">
                   <label
-                    htmlFor="rumahValue"
-                    className="block mb-2 font-medium text-gray-text-tertiary"
+                    htmlFor="hasilInvestasi"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
                   >
-                    Nilai Rumah
+                    Investment Income Value
                   </label>
                   <input
                     type="number"
-                    id="rumahValue"
+                    id="hasilInvestasi"
                     placeholder="Rp 0"
-                    value={rumahValue}
-                    onChange={(e) => setRumahValue(Number(e.target.value))}
+                    value={hasilInvestasi}
+                    onChange={(e) => setHasilInvestasi(Number(e.target.value))}
                     className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
                   />
                 </div>
-                <div className="mb-5">
-                  <label
-                    htmlFor="tanahValue"
-                    className="block mb-2 font-medium text-gray-text-tertiary"
-                  >
-                    Nilai Tanah
-                  </label>
-                  <input
-                    type="number"
-                    id="tanahValue"
-                    placeholder="Rp 0"
-                    value={tanahValue}
-                    onChange={(e) => setTanahValue(Number(e.target.value))}
-                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                  />
-                </div>
-                <div className="mb-5">
-                  <label
-                    htmlFor="bangunanValue"
-                    className="block mb-2 font-medium text-gray-text-tertiary"
-                  >
-                    Nilai Bangunan
-                  </label>
-                  <input
-                    type="number"
-                    id="bangunanValue"
-                    placeholder="Rp 0"
-                    value={bangunanValue}
-                    onChange={(e) => setBangunanValue(Number(e.target.value))}
-                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-                  />
-                </div>
-              </>
-            )}
-
-            <div className="flex items-center mb-5">
-              <label
-                htmlFor="punyaUtang"
-                className="font-medium text-gray-text-tertiary mr-3"
+              )}
+              <button
+                type="submit"
+                onClick={handleFinancialGoalsSubmit}
+                className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md transition-all duration-300"
               >
-                Punya utang?
-              </label>
-              <input
-                type="checkbox"
-                id="punyaUtang"
-                checked={punyaUtang}
-                onChange={(e) => setPunyaUtang(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-green-primary rounded border-gray-600 bg-gray-700"
-              />
-              <span className="ml-2 text-gray-300">
-                {punyaUtang ? "Ya" : "Tidak"}
-              </span>
+                Save Income
+              </button>
+            </form>
+
+            {/* Income Distribution Chart */}
+            <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
+              <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+                Income Distribution
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={incomeChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={100}
+                    fill="#8884d8" // Direct color for default fill
+                    dataKey="value"
+                  >
+                    {incomeChartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#2C3E50", // gray-tooltip-bg
+                      border: "1px solid #4F5D73", // gray-tooltip-border
+                      borderRadius: "8px",
+                    }}
+                    itemStyle={{ color: "#FFFFFF" }} // white-default
+                    labelStyle={{ color: "#9CA3AF" }} // gray-tooltip-label
+                    formatter={formatRpCurrency}
+                  />
+                  <Legend
+                    wrapperStyle={{ color: "#9CA3AF", paddingTop: "10px" }} // gray-legend
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
-            {punyaUtang && (
+          </div>
+        )}
+
+        {activeDataInputTab === "expenses" && (
+          <div className="space-y-8">
+            <form
+              onSubmit={handleFinancialGoalsSubmit}
+              className="space-y-6 max-w-lg mx-auto"
+            >
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6">
+                How much are your monthly expenses?
+              </h3>
               <div className="mb-5">
                 <label
-                  htmlFor="debts"
-                  className="block mb-2 font-medium text-gray-text-tertiary"
+                  htmlFor="belanjaKebutuhan"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
                 >
-                  Total Utang
+                  Essential Spending
                 </label>
                 <input
                   type="number"
-                  id="debts"
-                  placeholder="e.g., 20000000"
-                  value={debts}
-                  onChange={(e) => setDebts(Number(e.target.value))}
+                  id="belanjaKebutuhan"
+                  placeholder="Rp 0"
+                  value={belanjaKebutuhan}
+                  onChange={(e) => setBelanjaKebutuhan(Number(e.target.value))}
                   className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
                 />
               </div>
-            )}
-            <button
-              type="submit"
-              className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
-            >
-              Simpan Aset & Utang
-            </button>
-          </form>
-
-          {/* Assets vs Debts Bar Chart */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Perbandingan Aset dan Utang
-            </h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart
-                data={assetDebtChartData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="gray-grid" />
-                <XAxis dataKey="name" stroke="gray-medium" />
-                <YAxis stroke="gray-medium" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "gray-tooltip-bg",
-                    border: "1px solid gray-tooltip-border",
-                    borderRadius: "8px",
-                  }}
-                  itemStyle={{ color: "white-default" }}
-                  labelStyle={{ color: "gray-tooltip-label" }}
-                  formatter={(value) => `Rp ${value.toLocaleString("id-ID")}`}
-                />
-                <Legend
-                  wrapperStyle={{ color: "gray-legend", paddingTop: "10px" }}
-                />
-                <Bar
-                  dataKey="value"
-                  fill="green-primary"
-                  radius={[10, 10, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
-      {/* NEW: Analisis Crypto Tab Content */}
-      {activeDataInputTab === "analisisCrypto" && (
-        <div className="space-y-8">
-          <form onSubmit={handleFinancialGoalsSubmit} className="space-y-5">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4">
-              Analisis Potensi Perubahan Investasi Crypto Anda
-            </h3>
-            <div className="mb-5">
-              <label
-                htmlFor="bitcoinCurrentValue"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Nilai Bitcoin Anda Saat Ini (Rp)
-              </label>
-              <input
-                type="number"
-                id="bitcoinCurrentValue"
-                placeholder="e.g., 10000000"
-                value={bitcoinCurrentValue}
-                onChange={(e) => setBitcoinCurrentValue(Number(e.target.value))}
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-            </div>
-            <div className="mb-5">
-              <label
-                htmlFor="ethereumCurrentValue"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Nilai Ethereum Anda Saat Ini (Rp)
-              </label>
-              <input
-                type="number"
-                id="ethereumCurrentValue"
-                placeholder="e.g., 5000000"
-                value={ethereumCurrentValue}
-                onChange={(e) =>
-                  setEthereumCurrentValue(Number(e.target.value))
-                }
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-            </div>
-            <div className="mb-5">
-              <label
-                htmlFor="cryptoScenarioPercentage"
-                className="block mb-2 font-medium text-gray-text-tertiary"
-              >
-                Skenario Perubahan Harga (%)
-              </label>
-              <input
-                type="number"
-                id="cryptoScenarioPercentage"
-                placeholder="e.g., 10 untuk 10% naik, -5 untuk 5% turun"
-                value={cryptoScenarioPercentage}
-                onChange={(e) =>
-                  setCryptoScenarioPercentage(Number(e.target.value))
-                }
-                className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Masukkan angka positif untuk kenaikan, negatif untuk penurunan.
-              </p>
-            </div>
-            <button
-              type="submit"
-              className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
-            >
-              Simulasikan Perubahan
-            </button>
-          </form>
-
-          {/* Hasil Simulasi */}
-          <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
-            <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
-              Hasil Simulasi
-            </h3>
-            <div className="space-y-3">
-              <p className="text-lg text-gray-300">
-                Potensi Perubahan Nilai Investasi Crypto:{" "}
-                <span
-                  className={`font-bold ${
-                    cryptoScenarioResult && cryptoScenarioResult.potentialGainLoss >= 0
-                      ? "text-green-primary"
-                      : "text-red-primary"
-                  }`}
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6 mt-8">
+                Do you have other expenses?
+              </h3>
+              <div className="flex flex-wrap gap-3 mb-5">
+                <button
+                  type="button"
+                  onClick={toggleTransportasi}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
                 >
-                  Rp{" "}
-                  {cryptoScenarioResult
-                    ? cryptoScenarioResult.potentialGainLoss.toLocaleString("id-ID")
-                    : "0"}
-                </span>
-              </p>
-              <p className="text-lg text-gray-300">
-                Nilai Bitcoin Baru:{" "}
-                <span className="font-bold text-white-default">
-                  Rp{" "}
-                  {cryptoScenarioResult
-                    ? cryptoScenarioResult.newBitcoinValue.toLocaleString("id-ID")
-                    : "0"}
-                </span>
-              </p>
-              <p className="text-lg text-gray-300">
-                Nilai Ethereum Baru:{" "}
-                <span className="font-bold text-white-default">
-                  Rp{" "}
-                  {cryptoScenarioResult
-                    ? cryptoScenarioResult.newEthereumValue.toLocaleString("id-ID")
-                    : "0"}
-                </span>
-              </p>
-              <p className="text-lg text-gray-300">
-                Kekayaan Bersih Proyeksi:{" "}
-                <span className="font-bold gradient-text">
-                  Rp{" "}
-                  {cryptoScenarioResult
-                    ? cryptoScenarioResult.projectedNetWorth.toLocaleString("id-ID")
-                    : "0"}
-                </span>
-              </p>
+                  <i className="fas fa-plus-circle mr-2"></i> Transportation
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleSedekahDonasi}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Charity/Donation
+                </button>
+                <button
+                  type="button"
+                  onClick={togglePendidikanExpense}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Education
+                </button>
+                <button
+                  type="button"
+                  onClick={togglePajakExpense}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Tax
+                </button>
+                <button
+                  type="button"
+                  onClick={togglePremiAsuransi}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Monthly Insurance
+                  Premium
+                </button>
+              </div>
+              {showTransportasi && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="transportasi"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Transportation Value
+                  </label>
+                  <input
+                    type="number"
+                    id="transportasi"
+                    placeholder="Rp 0"
+                    value={transportasi}
+                    onChange={(e) => setTransportasi(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showSedekahDonasi && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="sedekahDonasi"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Charity/Donation Value
+                  </label>
+                  <input
+                    type="number"
+                    id="sedekahDonasi"
+                    placeholder="Rp 0"
+                    value={sedekahDonasi}
+                    onChange={(e) => setSedekahDonasi(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showPendidikanExpense && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="pendidikanExpense"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Education Value
+                  </label>
+                  <input
+                    type="number"
+                    id="pendidikanExpense"
+                    placeholder="Rp 0"
+                    value={pendidikanExpense}
+                    onChange={(e) =>
+                      setPendidikanExpense(Number(e.target.value))
+                    }
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showPajakExpense && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="pajakExpense"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Tax Value
+                  </label>
+                  <input
+                    type="number"
+                    id="pajakExpense"
+                    placeholder="Rp 0"
+                    value={pajakExpense}
+                    onChange={(e) => setPajakExpense(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showPremiAsuransi && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="premiAsuransi"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Monthly Insurance Premium Value
+                  </label>
+                  <input
+                    type="number"
+                    id="premiAsuransi"
+                    placeholder="Rp 0"
+                    value={premiAsuransi}
+                    onChange={(e) => setPremiAsuransi(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                onClick={handleFinancialGoalsSubmit}
+                className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md transition-all duration-300"
+              >
+                Save Expenses
+              </button>
+            </form>
+
+            {/* Expense Distribution Chart */}
+            <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
+              <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+                Expense Distribution
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={expenseChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {expenseChartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={RED_COLORS[index % RED_COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#2C3E50",
+                      border: "1px solid #4F5D73",
+                      borderRadius: "8px",
+                    }}
+                    itemStyle={{ color: "#FFFFFF" }}
+                    labelStyle={{ color: "#9CA3AF" }}
+                    formatter={formatRpCurrency}
+                  />
+                  <Legend
+                    wrapperStyle={{ color: "#9CA3AF", paddingTop: "10px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {activeDataInputTab === "savingsInvestments" && (
+          <div className="space-y-8">
+            <form
+              onSubmit={handleFinancialGoalsSubmit}
+              className="space-y-6 max-w-lg mx-auto"
+            >
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6">
+                How much do you save and invest monthly?
+              </h3>
+              <div className="mb-5">
+                <label
+                  htmlFor="tabungInvestasiBulanan"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                >
+                  Monthly Savings + Investments
+                </label>
+                <input
+                  type="number"
+                  id="tabungInvestasiBulanan"
+                  placeholder="Rp 0"
+                  value={tabungInvestasiBulanan}
+                  onChange={(e) =>
+                    setTabungInvestasiBulanan(Number(e.target.value))
+                  }
+                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Money you set aside monthly for savings and investments
+                  (mutual funds, gold, etc.)
+                </p>
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="totalTabunganSaatIni"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                >
+                  Current Total Savings
+                </label>
+                <input
+                  type="number"
+                  id="totalTabunganSaatIni"
+                  placeholder="Rp 0"
+                  value={totalTabunganSaatIni}
+                  onChange={(e) =>
+                    setTotalTabunganSaatIni(Number(e.target.value))
+                  }
+                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                />
+              </div>
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6 mt-8">
+                What investment products do you currently own?
+              </h3>
+              <div className="space-y-4 mb-5">
+                <div>
+                  <label
+                    htmlFor="crowdFunding"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Crowd-Funding
+                  </label>
+                  <input
+                    type="number"
+                    id="crowdFunding"
+                    placeholder="Rp 0 (Leave blank if none)"
+                    value={crowdFunding}
+                    onChange={(e) => setCrowdFunding(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="logamMulia"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Precious Metals
+                  </label>
+                  <input
+                    type="number"
+                    id="logamMulia"
+                    placeholder="Rp 0 (Leave blank if none)"
+                    value={logamMulia}
+                    onChange={(e) => setLogamMulia(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="saham"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Stocks
+                  </label>
+                  <input
+                    type="number"
+                    id="saham"
+                    placeholder="Rp 0 (Leave blank if none)"
+                    value={saham}
+                    onChange={(e) => setSaham(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="unitLink"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Unit Link
+                  </label>
+                  <input
+                    type="number"
+                    id="unitLink"
+                    placeholder="Rp 0 (Leave blank if none)"
+                    value={unitLink}
+                    onChange={(e) => setUnitLink(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              </div>
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6 mt-8">
+                Select other investment products
+              </h3>
+              <div className="flex flex-wrap gap-3 mb-5">
+                <button
+                  type="button"
+                  onClick={toggleReksadana}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Mutual Funds
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleObligasiP2P}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Bonds/P2P Lending
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleDeposito}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Deposits
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleEbaRitel}
+                  className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                >
+                  <i className="fas fa-plus-circle mr-2"></i> Retail ABS
+                </button>
+              </div>
+              {showReksadana && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="reksadana"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Mutual Funds Value
+                  </label>
+                  <input
+                    type="number"
+                    id="reksadana"
+                    placeholder="Rp 0"
+                    value={reksadana}
+                    onChange={(e) => setReksadana(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showObligasiP2P && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="obligasiP2P"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Bonds/P2P Lending Value
+                  </label>
+                  <input
+                    type="number"
+                    id="obligasiP2P"
+                    placeholder="Rp 0"
+                    value={obligasiP2P}
+                    onChange={(e) => setObligasiP2P(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showDeposito && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="deposito"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Deposits Value
+                  </label>
+                  <input
+                    type="number"
+                    id="deposito"
+                    placeholder="Rp 0"
+                    value={deposito}
+                    onChange={(e) => setDeposito(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              {showEbaRitel && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="ebaRitel"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Retail ABS Value
+                  </label>
+                  <input
+                    type="number"
+                    id="ebaRitel"
+                    placeholder="Rp 0"
+                    value={ebaRitel}
+                    onChange={(e) => setEbaRitel(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                onClick={handleFinancialGoalsSubmit}
+                className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md transition-all duration-300"
+              >
+                Save Savings & Investments
+              </button>
+            </form>
+
+            {/* Investment Breakdown Chart */}
+            <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
+              <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+                Investment Distribution
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={investmentChartData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDashArray="3 3" stroke="#4F5D73" />
+                  <XAxis dataKey="name" stroke="#9CA3AF" />
+                  <YAxis stroke="#9CA3AF" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#2C3E50",
+                      border: "1px solid #4F5D73",
+                      borderRadius: "8px",
+                    }}
+                    itemStyle={{ color: "#FFFFFF" }}
+                    labelStyle={{ color: "#9CA3AF" }}
+                    formatter={formatRpCurrency}
+                  />
+                  <Legend
+                    wrapperStyle={{ color: "#9CA3AF", paddingTop: "10px" }}
+                  />
+                  <Bar dataKey="value" fill="#3AD9A3" radius={[10, 10, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {activeDataInputTab === "assetsDebts" && (
+          <div className="space-y-8">
+            <form
+              onSubmit={handleFinancialGoalsSubmit}
+              className="space-y-6 max-w-lg mx-auto"
+            >
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6">
+                What are your assets and debts?
+              </h3>
+              <div className="flex items-center mb-5">
+                <label
+                  htmlFor="punyaAset"
+                  className="font-medium text-gray-text-tertiary mr-3 text-lg"
+                >
+                  Do you own assets?
+                </label>
+                <input
+                  type="checkbox"
+                  id="punyaAset"
+                  checked={punyaAset}
+                  onChange={(e) => setPunyaAset(e.target.checked)}
+                  className="form-checkbox h-5 w-5 text-green-primary rounded border-gray-600 bg-gray-700"
+                />
+                <span className="ml-2 text-gray-300">
+                  {punyaAset ? "Yes" : "No"}
+                </span>
+              </div>
+              {punyaAset && (
+                <div className="flex flex-wrap gap-3 mb-5">
+                  <button
+                    type="button"
+                    onClick={toggleKendaraan}
+                    className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                  >
+                    <i className="fas fa-plus-circle mr-2"></i> Vehicle
+                  </button>
+                  <button
+                    type="button"
+                    onClick={toggleRumah}
+                    className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                  >
+                    <i className="fas fa-plus-circle mr-2"></i> House
+                  </button>
+                  <button
+                    type="button"
+                    onClick={toggleTanah}
+                    className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                  >
+                    <i className="fas fa-plus-circle mr-2"></i> Land
+                  </button>
+                  <button
+                    type="button"
+                    onClick={toggleBangunan}
+                    className="px-4 py-2 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-800 flex items-center transition-colors"
+                  >
+                    <i className="fas fa-plus-circle mr-2"></i> Building
+                  </button>
+                </div>
+              )}
+              {punyaAset && (
+                <>
+                  {showKendaraan && (
+                    <div className="mb-5">
+                      <label
+                        htmlFor="vehicles"
+                        className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                      >
+                        Vehicle Value
+                      </label>
+                      <input
+                        type="number"
+                        id="vehicles"
+                        placeholder="Rp 0"
+                        value={vehicles}
+                        onChange={(e) => setVehicles(Number(e.target.value))}
+                        className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                      />
+                    </div>
+                  )}
+                  {showRumah && (
+                    <div className="mb-5">
+                      <label
+                        htmlFor="rumahValue"
+                        className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                      >
+                        House Value
+                      </label>
+                      <input
+                        type="number"
+                        id="rumahValue"
+                        placeholder="Rp 0"
+                        value={rumahValue}
+                        onChange={(e) => setRumahValue(Number(e.target.value))}
+                        className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                      />
+                    </div>
+                  )}
+                  {showTanah && (
+                    <div className="mb-5">
+                      <label
+                        htmlFor="tanahValue"
+                        className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                      >
+                        Land Value
+                      </label>
+                      <input
+                        type="number"
+                        id="tanahValue"
+                        placeholder="Rp 0"
+                        value={tanahValue}
+                        onChange={(e) => setTanahValue(Number(e.target.value))}
+                        className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                      />
+                    </div>
+                  )}
+                  {showBangunan && (
+                    <div className="mb-5">
+                      <label
+                        htmlFor="bangunanValue"
+                        className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                      >
+                        Building Value
+                      </label>
+                      <input
+                        type="number"
+                        id="bangunanValue"
+                        placeholder="Rp 0"
+                        value={bangunanValue}
+                        onChange={(e) =>
+                          setBangunanValue(Number(e.target.value))
+                        }
+                        className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+
+              <div className="flex items-center mb-5">
+                <label
+                  htmlFor="punyaUtang"
+                  className="font-medium text-gray-text-tertiary mr-3 text-lg"
+                >
+                  Do you have debts?
+                </label>
+                <input
+                  type="checkbox"
+                  id="punyaUtang"
+                  checked={punyaUtang}
+                  onChange={(e) => setPunyaUtang(e.target.checked)}
+                  className="form-checkbox h-5 w-5 text-green-primary rounded border-gray-600 bg-gray-700"
+                />
+                <span className="ml-2 text-gray-300">
+                  {punyaUtang ? "Yes" : "No"}
+                </span>
+              </div>
+              {punyaUtang && (
+                <div className="mb-5">
+                  <label
+                    htmlFor="debts"
+                    className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                  >
+                    Total Debts
+                  </label>
+                  <input
+                    type="number"
+                    id="debts"
+                    placeholder="e.g., 20000000"
+                    value={debts}
+                    onChange={(e) => setDebts(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                onClick={handleFinancialGoalsSubmit}
+                className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md transition-all duration-300"
+              >
+                Save Assets & Debts
+              </button>
+            </form>
+
+            {/* Assets vs Debts Bar Chart */}
+            <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
+              <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+                Assets vs Debts Comparison
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={assetDebtChartData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDashArray="3 3" stroke="#4F5D73" />
+                  <XAxis dataKey="name" stroke="#9CA3AF" />
+                  <YAxis stroke="#9CA3AF" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#2C3E50",
+                      border: "1px solid #4F5D73",
+                      borderRadius: "8px",
+                    }}
+                    itemStyle={{ color: "#FFFFFF" }}
+                    labelStyle={{ color: "#9CA3AF" }}
+                    formatter={formatRpCurrency}
+                  />
+                  <Legend
+                    wrapperStyle={{ color: "#9CA3AF", paddingTop: "10px" }}
+                  />
+                  <Bar dataKey="value" fill="#3AD9A3" radius={[10, 10, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+        {/* NEW: Crypto Analysis Tab Content */}
+        {activeDataInputTab === "cryptoAnalysis" && (
+          <div className="space-y-8">
+            <form
+              onSubmit={handleFinancialGoalsSubmit}
+              className="space-y-6 max-w-lg mx-auto"
+            >
+              <h3 className="text-2xl font-semibold text-gray-text-tertiary mb-6">
+                Analyze Potential Changes in Your Crypto Investments
+              </h3>
+              <div className="mb-5">
+                <label
+                  htmlFor="bitcoinCurrentValue"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                >
+                  Your Current Bitcoin Value (Rp)
+                </label>
+                <input
+                  type="number"
+                  id="bitcoinCurrentValue"
+                  placeholder="e.g., 10000000"
+                  value={bitcoinCurrentValue}
+                  onChange={(e) =>
+                    setBitcoinCurrentValue(Number(e.target.value))
+                  }
+                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="ethereumCurrentValue"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                >
+                  Your Current Ethereum Value (Rp)
+                </label>
+                <input
+                  type="number"
+                  id="ethereumCurrentValue"
+                  placeholder="e.g., 5000000"
+                  value={ethereumCurrentValue}
+                  onChange={(e) =>
+                    setEthereumCurrentValue(Number(e.target.value))
+                  }
+                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="cryptoScenarioPercentage"
+                  className="block mb-2 font-medium text-gray-text-tertiary text-lg"
+                >
+                  Price Change Scenario (%)
+                </label>
+                <input
+                  type="number"
+                  id="cryptoScenarioPercentage"
+                  placeholder="e.g., 10 for 10% increase, -5 for 5% decrease"
+                  value={cryptoScenarioPercentage}
+                  onChange={(e) =>
+                    setCryptoScenarioPercentage(Number(e.target.value))
+                  }
+                  className="w-full p-3 border border-gray-input-border rounded-lg bg-gray-input-bg text-white-default text-base outline-none transition-colors duration-300 focus:border-green-primary focus:ring-2 focus:ring-green-primary focus:ring-opacity-30"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Enter a positive number for increase, negative for decrease.
+                </p>
+              </div>
+              <button
+                type="submit"
+                onClick={handleFinancialGoalsSubmit}
+                className="w-full py-4 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md transition-all duration-300"
+              >
+                Simulate Change
+              </button>
+            </form>
+
+            {/* Simulation Results */}
+            <div className="bg-gray-card-bg rounded-xl p-6 shadow-md border border-gray-border mt-10">
+              <h3 className="text-xl font-semibold text-gray-text-tertiary mb-4 text-center">
+                Simulation Results
+              </h3>
+              <div className="space-y-3">
+                <p className="text-lg text-gray-300">
+                  Potential Change in Crypto Investment Value:{" "}
+                  <span
+                    className={`font-bold ${
+                      cryptoScenarioResult &&
+                      cryptoScenarioResult.potentialGainLoss >= 0
+                        ? "text-green-primary"
+                        : "text-red-primary"
+                    }`}
+                  >
+                    Rp{" "}
+                    {cryptoScenarioResult
+                      ? cryptoScenarioResult.potentialGainLoss.toLocaleString(
+                          "id-ID"
+                        )
+                      : "0"}
+                  </span>
+                </p>
+                <p className="text-lg text-gray-300">
+                  New Bitcoin Value:{" "}
+                  <span className="font-bold text-white-default">
+                    Rp{" "}
+                    {cryptoScenarioResult
+                      ? cryptoScenarioResult.newBitcoinValue.toLocaleString(
+                          "id-ID"
+                        )
+                      : "0"}
+                  </span>
+                </p>
+                <p className="text-lg text-gray-300">
+                  New Ethereum Value:{" "}
+                  <span className="font-bold text-white-default">
+                    Rp{" "}
+                    {cryptoScenarioResult
+                      ? cryptoScenarioResult.newEthereumValue.toLocaleString(
+                          "id-ID"
+                        )
+                      : "0"}
+                  </span>
+                </p>
+                <p className="text-lg text-gray-300">
+                  Projected Net Worth:{" "}
+                  <span className="font-bold gradient-text">
+                    Rp{" "}
+                    {cryptoScenarioResult
+                      ? cryptoScenarioResult.projectedNetWorth.toLocaleString(
+                          "id-ID"
+                        )
+                      : "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

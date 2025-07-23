@@ -1,34 +1,47 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
-import * as THREE from "three";
-// Three.js imports remain the same for texture loading
-const textureLoader = new THREE.TextureLoader();
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim"; // Memuat fitur dasar tsParticles
 
 function HomePage() {
   const { user, login } = useOutletContext();
-  const mountRef = useRef(null);
-  let mouse = new THREE.Vector2(); // Declare mouse variable for interaction
+  // State untuk melacak apakah engine tsParticles sudah diinisialisasi
+  const [particlesEngineInitialized, setParticlesEngineInitialized] =
+    useState(false);
 
+  // --- Inisialisasi tsParticles Engine ---
+  // Ini harus dijalankan hanya sekali per siklus hidup aplikasi.
+  // Biasanya dilakukan di App.jsx atau Layout.jsx jika ParticlesComponent digunakan di banyak tempat.
+  // Namun, karena ini adalah halaman utama, kita bisa menginisialisasinya di sini.
   useEffect(() => {
-    let scene, camera, renderer;
-    let particles = [];
-    const numParticles = 150; // Number of floating icons
-    const particleSpeed = 0.005; // Speed of animation
-    const particleBaseSize = 1.5; // Base size for particles
+    // Periksa apakah engine sudah diinisialisasi untuk menghindari inisialisasi ganda
+    if (!particlesEngineInitialized) {
+      initParticlesEngine(async (engine) => {
+        // Memuat fitur 'slim' untuk tsParticles (ukuran bundle lebih kecil)
+        await loadSlim(engine);
+      })
+        .then(() => {
+          setParticlesEngineInitialized(true); // Set state menjadi true setelah inisialisasi
+        })
+        .catch((error) => {
+          console.error("Failed to initialize tsParticles engine:", error);
+        });
+    }
+  }, [particlesEngineInitialized]); // Dependensi pada state inisialisasi
 
-    // Define abstract colors for the icons, matching your theme
-    const iconColors = [
-      0x3ad9a3, // green-primary
-      0x0f7c5f, // green-secondary
-      0x1abc9c, // green-accent-1
-      0x2ecc71, // green-accent-2
-      0x27ae60, // green-accent-3
-      0x2c3e50, // green-accent-5 (dark blue-gray, for subtle background effect if desired)
-    ];
+  // Callback saat container Particles dimuat
+  const particlesLoaded = (container) => {
+    console.log("tsParticles container loaded:", container);
+    // Di sini Anda bisa mengakses container.particles.array.length untuk jumlah partikel real-time
+    // Jika Anda ingin mengintegrasikan dengan Stats.js, ini adalah tempatnya.
+  };
 
-    // Define the list of paths to your SVG icon files in public/Crypto
-    // This list is generated based on the file names from your provided images.
-    const availableIconPaths = [
+  // --- Konfigurasi tsParticles (options) ---
+  // Gunakan useMemo untuk memastikan objek options tidak dibuat ulang di setiap render,
+  // yang dapat menyebabkan re-render animasi yang tidak perlu.
+  const particlesOptions = useMemo(() => {
+    // Daftar lengkap jalur SVG ikon kustom Anda
+    const customCryptoImageSources = [
       "/Crypto/ada.svg",
       "/Crypto/Audiocoin.svg",
       "/Crypto/Aurouracoin.svg",
@@ -88,278 +101,122 @@ function HomePage() {
       "/Crypto/ZcashWallet.svg",
     ];
 
-    // Function to create a Three.js texture from an image (PNG/SVG) loaded via its path
-    const createTextureFromImage = (imagePath, callback) => {
-      textureLoader.load(
-        imagePath,
-        (texture) => {
-          texture.minFilter = THREE.LinearMipmapLinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          // Store original aspect ratio (width / height) for correct plane scaling
-          if (texture.image && texture.image.width && texture.image.height) {
-            texture.userData.aspectRatio =
-              texture.image.width / texture.image.height;
-          } else {
-            texture.userData.aspectRatio = 1; // Default to 1:1 if aspect ratio cannot be determined
-          }
-          if (callback) callback(texture);
+    return {
+      // Latar belakang sekarang hitam solid
+      background: {
+        color: { value: "#000000" }, // Menggunakan warna hitam solid
+      },
+      fpsLimit: 120, // Batas FPS untuk performa yang lebih baik
+      interactivity: {
+        events: {
+          onClick: { enable: true, mode: "repulse" }, // Mode repulse saat klik
+          onHover: { enable: true, mode: "grab" }, // Mode grab saat hover
+          resize: true, // Responsif terhadap perubahan ukuran jendela
         },
-        undefined, // Progress callback (optional)
-        (err) => {
-          console.error(`Error loading texture ${imagePath}:`, err);
-        }
-      );
+        modes: {
+          push: { quantity: 4 }, // Jumlah partikel yang ditambahkan saat klik
+          repulse: { distance: 200, duration: 0.4 }, // Jarak dan durasi efek repulse
+          grab: { distance: 150, links: { opacity: 1 } }, // Jarak grab
+          bubble: {
+            distance: 400,
+            size: 40,
+            duration: 2,
+            opacity: 8,
+            speed: 3,
+          }, // Efek bubble
+        },
+      },
+      particles: {
+        color: { value: "#ffffff" }, // Warna partikel (jika bukan gambar)
+        links: {
+          // Garis koneksi antar partikel
+          color: "#ffffff", // Warna garis
+          distance: 150, // Jarak maksimum untuk menggambar garis
+          enable: true,
+          opacity: 0.3, // Opasitas garis
+          width: 1, // Ketebalan garis
+        },
+        move: {
+          direction: "none",
+          enable: true,
+          outModes: { default: "bounce" }, // Partikel memantul dari tepi
+          random: true,
+          speed: 1,
+          straight: false,
+        },
+        number: { value: 150, density: { enable: true, area: 800 } }, // Jumlah partikel
+        opacity: { value: 1.0 }, // Opasitas partikel
+        shape: {
+          type: "image", // Menggunakan tipe 'image' untuk gambar kustom
+          options: {
+            image: customCryptoImageSources.map((src) => ({
+              src: src,
+              width: 100, // Lebar gambar asli (sesuaikan jika ikon Anda berbeda)
+              height: 100, // Tinggi gambar asli (sesuaikan jika ikon Anda berbeda)
+              replaceColor: false, // Set ini ke true jika Anda ingin tsParticles mengubah warna SVG Anda
+              // menjadi warna yang ditentukan di 'particles.color.value'
+              // Set ke false jika SVG Anda sudah memiliki warna yang diinginkan
+            })),
+          },
+        },
+        size: { value: { min: 10, max: 30 } }, // Ukuran partikel (acak dalam rentang)
+      },
+      detectRetina: true, // Deteksi layar retina
     };
+  }, []); // particlesOptions hanya dibuat sekali berkat useMemo
 
-    const initThree = () => {
-      scene = new THREE.Scene();
-      scene.background = null;
+  // Render komponen Particles hanya jika engine sudah diinisialisasi
+  if (particlesEngineInitialized) {
+    return (
+      <section
+        id="home"
+        className="w-screen h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      >
+        {/* Komponen Particles dari tsParticles akan merender kanvas di sini */}
+        <Particles
+          id="tsparticles" // ID untuk container tsParticles
+          className="fixed inset-0 z-0" // Gaya untuk menutupi seluruh layar
+          init={async (engine) => {
+            /* engine instance */
+          }} // initParticlesEngine sudah dipanggil di atas
+          loaded={particlesLoaded} // Callback saat container dimuat
+          options={particlesOptions} // Konfigurasi partikel yang telah kita definisikan
+        />
 
-      camera = new THREE.PerspectiveCamera(
-        75,
-        mountRef.current.clientWidth / mountRef.current.clientHeight,
-        0.1,
-        1000
-      );
-      camera.position.z = 10;
+        {/* Konten teks dan tombol - diposisikan di atas kanvas */}
+        <div className="relative z-10 p-10 max-w-4xl mx-auto text-center flex flex-col items-center justify-center h-full">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 gradient-text leading-tight animate-fade-in-up animate-delay-100">
+            Check Your Financial Health!
+          </h1>
+          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animate-delay-200">
+            AuraFi is an innovative DApp that helps you track, analyze, and
+            improve your financial health. Start your journey towards financial
+            stability now.
+          </p>
+          {!user && (
+            <button
+              onClick={login}
+              className="px-8 py-4 text-xl rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg active:translate-y-0 active:shadow-md transition-all duration-300 btn-gradient-hover animate-fade-in-up animate-delay-300"
+            >
+              <span className="relative z-10">
+                Login with Internet Identity
+              </span>
+            </button>
+          )}
+        </div>
+      </section>
+    );
+  }
 
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(
-        mountRef.current.clientWidth,
-        mountRef.current.clientHeight
-      );
-      mountRef.current.appendChild(renderer.domElement);
-
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
-      scene.add(ambientLight);
-
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      directionalLight.position.set(5, 10, 7);
-      directionalLight.castShadow = true;
-      scene.add(directionalLight);
-
-      directionalLight.shadow.mapSize.width = 1024;
-      directionalLight.shadow.mapSize.height = 1024;
-      directionalLight.shadow.camera.near = 0.5;
-      directionalLight.shadow.camera.far = 50;
-      directionalLight.shadow.camera.left = -10;
-      directionalLight.shadow.camera.right = 10;
-      directionalLight.shadow.camera.top = 10;
-      directionalLight.shadow.camera.bottom = -10;
-
-      const pointLight = new THREE.PointLight(0x3ad9a3, 0.5, 50);
-      pointLight.position.set(-5, 5, 5);
-      scene.add(pointLight);
-
-      // Load all textures asynchronously
-      const texturePromises = availableIconPaths.map(
-        (path) =>
-          new Promise((resolve) => {
-            createTextureFromImage(path, (texture) => {
-              resolve(texture);
-            });
-          })
-      );
-
-      Promise.all(texturePromises).then((loadedTextures) => {
-        // Only create particles after all textures are loaded
-        for (let i = 0; i < numParticles; i++) {
-          const randomTexture =
-            loadedTextures[Math.floor(Math.random() * loadedTextures.length)];
-
-          // Adjust plane geometry based on icon's aspect ratio
-          const currentParticleGeometry = new THREE.PlaneGeometry(
-            particleBaseSize * randomTexture.userData.aspectRatio,
-            particleBaseSize
-          );
-
-          const material = new THREE.MeshBasicMaterial({
-            map: randomTexture,
-            transparent: true,
-            alphaTest: 0.1,
-            side: THREE.DoubleSide,
-            // Optionally, apply a tint color to the icon from your palette
-            // This will tint the icon over its original color.
-            // Uncomment the line below to enable tinting:
-            // color: new THREE.Color(iconColors[Math.floor(Math.random() * iconColors.length)]),
-          });
-
-          const particle = new THREE.Mesh(currentParticleGeometry, material);
-
-          particle.position.x = (Math.random() - 0.5) * 30;
-          particle.position.y = (Math.random() - 0.5) * 30;
-          particle.position.z = (Math.random() - 0.5) * 30;
-
-          const scale = Math.random() * 0.5 + 0.7;
-          particle.scale.set(scale, scale, scale);
-
-          particle.userData.originalScale = scale;
-          particles.push(particle);
-          scene.add(particle);
-        }
-      });
-
-      const planeGeometry = new THREE.PlaneGeometry(100, 100);
-      const planeMaterial = new THREE.MeshStandardMaterial({
-        color: 0x0a0a0a,
-        roughness: 0.8,
-        metalness: 0.1,
-      });
-      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-      plane.rotation.x = -Math.PI / 2;
-      plane.position.y = -5;
-      plane.receiveShadow = true;
-      scene.add(plane);
-    };
-
-    const onMouseMove = (event) => {
-      const rect = mountRef.current.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-    };
-
-    const onMouseDown = (event) => {
-      if (event.button !== 0) return;
-
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(particles);
-
-      if (intersects.length > 0) {
-        const intersectedParticle = intersects[0].object;
-
-        if (!intersectedParticle.userData.isClicked) {
-          intersectedParticle.userData.isClicked = true;
-          intersectedParticle.userData.clickedTime = Date.now();
-          setTimeout(() => {
-            intersectedParticle.userData.isClicked = false;
-          }, 200);
-        }
-      }
-    };
-
-    let cameraAngle = 0;
-    const animate = () => {
-      requestAnimationFrame(animate);
-
-      particles.forEach((particle) => {
-        particle.lookAt(camera.position);
-
-        particle.position.y +=
-          Math.sin(Date.now() * 0.0005 + particle.id) * 0.01;
-        particle.position.x +=
-          Math.cos(Date.now() * 0.0005 + particle.id) * 0.01;
-        particle.position.z +=
-          Math.sin(Date.now() * 0.0007 + particle.id) * 0.01;
-
-        if (particle.position.length() > 20) {
-          particle.position.x = (Math.random() - 0.5) * 30;
-          particle.position.y = (Math.random() - 0.5) * 30;
-          particle.position.z = (Math.random() - 0.5) * 30;
-        }
-
-        if (particle.userData.clickedTime) {
-          const elapsedTime = Date.now() - particle.userData.clickedTime;
-          const duration = 500;
-          const maxScaleFactor = 1.5;
-
-          if (elapsedTime < duration) {
-            const progress = elapsedTime / duration;
-            const scaleFactor =
-              1 + Math.sin(progress * Math.PI) * (maxScaleFactor - 1);
-            particle.scale.setScalar(
-              scaleFactor * particle.userData.originalScale
-            );
-          } else {
-            particle.scale.setScalar(particle.userData.originalScale);
-            particle.userData.clickedTime = null;
-          }
-        }
-      });
-
-      cameraAngle += 0.0005;
-      camera.position.x = Math.sin(cameraAngle) * 15;
-      camera.position.z = Math.cos(cameraAngle) * 15;
-      camera.position.y = Math.sin(cameraAngle * 0.7) * 5;
-      camera.lookAt(scene.position);
-
-      renderer.render(scene, camera);
-    };
-
-    const onWindowResize = () => {
-      if (mountRef.current) {
-        camera.aspect =
-          mountRef.current.clientWidth / mountRef.current.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(
-          mountRef.current.clientWidth,
-          mountRef.current.clientHeight
-        );
-      }
-    };
-
-    if (mountRef.current) {
-      initThree();
-      animate();
-      window.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("mousedown", onMouseDown);
-      window.addEventListener("resize", onWindowResize);
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("resize", onWindowResize);
-      if (mountRef.current && renderer) {
-        if (mountRef.current.contains(renderer.domElement)) {
-          mountRef.current.removeChild(renderer.domElement);
-        }
-        renderer.dispose();
-        scene.traverse((object) => {
-          if (object.isMesh) {
-            object.geometry.dispose();
-            if (object.material.map) object.material.map.dispose();
-            object.material.dispose();
-          }
-        });
-        scene.clear();
-      }
-    };
-  }, []);
-
+  // Tampilkan loading atau fallback jika engine belum diinisialisasi
   return (
     <section
       id="home"
-      className="w-screen h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      className="w-screen h-screen flex flex-col items-center justify-center bg-black-primary text-white-default"
     >
-      <div
-        ref={mountRef}
-        className="fixed inset-0 z-0"
-        style={{ pointerEvents: "none" }}
-      ></div>
-
-      <div className="relative z-10 p-10 max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold mb-8 gradient-text leading-tight">
-          Check Your Financial Health!
-        </h2>
-        <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-          AuraFi is an innovative DApp that helps you track, analyze, and
-          improve your financial health. Start your journey towards financial
-          stability now.
-        </p>
-        {!user && (
-          <button
-            onClick={login}
-            className="px-8 py-4 text-xl rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md"
-          >
-            Login with Internet Identity
-          </button>
-        )}
-      </div>
+      <p className="text-xl text-gray-400 animate-pulse">
+        Loading particles engine...
+      </p>
     </section>
   );
 }

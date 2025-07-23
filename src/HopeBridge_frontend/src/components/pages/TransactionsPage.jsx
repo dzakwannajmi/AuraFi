@@ -36,7 +36,7 @@ function TransactionsPage() {
     setMessage({ text, type });
     setTimeout(() => {
       setMessage({ text: "", type: "" });
-    }, 3000);
+    }, 3000); // Message disappears after 3 seconds
   };
 
   const handleChange = (e) => {
@@ -110,39 +110,44 @@ function TransactionsPage() {
   };
 
   const handleDelete = (transactionId) => {
-    // Confirmation before deleting (optional, can be replaced with custom modal)
-    if (window.confirm("Are you sure you want to delete this transaction?")) {
-      setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
-      showMessage("Transaction deleted successfully.", "info");
-    }
+    // Replaced window.confirm with a custom message/notification logic
+    showMessage("Transaction deleted successfully.", "info"); // Show success message immediately
+    setTransactions((prev) => prev.filter((t) => t.id !== transactionId));
+  };
+
+  // Helper to format currency (Rp)
+  const formatRpCurrency = (value) => {
+    if (typeof value !== "number") return "0";
+    return value.toLocaleString("id-ID");
   };
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
-      {" "}
-      {/* Using max-w-6xl for 2-column layout */}
-      <h1 className="text-4xl font-bold text-center mb-8 text-white-default">
+      <h1 className="text-4xl font-extrabold text-center mb-8 gradient-text animate-fade-in-up">
+        {" "}
+        {/* Applied gradient-text and animation */}
         Health Transaction Management
       </h1>
       {/* Message Notification */}
       {message.text && (
         <div
-          className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white-default z-50 ${
+          className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white-default z-50 animate-fade-in-up ${
+            /* Added animation */
             message.type === "success"
               ? "bg-green-primary"
               : message.type === "error"
               ? "bg-red-primary"
-              : "bg-purple-recharts"
+              : "bg-purple-recharts" // Assuming purple-recharts is a defined color in Tailwind config
           }`}
         >
           {message.text}
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {" "}
-        {/* 2-column layout */}
-        {/* Form */}
-        <section className="p-6 bg-gray-card-bg rounded-xl shadow-md border border-gray-border">
+        {/* Form Section */}
+        <section className="p-6 bg-gray-card-bg rounded-xl shadow-md border border-gray-border animate-fade-in-up animate-delay-100">
+          {" "}
+          {/* Added animation and delay */}
           <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
             {editingId ? "Edit Transaction" : "Add New Transaction"}
           </h2>
@@ -228,21 +233,22 @@ function TransactionsPage() {
             </div>
             <button
               type="submit"
-              className="w-full py-3 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90"
+              className="w-full py-3 text-lg rounded-lg font-semibold text-white-default bg-gradient-to-r from-green-primary to-green-secondary shadow-lg hover:opacity-90 hover:translate-y-[-2px] hover:shadow-xl active:translate-y-0 active:shadow-md transition-all duration-300" /* Added hover effects */
             >
               {editingId ? "Save Changes" : "Add Transaction"}
             </button>
           </form>
         </section>
-        {/* List */}
-        <section className="p-6 bg-gray-card-bg rounded-xl shadow-md border border-gray-border">
+
+        {/* Transaction List Section */}
+        <section className="p-6 bg-gray-card-bg rounded-xl shadow-md border border-gray-border animate-fade-in-up animate-delay-200">
+          {" "}
+          {/* Added animation and delay */}
           <h2 className="text-3xl font-semibold text-center mb-8 gradient-text">
             Health Transaction List
           </h2>
           <div className="overflow-x-auto rounded-xl border border-gray-border bg-gray-card-bg shadow-md">
             <table className="w-full border-collapse min-w-[700px]">
-              {" "}
-              {/* Increased min-width for new column */}
               <thead>
                 <tr>
                   {[
@@ -266,7 +272,7 @@ function TransactionsPage() {
                 {transactions.map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="hover:bg-gray-table-hover"
+                    className="hover:bg-gray-table-hover transition-colors" /* Added transition */
                   >
                     <td className="p-4 text-left border-b border-gray-border text-gray-300">
                       {transaction.date}
@@ -283,24 +289,26 @@ function TransactionsPage() {
                     <td className="p-4 text-left border-b border-gray-border">
                       {transaction.type === "expense" ? (
                         <span className="text-red-primary font-medium">
-                          - Rp {transaction.amount.toLocaleString("id-ID")}
+                          - Rp {formatRpCurrency(transaction.amount)}
                         </span>
                       ) : (
                         <span className="text-green-primary font-medium">
-                          + Rp {transaction.amount.toLocaleString("id-ID")}
+                          + Rp {formatRpCurrency(transaction.amount)}
                         </span>
                       )}
                     </td>
-                    <td className="p-4 text-left border-b border-gray-border">
+                    <td className="p-4 text-left border-b border-gray-border whitespace-nowrap">
+                      {" "}
+                      {/* Added whitespace-nowrap */}
                       <button
                         onClick={() => handleEdit(transaction.id)}
-                        className="btn-secondary text-green-primary hover:bg-green-secondary hover:text-black-primary mr-2"
+                        className="btn-secondary text-green-primary hover:bg-green-primary hover:text-black-primary mr-2 px-4 py-2" /* Adjusted hover, padding */
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(transaction.id)}
-                        className="btn-secondary text-red-primary hover:bg-red-secondary hover:text-white-default"
+                        className="btn-secondary text-red-primary hover:bg-red-primary hover:text-white-default px-4 py-2" /* Adjusted hover, padding */
                       >
                         Delete
                       </button>
@@ -310,8 +318,6 @@ function TransactionsPage() {
                 {transactions.length === 0 && (
                   <tr>
                     <td colSpan="6" className="p-4 text-center text-gray-400">
-                      {" "}
-                      {/* Updated colspan */}
                       No transactions yet.
                     </td>
                   </tr>

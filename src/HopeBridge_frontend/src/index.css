@@ -1,35 +1,54 @@
 /* HopeBridge_frontend/src/index.css */
 
+/* Import Google Fonts - Poppins */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* Import Font Awesome CSS - Pastikan ini adalah versi yang sesuai dengan yang Anda instal */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables for colors are now defined in tailwind.config.js */
-/* The :root block is removed as colors are now Tailwind classes */
+/* --- Global Resets and Scrollbar Control --- */
+html, body, #root {
+  /* margin dan padding sudah di-reset oleh @tailwind base */
+  height: 100%; /* Memastikan tinggi penuh */
+  width: 100%;  /* Memastikan lebar penuh */
+  overflow-x: hidden; /* Mencegah scrollbar horizontal */
+  /* overflow-y: hidden; */ /* Hati-hati menggunakan ini, bisa menyembunyikan konten yang seharusnya bisa discroll */
+  box-sizing: border-box; /* Sudah ada di @tailwind base, tapi memastikan */
+}
+
+/* Menyembunyikan scrollbar secara visual di browser yang berbeda */
+body {
+  scrollbar-width: none; /* Untuk Firefox */
+  -ms-overflow-style: none;  /* Untuk IE dan Edge */
+}
+body::-webkit-scrollbar {
+  display: none; /* Untuk Chrome, Safari, dan Opera */
+}
+
+/* --- Base Body Styles --- */
+body {
+  font-family: "Poppins", sans-serif;
+  @apply bg-black-primary text-white-default; /* Menerapkan warna latar belakang dan teks dasar Tailwind */
+  min-height: 100vh; /* Memastikan body menutupi setidaknya tinggi viewport penuh */
+}
+
+/* --- Custom CSS Classes (menggunakan @apply untuk utilitas Tailwind) --- */
 
 .gradient-text {
   background: linear-gradient(
     90deg,
-    var(--tw-gradient-from, #3ad9a3),
-    var(--tw-gradient-to, #0f7c5f)
+    var(--tw-gradient-from, #3ad9a3), /* green-primary */
+    var(--tw-gradient-to, #0f7c5f)    /* green-secondary */
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  /* Use Tailwind classes for background and text color directly */
-  @apply bg-black-primary text-white-default font-poppins;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* General styles for cards, buttons, inputs, tables - now using Tailwind classes */
+/* Gaya umum untuk cards, buttons, inputs, tables */
 .card {
   @apply bg-gray-card-bg rounded-xl shadow-md p-6 mb-6 border border-gray-border;
 }
@@ -52,7 +71,7 @@ body {
   @apply text-gray-text-placeholder;
 }
 .input-field:focus {
-  @apply outline-none border-green-primary shadow-outline-green; /* Custom shadow for focus */
+  @apply outline-none border-green-primary shadow-outline-green; /* Custom shadow untuk fokus */
 }
 table {
   @apply w-full border-collapse;
@@ -70,17 +89,116 @@ th {
 .loss {
   @apply text-red-primary font-medium;
 }
+/* Style untuk canvas Three.js atau particles.js yang disuntikkan */
+/* Note: #particles-js akan memiliki gaya latar belakangnya sendiri yang ditetapkan di bawah */
 canvas {
-  /* Hapus max-w-xl, h-72, dan mx-auto */
-  /* Cukup w-full dan h-full agar memenuhi parent div-nya */
-  @apply block w-full h-full bg-gray-input-bg rounded-lg border border-gray-border;
+  display: block; /* Menghilangkan margin ekstra di bawah elemen inline */
+  vertical-align: bottom; /* Menghilangkan celah di bawah elemen inline */
+  /* Hapus apply yang tidak relevan dengan kanvas latar belakang particles.js */
+  /* @apply w-full h-full bg-gray-input-bg rounded-lg border border-gray-border; */
 }
 .loading-spinner {
-  /* Spinner animation is now defined in tailwind.config.js */
   @apply border-4 border-gray-light border-t-green-primary rounded-full w-6 h-6 inline-block align-middle ml-2 animate-spin;
 }
 
-/* Custom shadow for input focus, as direct rgba in @apply is not supported */
+/* Custom shadow untuk fokus input, karena rgba langsung tidak didukung di @apply */
 .shadow-outline-green {
   box-shadow: 0 0 0 2px rgba(58, 217, 163, 0.2);
+}
+
+/* --- Kelas Kustom untuk Efek Hover Gradient Tombol --- */
+.btn-gradient-hover {
+  position: relative;
+  z-index: 1; /* Pastikan teks di atas pseudo-element */
+  overflow: hidden;
+  transition: all 0.3s ease-out; /* Transisi untuk properti tombol itu sendiri */
+}
+
+.btn-gradient-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Menggunakan warna dari tema Anda, sesuaikan arah gradien jika perlu */
+  background: linear-gradient(
+    45deg,
+    theme('colors.green-accent-1'),
+    theme('colors.green-accent-3'),
+    theme('colors.green-secondary')
+  );
+  z-index: -1; /* Pastikan di belakang teks */
+  opacity: 0; /* Sembunyikan secara default */
+  transform: scaleX(0); /* Awalnya tidak terlihat secara horizontal */
+  transform-origin: left; /* Animasi mulai dari kiri */
+  /* Menggunakan nama animasi yang didefinisikan di tailwind.config.js */
+  animation: theme('animation.btn-gradient-hover-enter'); /* Gunakan animasi masuk */
+  animation-duration: 0.3s; /* Mengganti durasi default jika perlu */
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.btn-gradient-hover:hover::before {
+  opacity: 1; /* Tampilkan saat hover */
+  transform: scaleX(1); /* Penuh saat hover */
+}
+
+/* Mengatur ulang animasi keluar saat hover berakhir */
+.btn-gradient-hover:hover::before {
+  animation: theme('animation.btn-gradient-hover-enter'); /* Memicu ulang animasi masuk saat hover */
+}
+
+/* Menyesuaikan properti tombol itu sendiri saat hover agar terlihat bagus dengan gradien */
+.btn-gradient-hover:hover {
+  color: theme('colors.white-default');
+  transform: translateY(-2px); /* Menjaga efek naik halus */
+  box-shadow: theme('boxShadow.xl'); /* Menjaga bayangan */
+  opacity: 0.9; /* Menjaga perubahan opasitas */
+}
+
+/* --- particles.js container styles --- */
+/* Ini akan menjadi latar belakang halaman utama */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #262626; /* Warna latar belakang solid baru */
+  /* background-image dan gradien dihapus karena sekarang solid */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+/* --- stats.js default styles --- */
+/* Gaya ini menargetkan elemen yang dibuat oleh Stats.js dan div counter kustom */
+.count-particles {
+  background: #000022; /* Warna latar belakang dari contoh particles.js */
+  position: absolute;
+  top: 48px; /* Diambil dari contoh particles.js */
+  left: 0;
+  width: 80px; /* Diambil dari contoh particles.js */
+  color: #13E8E9; /* Diambil dari contoh particles.js */
+  font-size: .8em;
+  text-align: left;
+  text-indent: 4px;
+  line-height: 14px;
+  padding-bottom: 2px;
+  font-family: 'Poppins', sans-serif; /* Menggunakan font Poppins proyek Anda */
+  font-weight: bold;
+  border-radius: 0 0 3px 3px;
+  z-index: 9998;
+}
+.js-count-particles {
+  font-size: 1.1em;
+}
+#stats { /* The actual Stats.js panel ID */
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+}
+#stats, .count-particles {
+  -webkit-user-select: none;
+  user-select: none; /* Properti modern untuk user-select */
+  margin-top: 5px;
+  margin-left: 5px;
 }

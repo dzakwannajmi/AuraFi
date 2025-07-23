@@ -48,24 +48,51 @@ export default {
         "purple-recharts": "#8884d8", // Warna default recharts (jika tidak di-override)
       },
       keyframes: {
+        // Definisi Keyframes untuk animasi kustom
         spin: {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
-        fadeIn: {
-          "0%": { opacity: 0, transform: "scale(0.95)" },
-          "100%": { opacity: 1, transform: "scale(1)" },
+        // fadeIn: Ini adalah default Tailwind, jadi tidak perlu didefinisikan ulang kecuali ingin custom
+        // fade-in-up disesuaikan dengan nama yang akan dipanggil di `animation`
+        fadeInUp: { // Nama keyframes di camelCase, akan menjadi `fadeInUp` di Tailwind
+          "from": { opacity: 0, transform: "translateY(20px)" },
+          "to": { opacity: 1, transform: "translateY(0)" },
+        },
+        // slide-in disesuaikan dengan nama yang akan dipanggil di `animation`
+        slideIn: { // Nama keyframes di camelCase, akan menjadi `slideIn` di Tailwind
+          "from": { opacity: 0, transform: "translateY(50px) scale(0.95)" },
+          "to": { opacity: 1, transform: "translateY(0) scale(1)" },
         },
         bounceOnce: {
           "0%, 100%": { transform: "translateY(0)" },
-          "20%, 50%, 80%": { transform: "translateY(-8px)" },
-          "40%, 60%": { transform: "translateY(0)" },
+          "25%": { transform: "translateY(-10px)" }, // Sedikit lebih tinggi dari 8px sebelumnya
+          "50%": { transform: "translateY(0)" },
+          // Hapus 20%, 40%, 60%, 80% untuk membuat bounce lebih sederhana
+        },
+        // Keyframes untuk efek gradient hover tombol
+        gradientMove: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "100% 50%" },
+        },
+        gradientHoverEnter: { // Animasi masuk gradient
+          "from": { opacity: 0, transform: "scaleX(0)", transformOrigin: "left" },
+          "to": { opacity: 1, transform: "scaleX(1)", transformOrigin: "left" },
+        },
+        gradientHoverExit: { // Animasi keluar gradient (opsional, jika ingin custom exit)
+          "from": { opacity: 1, transform: "scaleX(1)", transformOrigin: "right" },
+          "to": { opacity: 0, transform: "scaleX(0)", transformOrigin: "right" },
         },
       },
       animation: {
+        // Mapping nama animasi ke keyframes dan properti durasi/timing-function
         spin: "spin 1s linear infinite",
-        "fade-in": "fadeIn 0.3s ease-out forwards",
-        "bounce-once": "bounceOnce 1.5s ease-in-out",
+        "fade-in-up": "fadeInUp 0.8s ease-out forwards", // Disesuaikan
+        "slide-in": "slideIn 0.5s ease-out forwards",     // Disesuaikan
+        "bounce-once": "bounceOnce 0.6s ease-in-out",     // Disesuaikan
+        // Animasi untuk efek gradient hover tombol
+        "btn-gradient-hover-enter": "gradientHoverEnter 0.3s ease-out forwards",
+        "btn-gradient-hover-exit": "gradientHoverExit 0.3s ease-in forwards",
       },
     },
   },

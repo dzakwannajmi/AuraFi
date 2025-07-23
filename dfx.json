@@ -17,11 +17,10 @@
       "local": "sk-ffef17e8f4da4d06b21230523dae1c91"
     }
   },
-
   "defaults": {
     "build": {
       "args": "",
-      "packtool": ""
+      "packtool": "mops sources"
     }
   },
   "output_env_file": ".env",
